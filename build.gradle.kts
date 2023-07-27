@@ -15,6 +15,12 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_20
 }
 
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
 repositories {
 	mavenCentral()
 }
@@ -43,8 +49,12 @@ dependencyManagement {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "1.8"
+		jvmTarget = "17"
 	}
+}
+
+tasks.named<Jar>("jar") {
+	enabled = false
 }
 
 tasks.withType<Test> {
