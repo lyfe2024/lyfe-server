@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
 	id("org.springframework.boot") version "3.1.2"
@@ -8,8 +9,7 @@ plugins {
 	kotlin("plugin.jpa") version "1.8.22"
 }
 
-group = "lyfe"
-version = "0.0.1-SNAPSHOT"
+extra["springCloudVersion"] = "2022.0.3"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -21,42 +21,65 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
 
-extra["springCloudVersion"] = "2022.0.3"
+allprojects {
+	group = "lyfe-server"
+	version = "1.0.0"
 
-dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-	runtimeOnly("com.mysql:mysql-connector-j")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
-}
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+	repositories {
+		mavenCentral()
 	}
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "17"
+
+subprojects {
+	apply(plugin = "kotlin")
+	apply(plugin = "kotlin-spring")
+	apply(plugin = "kotlin-kapt")
+	apply(plugin = "org.springframework.boot")
+	apply(plugin = "io.spring.dependency-management")
+
+	dependencies {
+		implementation("org.springframework.boot:spring-boot-starter")
+		implementation("org.springframework.boot:spring-boot-starter-security")
+
+		implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
+		implementation("org.jetbrains.kotlin:kotlin-reflect")
+		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+		testImplementation("org.springframework.boot:spring-boot-starter-test")
+		testImplementation("org.springframework.security:spring-security-test")
 	}
+
+
+	dependencyManagement {
+		imports {
+			mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+		}
+	}
+
+	tasks.withType<KotlinCompile> {
+		kotlinOptions {
+			freeCompilerArgs += "-Xjsr305=strict"
+			jvmTarget = "17"
+		}
+	}
+
+	tasks.named<Jar>("jar") {
+		enabled = true
+	}
+
+	tasks.named<BootJar>("bootJar") {
+		enabled = false
+	}
+
+	tasks.withType<Test> {
+		useJUnitPlatform()
+	}
+
 }
 
-tasks.named<Jar>("jar") {
-	enabled = false
-}
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
+
