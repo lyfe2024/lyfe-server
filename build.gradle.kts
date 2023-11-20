@@ -5,8 +5,8 @@ plugins {
 	id("org.springframework.boot") version "3.1.2"
 	id("io.spring.dependency-management") version "1.1.2"
 	kotlin("jvm") version "1.8.22"
-	kotlin("plugin.spring") version "1.8.22"
-	kotlin("plugin.jpa") version "1.8.22"
+	kotlin("plugin.spring") version "1.8.22" apply false
+	kotlin("plugin.jpa") version "1.8.22" apply false
 }
 
 extra["springCloudVersion"] = "2022.0.3"
@@ -33,11 +33,15 @@ allprojects {
 
 
 subprojects {
+	apply(plugin = "java")
+
 	apply(plugin = "kotlin")
 	apply(plugin = "kotlin-spring")
 	apply(plugin = "kotlin-kapt")
+
 	apply(plugin = "org.springframework.boot")
 	apply(plugin = "io.spring.dependency-management")
+	apply(plugin = "org.jetbrains.kotlin.plugin.spring")
 
 	dependencies {
 		implementation("org.springframework.boot:spring-boot-starter")
@@ -57,6 +61,7 @@ subprojects {
 	dependencyManagement {
 		imports {
 			mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+			mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
 		}
 	}
 
@@ -67,19 +72,13 @@ subprojects {
 		}
 	}
 
-	tasks.named<Jar>("jar") {
-		enabled = true
-	}
-
-	tasks.named<BootJar>("bootJar") {
-		enabled = false
-	}
-
 	tasks.withType<Test> {
 		useJUnitPlatform()
 	}
 
+	configurations {
+		compileOnly {
+			extendsFrom(configurations.annotationProcessor.get())
+		}
+	}
 }
-
-
-

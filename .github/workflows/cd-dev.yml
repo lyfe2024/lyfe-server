@@ -4,17 +4,6 @@ on:
   push:
     branches: [ "develop" ]
 
-#on:
-#  workflow_dispatch:
-#    inputs:
-#      branch:
-#        description: 'Branch name'
-#        required: true
-#        default: 'develop'
-
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,7 +23,7 @@ jobs:
       - name: Set up yml secrets file
         env:
           YAML_SECRET: ${{ secrets.YAML_EC2_DEV }}
-          YAML_DIR: src/main/resources
+          YAML_DIR: server/lyfe-api/src/main/resources/config
           YAML_FILE_NAME: application-ec2-dev.yml
         run: |
           echo $YAML_SECRET | base64 --decode > $YAML_DIR/$YAML_FILE_NAME
@@ -65,7 +54,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew bootJar
+        run: ./gradlew server:lyfe-api:bootJar
 
       - name: Docker Login and Push
         env:
@@ -78,7 +67,17 @@ jobs:
           docker tag $DOCKER_IMAGE_TAG $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_TAG
           docker push $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_TAG
 
-      # Deploy to EC2
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Get Short SHA
+        id: short_sha
+        run: |
+          echo "::set-output name=sha_short::$(echo ${{ github.sha }} | head -c 7)"
+          echo "Short SHA: ${{ steps.short_sha.outputs.sha_short }}"
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -89,4 +88,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}
             docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }} lyfe-server
             docker rm -f $(docker ps -qa)
-            docker run -d --name lyfe-server -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev -p 8080:8081 ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}
+            docker run -d --name lyfe-server -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev -p 80:8081 ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}

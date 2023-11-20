@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 apply(plugin = "kotlin-jpa")
 
 dependencies {
@@ -6,4 +8,12 @@ dependencies {
 
     implementation(project(":util:common-util"))
     implementation(project(":core:lyfe-core"))
+}
+
+tasks.named<Jar>("jar") {
+    enabled = true
+}
+
+tasks.named<BootJar>("bootJar") {
+    enabled = false
 }
