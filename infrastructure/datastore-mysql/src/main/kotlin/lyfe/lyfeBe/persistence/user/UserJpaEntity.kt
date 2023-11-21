@@ -3,6 +3,7 @@ package lyfe.lyfeBe.persistence.user
 import jakarta.persistence.*
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.user.domain.Role
+import lyfe.lyfeBe.user.domain.UserStatus
 import java.time.Instant
 
 @Entity
@@ -19,6 +20,9 @@ class UserJpaEntity(
     var fcmRegistration: Boolean,
     var profileImage: String? = null,
     var withdrawnAt: Instant? = null,
+
+    @Enumerated(EnumType.STRING)
+    var userStatus: UserStatus,
 
     @Enumerated(EnumType.STRING)
     var role: Role,

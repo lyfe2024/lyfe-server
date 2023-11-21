@@ -13,10 +13,11 @@ object UserMapper {
             notificationConsent = user.notificationConsent,
             fcmRegistration = user.fcmRegistration,
             profileImage = user.profileImage,
-            withdrawnAt = user.withdrawnAt,
             role = user.role,
+            userStatus = user.userStatus,
             createdAt = user.createdAt,
             updatedAt = user.updatedAt,
+            withdrawnAt = user.withdrawnAt,
             visibility = user.visibility,
         )
 
@@ -31,6 +32,7 @@ object UserMapper {
             profileImage = user.profileImage,
             withdrawnAt = user.withdrawnAt,
             role = user.role,
+            userStatus = user.userStatus,
         ).apply {
             createdAt = user.createdAt
             updatedAt = user.updatedAt
