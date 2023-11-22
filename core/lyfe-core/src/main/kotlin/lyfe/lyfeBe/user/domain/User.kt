@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.user.domain
 
 import lyfe.lyfeBe.error.ResourceNotFoundException
+import lyfe.lyfeBe.image.domain.Image
 import java.time.Instant
 
 data class User(
@@ -10,7 +11,7 @@ data class User(
     val nickname: String,
     val notificationConsent: Boolean,
     val fcmRegistration: Boolean,
-    val profileImage: String?,
+    val profileImage: Image?,
     val role: Role,
     val userStatus: UserStatus,
     val createdAt: Instant?,

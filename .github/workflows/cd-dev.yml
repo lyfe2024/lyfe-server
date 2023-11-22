@@ -20,11 +20,20 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Set up yml secrets file
+      - name: Set up yml ec2-dev file
         env:
           YAML_SECRET: ${{ secrets.YAML_EC2_DEV }}
           YAML_DIR: server/lyfe-api/src/main/resources/config
           YAML_FILE_NAME: application-ec2-dev.yml
+        run: |
+          echo $YAML_SECRET | base64 --decode > $YAML_DIR/$YAML_FILE_NAME
+          echo "YAML_SECRET has been decoded and saved to $YAML_DIR/$YAML_FILE_NAME"
+
+      - name: Set up yml secret file
+        env:
+          YAML_SECRET: ${{ secrets.YAML_SECRET }}
+          YAML_DIR: server/lyfe-api/src/main/resources/config
+          YAML_FILE_NAME: application-secret.yml
         run: |
           echo $YAML_SECRET | base64 --decode > $YAML_DIR/$YAML_FILE_NAME
           echo "YAML_SECRET has been decoded and saved to $YAML_DIR/$YAML_FILE_NAME"
@@ -88,4 +97,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}
             docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }} lyfe-server
             docker rm -f $(docker ps -qa)
-            docker run -d --name lyfe-server -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev -p 80:8081 ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}
+            docker run -d --name lyfe-server -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev,secret -p 80:8081 ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}

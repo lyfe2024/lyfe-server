@@ -1,12 +1,13 @@
 package lyfe.lyfeBe.picture.domain
 
+import lyfe.lyfeBe.image.domain.Image
 import lyfe.lyfeBe.topic.domain.Topic
 import lyfe.lyfeBe.user.domain.User
 import java.time.Instant
 
 data class TopicPicture(
     val id: Long,
-    val picture: String,
+    val picture: Image,
     val title: String,
     val user: User,
     val topic: Topic,

@@ -1,7 +1,9 @@
 package lyfe.lyfeBe.persistence.user
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.image.domain.Image
 import lyfe.lyfeBe.persistence.BaseEntity
+import lyfe.lyfeBe.persistence.image.ImageListConverter
 import lyfe.lyfeBe.user.domain.Role
 import lyfe.lyfeBe.user.domain.UserStatus
 import java.time.Instant
@@ -18,7 +20,11 @@ class UserJpaEntity(
     var nickname: String,
     var notificationConsent: Boolean,
     var fcmRegistration: Boolean,
-    var profileImage: String? = null,
+
+    @Convert(converter = ImageListConverter::class)
+    @Column(columnDefinition = "json")
+    var profileImage: Image? = null,
+
     var withdrawnAt: Instant? = null,
 
     @Enumerated(EnumType.STRING)

@@ -24,7 +24,8 @@ class JwtAuthenticationFilter(
         if (token != null && StringUtils.hasText(token)) {
             authenticateUserByToken(token)
             filterChain.doFilter(request, response)
-        }
+        } else
+            filterChain.doFilter(request, response)
     }
 
     private fun authenticateUserByToken(token: String) {
