@@ -4,6 +4,7 @@ apply(plugin = "kotlin-jpa")
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation(project(mapOf("path" to ":infrastructure:aws")))
     runtimeOnly("com.mysql:mysql-connector-j")
 
     implementation(project(":util:common-util"))
