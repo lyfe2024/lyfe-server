@@ -40,7 +40,10 @@ class BoardJpaEntity(
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", foreignKey = ForeignKey(name = "fk_board_topic_id"))
-    val topic: TopicJpaEntity
+    val topic: TopicJpaEntity,
 
-    ) : BaseEntity() {
+    @Embedded
+    val baseEntity: BaseEntity = BaseEntity()
+
+) {
 }

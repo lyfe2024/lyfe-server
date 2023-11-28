@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.persistence.user
 
+import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.user.User
 
 object UserMapper {
@@ -15,10 +16,10 @@ object UserMapper {
             profileImage = user.profileImage,
             role = user.role,
             userStatus = user.userStatus,
-            createdAt = user.createdAt,
-            updatedAt = user.updatedAt,
+            createdAt = user.baseEntity.createdAt,
+            updatedAt = user.baseEntity.updatedAt,
             withdrawnAt = user.withdrawnAt,
-            visibility = user.visibility,
+            visibility = user.baseEntity.visibility,
         )
 
     fun mapToJpaEntity(user: User): UserJpaEntity =
@@ -33,9 +34,10 @@ object UserMapper {
             withdrawnAt = user.withdrawnAt,
             role = user.role,
             userStatus = user.userStatus,
-        ).apply {
-            createdAt = user.createdAt
-            updatedAt = user.updatedAt
-            visibility = user.visibility
-        }
+            baseEntity = BaseEntity(
+                createdAt = user.createdAt,
+                updatedAt = user.updatedAt,
+                visibility = user.visibility
+            )
+        )
 }

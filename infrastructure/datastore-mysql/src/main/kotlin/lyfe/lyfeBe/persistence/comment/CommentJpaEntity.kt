@@ -29,5 +29,8 @@ class CommentJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     val board: BoardJpaEntity,
 
-    ) : BaseEntity() {
+    @Embedded
+    val baseEntity: BaseEntity = BaseEntity()
+
+) {
 }

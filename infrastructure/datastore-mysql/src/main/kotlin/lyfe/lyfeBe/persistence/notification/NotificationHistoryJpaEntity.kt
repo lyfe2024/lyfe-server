@@ -5,7 +5,6 @@ import lyfe.lyfeBe.notification.NotificationType
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
 import org.jetbrains.annotations.NotNull
-import java.time.Instant
 
 @Entity
 @Table(name = "notification_history")
@@ -23,7 +22,10 @@ class NotificationHistoryJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_notification_history_user_id"))
-    val user: UserJpaEntity
+    val user: UserJpaEntity,
 
-) : BaseEntity() {
+    @Embedded
+    val baseEntity: BaseEntity = BaseEntity()
+
+) {
 }

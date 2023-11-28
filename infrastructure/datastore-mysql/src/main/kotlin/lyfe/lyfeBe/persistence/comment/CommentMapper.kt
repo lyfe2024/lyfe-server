@@ -3,6 +3,7 @@ package lyfe.lyfeBe.persistence.comment
 import lyfe.lyfeBe.persistence.board.BoardMapper
 import lyfe.lyfeBe.persistence.user.UserMapper
 import lyfe.lyfeBe.comment.Comment
+import lyfe.lyfeBe.persistence.BaseEntity
 
 object CommentMapper {
 
@@ -13,10 +14,10 @@ object CommentMapper {
             commentGroupId = comment.commentGroupId,
             user = UserMapper.mapToDomainEntity(comment.user),
             board = BoardMapper.mapToDomainEntity(comment.board),
-            createdAt = comment.createdAt,
-            updatedAt = comment.updatedAt,
+            createdAt = comment.baseEntity.createdAt,
+            updatedAt = comment.baseEntity.updatedAt,
             deletedAt = comment.deletedAt,
-            visibility = comment.visibility,
+            visibility = comment.baseEntity.visibility,
         )
 
     fun mapToJpaEntity(comment: Comment): CommentJpaEntity =
@@ -27,9 +28,10 @@ object CommentMapper {
             user = UserMapper.mapToJpaEntity(comment.user),
             board = BoardMapper.mapToJpaEntity(comment.board),
             deletedAt = comment.deletedAt,
-        ).apply {
-            createdAt = comment.createdAt
-            updatedAt = comment.updatedAt
-            visibility = comment.visibility
-        }
+            baseEntity = BaseEntity(
+                createdAt = comment.createdAt,
+                updatedAt = comment.updatedAt,
+                visibility = comment.visibility
+            )
+        )
 }

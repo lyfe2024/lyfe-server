@@ -3,6 +3,7 @@ package lyfe.lyfeBe.persistence.board
 import lyfe.lyfeBe.persistence.topic.TopicMapper
 import lyfe.lyfeBe.persistence.user.UserMapper
 import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.persistence.BaseEntity
 
 object BoardMapper {
 
@@ -15,10 +16,10 @@ object BoardMapper {
             boardType = board.boardType,
             user = UserMapper.mapToDomainEntity(board.user),
             topic = TopicMapper.mapToDomainEntity(board.topic),
-            createdAt = board.createdAt,
-            updatedAt = board.updatedAt,
+            createdAt = board.baseEntity.createdAt,
+            updatedAt = board.baseEntity.updatedAt,
             deletedAt = board.deletedAt,
-            visibility = board.visibility,
+            visibility = board.baseEntity.visibility,
         )
 
     fun mapToJpaEntity(board: Board): BoardJpaEntity =
@@ -30,10 +31,11 @@ object BoardMapper {
             boardType = board.boardType,
             user = UserMapper.mapToJpaEntity(board.user),
             topic = TopicMapper.mapToJpaEntity(board.topic),
-            deletedAt = board.deletedAt
-        ).apply {
-            createdAt = board.createdAt
-            updatedAt = board.updatedAt
-            visibility = board.visibility
-        }
+            deletedAt = board.deletedAt,
+            baseEntity = BaseEntity(
+                createdAt = board.createdAt,
+                updatedAt = board.updatedAt,
+                visibility = board.visibility
+            )
+        )
 }

@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.notification
 
 import lyfe.lyfeBe.notification.NotificationHistory
+import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.user.UserMapper
 
 object NotificationHistoryMapper {
@@ -11,9 +12,9 @@ object NotificationHistoryMapper {
             content = notificationHistory.content,
             notificationType = notificationHistory.notificationType,
             user = UserMapper.mapToDomainEntity(notificationHistory.user),
-            createdAt = notificationHistory.createdAt,
-            updatedAt = notificationHistory.updatedAt,
-            visibility = notificationHistory.visibility,
+            createdAt = notificationHistory.baseEntity.createdAt,
+            updatedAt = notificationHistory.baseEntity.updatedAt,
+            visibility = notificationHistory.baseEntity.visibility,
         )
 
     fun mapToJpaEntity(notificationHistory: NotificationHistory): NotificationHistoryJpaEntity =
@@ -21,10 +22,11 @@ object NotificationHistoryMapper {
             id = notificationHistory.id,
             content = notificationHistory.content,
             notificationType = notificationHistory.notificationType,
-            user = UserMapper.mapToJpaEntity(notificationHistory.user)
-        ).apply {
-            createdAt = notificationHistory.createdAt
-            updatedAt = notificationHistory.updatedAt
-            visibility = notificationHistory.visibility
-        }
+            user = UserMapper.mapToJpaEntity(notificationHistory.user),
+            baseEntity = BaseEntity(
+                createdAt = notificationHistory.createdAt,
+                updatedAt = notificationHistory.updatedAt,
+                visibility = notificationHistory.visibility
+            )
+        )
 }

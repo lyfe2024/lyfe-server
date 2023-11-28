@@ -42,5 +42,7 @@ class UserJpaEntity(
     @Enumerated(EnumType.STRING)
     val role: Role,
 
-    ) : BaseEntity() {
+    @Embedded
+    val baseEntity: BaseEntity = BaseEntity()
+) {
 }
