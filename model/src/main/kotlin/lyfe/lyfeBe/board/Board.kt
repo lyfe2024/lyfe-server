@@ -1,14 +1,16 @@
-package lyfe.lyfeBe.picture
+package lyfe.lyfeBe.board
 
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.User
 import java.time.Instant
 
-data class TopicPicture(
+data class Board(
     val id: Long,
-    val picture: Image,
     val title: String,
+    val content: String?,
+    val picture: Image?,
+    val boardType: BoardType,
     val user: User,
     val topic: Topic,
     val createdAt: Instant?,

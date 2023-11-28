@@ -1,31 +1,45 @@
-package lyfe.lyfeBe.persistence.picture.topic
+package lyfe.lyfeBe.persistence.board
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.image.ImageListConverter
 import lyfe.lyfeBe.persistence.topic.TopicJpaEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
+import org.jetbrains.annotations.NotNull
 import java.time.Instant
 
 @Entity
-@Table(name = "topic_picture")
-class TopicPictureJpaEntity(
+@Table(name = "board")
+class BoardJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "topic_picture_id")
-    var id: Long = 0,
+    @Column(name = "board_id")
+    val id: Long = 0,
+
+    @field:NotNull
+    val title: String,
+
+    val content: String? = null,
 
     @Convert(converter = ImageListConverter::class)
     @Column(columnDefinition = "json")
-    var picture: Image,
-    var title: String,
-    var deletedAt: Instant? = null,
+    val picture: Image? = null,
 
+    @field:NotNull
+    @Enumerated(EnumType.STRING)
+    val boardType: BoardType,
+
+    val deletedAt: Instant? = null,
+
+    @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    var user: UserJpaEntity,
+    val user: UserJpaEntity,
+
+    @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    var topic: TopicJpaEntity,
+    val topic: TopicJpaEntity
 
     ) : BaseEntity() {
 }

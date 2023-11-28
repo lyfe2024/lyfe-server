@@ -1,16 +1,16 @@
-package lyfe.lyfeBe.worry
+package lyfe.lyfeBe.comment
 
+import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.user.User
 import java.time.Instant
 
-data class WorryComment(
+data class Comment(
     val id: Long,
     val content: String,
-    val depth: Int,
-    val sequence: Int,
+    val commentGroupId: Long?,
     val deletedAt: Instant?,
     val user: User,
-    val topicWorry: TopicWorry,
+    val board: Board,
     val createdAt: Instant?,
     val updatedAt: Instant?,
     val visibility: Boolean,
