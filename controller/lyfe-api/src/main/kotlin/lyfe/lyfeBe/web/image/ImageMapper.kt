@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.web.image
 
-import lyfe.lyfeBe.image.domain.Image
+import lyfe.lyfeBe.image.Image
 
 object ImageMapper {
 

@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.persistence.topic
 
-import lyfe.lyfeBe.topic.domain.Topic
+import lyfe.lyfeBe.topic.Topic
 
 object TopicMapper {
 

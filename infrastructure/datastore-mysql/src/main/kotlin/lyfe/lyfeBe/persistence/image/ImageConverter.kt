@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import lyfe.lyfeBe.image.domain.Image
+import lyfe.lyfeBe.image.Image
 
 @Converter(autoApply = true)
 class ImageConverter : AttributeConverter<Image?, String?> {

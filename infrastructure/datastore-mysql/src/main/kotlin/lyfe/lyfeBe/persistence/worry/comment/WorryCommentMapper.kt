@@ -2,7 +2,7 @@ package lyfe.lyfeBe.persistence.worry.comment
 
 import lyfe.lyfeBe.persistence.user.UserMapper
 import lyfe.lyfeBe.persistence.worry.topic.TopicWorryMapper
-import lyfe.lyfeBe.worry.domain.WorryComment
+import lyfe.lyfeBe.worry.WorryComment
 
 object WorryCommentMapper {
 

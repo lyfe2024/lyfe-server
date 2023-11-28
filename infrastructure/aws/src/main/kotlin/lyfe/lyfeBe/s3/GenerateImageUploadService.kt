@@ -1,8 +1,8 @@
 package lyfe.lyfeBe.s3
 
 
-import lyfe.lyfeBe.image.application.port.`in`.GenerateImageUploadUseCase
-import lyfe.lyfeBe.image.domain.GetImageUploadUrlResult
+import lyfe.lyfeBe.image.GetImageUploadUrlResult
+import lyfe.lyfeBe.image.port.`in`.GenerateImageUploadUseCase
 import org.springframework.stereotype.Service
 
 @Service

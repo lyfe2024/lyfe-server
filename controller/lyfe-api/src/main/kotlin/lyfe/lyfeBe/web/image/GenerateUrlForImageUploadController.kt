@@ -1,8 +1,8 @@
 package lyfe.lyfeBe.web.image
 
 import lyfe.lyfeBe.dto.CommonResponse
-import lyfe.lyfeBe.image.application.port.`in`.GenerateImageUploadUseCase
-import lyfe.lyfeBe.image.domain.GetImageUploadUrlResult
+import lyfe.lyfeBe.image.port.`in`.GenerateImageUploadUseCase
+import lyfe.lyfeBe.image.GetImageUploadUrlResult
 import org.springframework.web.bind.annotation.*
 
 @RestController

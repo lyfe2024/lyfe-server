@@ -2,7 +2,7 @@ package lyfe.lyfeBe.persistence.picture.topic
 
 import lyfe.lyfeBe.persistence.topic.TopicMapper
 import lyfe.lyfeBe.persistence.user.UserMapper
-import lyfe.lyfeBe.picture.domain.TopicPicture
+import lyfe.lyfeBe.picture.TopicPicture
 
 object TopicPictureMapper {
 

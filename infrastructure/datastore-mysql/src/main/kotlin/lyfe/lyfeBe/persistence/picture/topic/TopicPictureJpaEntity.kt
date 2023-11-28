@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.persistence.picture.topic
 
 import jakarta.persistence.*
-import lyfe.lyfeBe.image.domain.Image
+import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.image.ImageListConverter
 import lyfe.lyfeBe.persistence.topic.TopicJpaEntity

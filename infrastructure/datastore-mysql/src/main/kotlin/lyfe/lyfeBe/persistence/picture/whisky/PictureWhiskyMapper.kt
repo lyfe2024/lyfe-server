@@ -2,7 +2,7 @@ package lyfe.lyfeBe.persistence.picture.whisky
 
 import lyfe.lyfeBe.persistence.picture.topic.TopicPictureMapper
 import lyfe.lyfeBe.persistence.user.UserMapper
-import lyfe.lyfeBe.picture.domain.PictureWhisky
+import lyfe.lyfeBe.picture.PictureWhisky
 
 object PictureWhiskyMapper {
 

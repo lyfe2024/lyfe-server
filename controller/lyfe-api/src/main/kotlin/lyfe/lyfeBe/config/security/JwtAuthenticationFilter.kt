@@ -3,8 +3,8 @@ package lyfe.lyfeBe.config.security
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import lyfe.lyfeBe.auth.application.port.`in`.AuthenticationUseCase
-import lyfe.lyfeBe.auth.domain.JwtTokenValidator
+import lyfe.lyfeBe.auth.port.`in`.AuthenticationUseCase
+import lyfe.lyfeBe.auth.JwtTokenValidator
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils

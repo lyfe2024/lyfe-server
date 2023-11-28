@@ -1,6 +1,7 @@
 rootProject.name = "lyfe-server"
 include(
-    "core:lyfe-core",
+    "model",
+    "usecase",
     "infrastructure:datastore-mysql",
     "infrastructure:aws",
     "controller:lyfe-api",

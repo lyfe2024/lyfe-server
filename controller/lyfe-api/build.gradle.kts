@@ -8,7 +8,8 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 
     implementation(project(":util:common-util"))
-    implementation(project(":core:lyfe-core"))
+    implementation(project(":model"))
+    implementation(project(":usecase"))
     implementation(project(":infrastructure:datastore-mysql"))
     implementation(project(":infrastructure:aws"))
 }

@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.persistence.notification
 
-import lyfe.lyfeBe.notification.domain.NotificationHistory
+import lyfe.lyfeBe.notification.NotificationHistory
 import lyfe.lyfeBe.persistence.user.UserMapper
 
 object NotificationHistoryMapper {

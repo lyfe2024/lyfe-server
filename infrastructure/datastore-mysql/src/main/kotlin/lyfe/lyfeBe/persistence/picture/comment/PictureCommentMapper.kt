@@ -2,7 +2,7 @@ package lyfe.lyfeBe.persistence.picture.comment
 
 import lyfe.lyfeBe.persistence.picture.topic.TopicPictureMapper
 import lyfe.lyfeBe.persistence.user.UserMapper
-import lyfe.lyfeBe.picture.domain.PictureComment
+import lyfe.lyfeBe.picture.PictureComment
 
 object PictureCommentMapper {
 

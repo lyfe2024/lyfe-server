@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.persistence.feedback
 
-import lyfe.lyfeBe.feedback.domain.Feedback
+import lyfe.lyfeBe.feedback.Feedback
 import lyfe.lyfeBe.persistence.user.UserMapper
 
 object FeedbackMapper {

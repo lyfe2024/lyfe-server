@@ -15,7 +15,8 @@ dependencies {
 
 
     implementation(project(":util:common-util"))
-    implementation(project(":core:lyfe-core"))
+    implementation(project(":model"))
+    implementation(project(":usecase"))
 }
 
 tasks.named<Jar>("jar") {

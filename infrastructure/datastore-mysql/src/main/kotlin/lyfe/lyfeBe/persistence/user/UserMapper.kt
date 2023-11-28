@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.persistence.user
 
-import lyfe.lyfeBe.user.domain.User
+import lyfe.lyfeBe.user.User
 
 object UserMapper {
 
