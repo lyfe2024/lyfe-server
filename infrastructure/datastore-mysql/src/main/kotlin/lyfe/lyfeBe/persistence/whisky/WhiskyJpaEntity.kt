@@ -12,7 +12,6 @@ import java.time.Instant
 class WhiskyJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "whisky_id")
     val id: Long = 0,
 
     @CreatedDate
@@ -20,10 +19,12 @@ class WhiskyJpaEntity(
 
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_whisky_user_id"))
     val user: UserJpaEntity,
 
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", foreignKey = ForeignKey(name = "fk_whisky_board_id"))
     val board: BoardJpaEntity,
 
     ) {

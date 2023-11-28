@@ -12,7 +12,6 @@ import java.time.Instant
 class CommentJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
     val id: Long = 0,
 
     @field:NotNull

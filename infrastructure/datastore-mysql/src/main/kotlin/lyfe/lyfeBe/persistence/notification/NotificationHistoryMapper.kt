@@ -10,7 +10,6 @@ object NotificationHistoryMapper {
             id = notificationHistory.id,
             content = notificationHistory.content,
             notificationType = notificationHistory.notificationType,
-            notifiedAt = notificationHistory.notifiedAt,
             user = UserMapper.mapToDomainEntity(notificationHistory.user),
             createdAt = notificationHistory.createdAt,
             updatedAt = notificationHistory.updatedAt,
@@ -22,7 +21,6 @@ object NotificationHistoryMapper {
             id = notificationHistory.id,
             content = notificationHistory.content,
             notificationType = notificationHistory.notificationType,
-            notifiedAt = notificationHistory.notifiedAt,
             user = UserMapper.mapToJpaEntity(notificationHistory.user)
         ).apply {
             createdAt = notificationHistory.createdAt

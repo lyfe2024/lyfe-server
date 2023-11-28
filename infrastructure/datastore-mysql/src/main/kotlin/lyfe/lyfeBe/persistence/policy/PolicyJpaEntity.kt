@@ -1,16 +1,22 @@
 package lyfe.lyfeBe.persistence.policy
 
 import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
 
 @Entity
 @Table(name = "policy")
 class PolicyJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    var id: Long = 0,
-    var title: String,
-    var content: String,
-    var version: String,
+    val id: Long = 0,
+
+    @field:NotNull
+    val title: String,
+
+    @field:NotNull
+    val content: String,
+
+    @field:NotNull
+    val version: String,
 ) {
 }

@@ -15,7 +15,6 @@ import java.time.Instant
 class BoardJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
     val id: Long = 0,
 
     @field:NotNull
@@ -35,10 +34,12 @@ class BoardJpaEntity(
 
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_board_user_id"))
     val user: UserJpaEntity,
 
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "topic_id", foreignKey = ForeignKey(name = "fk_board_topic_id"))
     val topic: TopicJpaEntity
 
     ) : BaseEntity() {

@@ -6,6 +6,7 @@ import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.image.ImageListConverter
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.UserStatus
+import org.jetbrains.annotations.NotNull
 import java.time.Instant
 
 @Entity
@@ -13,25 +14,33 @@ import java.time.Instant
 class UserJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    var id: Long = 0,
-    var email: String,
-    var hashedPassword: String,
-    var nickname: String,
-    var notificationConsent: Boolean,
-    var fcmRegistration: Boolean,
+    val id: Long = 0,
+
+    @field:NotNull
+    val email: String,
+
+    @field:NotNull
+    val hashedPassword: String,
+
+    @field:NotNull
+    val nickname: String,
+
+    val notificationConsent: Boolean,
+    val fcmRegistration: Boolean,
 
     @Convert(converter = ImageListConverter::class)
     @Column(columnDefinition = "json")
-    var profileImage: Image? = null,
+    val profileImage: Image? = null,
 
-    var withdrawnAt: Instant? = null,
+    val withdrawnAt: Instant? = null,
 
+    @field:NotNull
     @Enumerated(EnumType.STRING)
-    var userStatus: UserStatus,
+    val userStatus: UserStatus,
 
+    @field:NotNull
     @Enumerated(EnumType.STRING)
-    var role: Role,
+    val role: Role,
 
     ) : BaseEntity() {
 }

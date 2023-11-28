@@ -6,8 +6,7 @@ import java.time.Instant
 data class NotificationHistory(
     val id: Long,
     val content: String,
-    val notificationType: String,
-    val notifiedAt: Instant,
+    val notificationType: NotificationType,
     val user: User,
     val createdAt: Instant?,
     val updatedAt: Instant?,
