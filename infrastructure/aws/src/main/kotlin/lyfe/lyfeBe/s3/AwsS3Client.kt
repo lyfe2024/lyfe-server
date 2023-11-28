@@ -4,7 +4,7 @@ import com.amazonaws.HttpMethod
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest
 import io.github.oshai.kotlinlogging.KotlinLogging
-import lyfe.lyfeBe.image.domain.GetImageUploadUrlResult
+import lyfe.lyfeBe.image.GetImageUploadUrlResult
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.security.SecureRandom

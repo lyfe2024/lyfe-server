@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.persistence.policy
 
-import lyfe.lyfeBe.policy.domain.Policy
+import lyfe.lyfeBe.policy.Policy
 
 object PolicyMapper {
 

@@ -1,23 +1,31 @@
 package lyfe.lyfeBe.persistence.notification
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.notification.NotificationType
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
-import java.time.Instant
+import org.jetbrains.annotations.NotNull
 
 @Entity
 @Table(name = "notification_history")
 class NotificationHistoryJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_history_id")
-    var id: Long = 0,
-    var content: String,
-    var notificationType: String,
-    var notifiedAt: Instant,
+    val id: Long = 0,
+
+    @field:NotNull
+    val content: String,
+
+    @field:NotNull
+    @Enumerated(EnumType.STRING)
+    val notificationType: NotificationType,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    var user: UserJpaEntity
+    @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_notification_history_user_id"))
+    val user: UserJpaEntity,
 
-) : BaseEntity() {
+    @Embedded
+    val baseEntity: BaseEntity = BaseEntity()
+
+) {
 }

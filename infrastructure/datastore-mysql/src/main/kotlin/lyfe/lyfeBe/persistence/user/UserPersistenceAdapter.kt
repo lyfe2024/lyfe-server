@@ -1,8 +1,8 @@
 package lyfe.lyfeBe.persistence.user
 
 import lyfe.lyfeBe.error.ResourceNotFoundException
-import lyfe.lyfeBe.user.application.port.out.GetUserPort
-import lyfe.lyfeBe.user.domain.User
+import lyfe.lyfeBe.user.port.out.GetUserPort
+import lyfe.lyfeBe.user.User
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional

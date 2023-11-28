@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.topic
 
-import lyfe.lyfeBe.topic.domain.Topic
+import lyfe.lyfeBe.persistence.BaseEntity
+import lyfe.lyfeBe.topic.Topic
 
 object TopicMapper {
 
@@ -9,9 +10,9 @@ object TopicMapper {
             id = topic.id,
             content = topic.content,
             appliedAt = topic.appliedAt,
-            createdAt = topic.createdAt,
-            updatedAt = topic.updatedAt,
-            visibility = topic.visibility,
+            createdAt = topic.baseEntity.createdAt,
+            updatedAt = topic.baseEntity.updatedAt,
+            visibility = topic.baseEntity.visibility,
         )
 
     fun mapToJpaEntity(topic: Topic): TopicJpaEntity =
@@ -19,9 +20,11 @@ object TopicMapper {
             id = topic.id,
             content = topic.content,
             appliedAt = topic.appliedAt,
-        ).apply {
-            createdAt = topic.createdAt
-            updatedAt = topic.updatedAt
-            visibility = topic.visibility
-        }
+            baseEntity = BaseEntity(
+                createdAt = topic.createdAt,
+                updatedAt = topic.updatedAt,
+                visibility = topic.visibility
+            )
+        )
+
 }

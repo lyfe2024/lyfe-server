@@ -1,15 +1,12 @@
 package lyfe.lyfeBe.persistence
 
-import jakarta.persistence.EntityListeners
-import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.Embeddable
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.Instant
 
-@EntityListeners(AuditingEntityListener::class)
-@MappedSuperclass
-abstract class BaseEntity(
+@Embeddable
+class BaseEntity(
     @CreatedDate
     var createdAt: Instant? = null,
     @LastModifiedDate

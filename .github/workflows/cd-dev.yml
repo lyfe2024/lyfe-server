@@ -23,7 +23,7 @@ jobs:
       - name: Set up yml ec2-dev file
         env:
           YAML_SECRET: ${{ secrets.YAML_EC2_DEV }}
-          YAML_DIR: server/lyfe-api/src/main/resources/config
+          YAML_DIR: controller/lyfe-api/src/main/resources/config
           YAML_FILE_NAME: application-ec2-dev.yml
         run: |
           echo $YAML_SECRET | base64 --decode > $YAML_DIR/$YAML_FILE_NAME
@@ -32,7 +32,7 @@ jobs:
       - name: Set up yml secret file
         env:
           YAML_SECRET: ${{ secrets.YAML_SECRET }}
-          YAML_DIR: server/lyfe-api/src/main/resources/config
+          YAML_DIR: controller/lyfe-api/src/main/resources/config
           YAML_FILE_NAME: application-secret.yml
         run: |
           echo $YAML_SECRET | base64 --decode > $YAML_DIR/$YAML_FILE_NAME
@@ -63,7 +63,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew server:lyfe-api:bootJar
+        run: ./gradlew controller:lyfe-api:bootJar
 
       - name: Docker Login and Push
         env:
