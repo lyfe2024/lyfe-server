@@ -13,7 +13,6 @@ object UserMapper {
             nickname = user.nickname,
             notificationConsent = user.notificationConsent,
             fcmRegistration = user.fcmRegistration,
-            profileImage = user.profileImage,
             role = user.role,
             userStatus = user.userStatus,
             createdAt = user.baseEntity.createdAt,
@@ -30,14 +29,13 @@ object UserMapper {
             nickname = user.nickname,
             notificationConsent = user.notificationConsent,
             fcmRegistration = user.fcmRegistration,
-            profileImage = user.profileImage,
             withdrawnAt = user.withdrawnAt,
             role = user.role,
             userStatus = user.userStatus,
             baseEntity = BaseEntity(
                 createdAt = user.createdAt,
                 updatedAt = user.updatedAt,
-                visibility = user.visibility
+                visibility = user.visibility == true //FIXME: 여긴어떻게처리..?
             )
         )
 }

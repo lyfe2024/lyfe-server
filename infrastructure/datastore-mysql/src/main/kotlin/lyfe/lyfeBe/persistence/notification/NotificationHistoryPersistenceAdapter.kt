@@ -6,6 +6,6 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 @Component
 class NotificationHistoryPersistenceAdapter(
-    private val notificationHistoryRepository: lyfe.lyfeBe.persistence.notification.NotificationHistoryRepository
+    private val notificationHistoryRepository: NotificationHistoryRepository
 ) {
 }

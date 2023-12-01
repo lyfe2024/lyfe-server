@@ -1,10 +1,9 @@
 package lyfe.lyfeBe.persistence.user
 
 import jakarta.persistence.*
-import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.persistence.BaseEntity
-import lyfe.lyfeBe.persistence.image.ImageListConverter
 import lyfe.lyfeBe.user.Role
+import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
 import org.jetbrains.annotations.NotNull
 import java.time.Instant
@@ -14,7 +13,7 @@ import java.time.Instant
 class UserJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val id: Long,
 
     @field:NotNull
     val email: String,
@@ -27,10 +26,6 @@ class UserJpaEntity(
 
     val notificationConsent: Boolean,
     val fcmRegistration: Boolean,
-
-    @Convert(converter = ImageListConverter::class)
-    @Column(columnDefinition = "json")
-    val profileImage: Image? = null,
 
     val withdrawnAt: Instant? = null,
 
@@ -45,4 +40,35 @@ class UserJpaEntity(
     @Embedded
     val baseEntity: BaseEntity = BaseEntity()
 ) {
+    fun toDomain(): User {
+        return User(
+            id = id,
+            email = email,
+            hashedPassword = hashedPassword,
+            nickname = nickname,
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            withdrawnAt = withdrawnAt,
+            userStatus = userStatus,
+            role = role,
+            createdAt = baseEntity.createdAt,
+            updatedAt = baseEntity.updatedAt,
+            visibility = baseEntity.visibility
+        )
+
+    }
+
+    companion object {
+        fun from(user: User): UserJpaEntity = UserJpaEntity(
+            id = user.id,
+            email = user.email,
+            hashedPassword = user.hashedPassword,
+            nickname = user.nickname,
+            notificationConsent = user.notificationConsent,
+            fcmRegistration = user.fcmRegistration,
+            withdrawnAt = user.withdrawnAt,
+            userStatus = user.userStatus,
+            role = user.role
+        )
+    }
 }
