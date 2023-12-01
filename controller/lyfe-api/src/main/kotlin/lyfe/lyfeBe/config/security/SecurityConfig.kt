@@ -40,7 +40,9 @@ class SecurityConfig(
                 authorizeHttpRequests
                     .requestMatchers(
                         "/health", "/",
-                        "/v1/images/*"
+                        "/v1/images/*",
+                        "/board",
+                        "/board/*"
                     ).permitAll()
                     .anyRequest().authenticated()
             }
