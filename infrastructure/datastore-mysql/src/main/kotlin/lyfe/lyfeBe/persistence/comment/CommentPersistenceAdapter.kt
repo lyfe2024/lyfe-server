@@ -12,6 +12,13 @@ class CommentPersistenceAdapter(
     override fun create(comment: Comment) =
         commentRepository.save(CommentJpaEntity.from(comment)).toDomain()
 
+    override fun update(comment: Comment): Comment {
+        check(comment.id != 0L) { "ID가 0인 Comment는 업데이트할 수 없습니다." }
+        return CommentMapper.mapToJpaEntity(comment)
+            .let { commentRepository.save(it) }
+            .let { CommentMapper.mapToDomainEntity(it) }
+    }
+
     override fun getById(id: Long): Comment =
         commentRepository.findByIdOrNull(id)
             ?.let { CommentMapper.mapToDomainEntity(it) }

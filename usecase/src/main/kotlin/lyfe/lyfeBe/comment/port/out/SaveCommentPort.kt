@@ -4,4 +4,5 @@ import lyfe.lyfeBe.comment.Comment
 
 interface SaveCommentPort {
     fun create(comment: Comment): Comment
+    fun update(comment: Comment): Comment
 }
