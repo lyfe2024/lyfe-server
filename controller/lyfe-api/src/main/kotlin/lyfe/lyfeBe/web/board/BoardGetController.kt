@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("boards")
-class BoardController(
+class BoardGetController(
     private val service: BoardService
 ) {
 
@@ -17,30 +17,6 @@ class BoardController(
     fun get(
         @PathVariable(value = "boardId") boardId: Long,
     ) = service.get(BoardGet(boardId))
-
-
-    @GetMapping
-    fun getBoards(
-        @RequestParam(value = "page", required = false, defaultValue = "0") page: Int,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int
-    ) = service.getBoards(BoardsGet(page, pageSize))
-
-
-    @PostMapping
-    fun create(
-        @Valid @RequestBody req: BoardSaveReq
-    ) {
-        service.create(
-            BoardCreate(
-                req.title,
-                req.content,
-                req.boardType,
-                req.userId,
-                req.topicId
-            )
-        )
-    }
-
 
     @PutMapping("{boardId}")
     fun update(
