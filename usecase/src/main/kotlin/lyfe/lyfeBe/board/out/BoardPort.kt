@@ -1,11 +1,10 @@
-package lyfe.lyfeBe.board.port
+package lyfe.lyfeBe.board.out
 
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardCreate
 import org.springframework.data.domain.PageRequest
 import java.util.*
 
-interface BoardRepository {
+interface BoardPort {
     fun findById(id: Long): Optional<Board>
     fun create(board: Board): Board
     fun update(board: Board): Board

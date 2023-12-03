@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.board
 
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.image.Image
 
 data class BoardCreate(

@@ -1,17 +1,17 @@
 package lyfe.lyfeBe.board
 
-import lyfe.lyfeBe.board.port.BoardRepository
-import lyfe.lyfeBe.topic.port.TopicRepository
-import lyfe.lyfeBe.user.port.UserRepository
+import lyfe.lyfeBe.board.out.BoardPort
+import lyfe.lyfeBe.topic.port.TopicPort
+import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
 class BoardService(
-    private val boardRepository: BoardRepository,
-    private val userRepository: UserRepository,
-    private val topicRepository: TopicRepository
+    private val boardRepository: BoardPort,
+    private val userRepository: UserPort,
+    private val topicRepository: TopicPort
 ) {
 
 

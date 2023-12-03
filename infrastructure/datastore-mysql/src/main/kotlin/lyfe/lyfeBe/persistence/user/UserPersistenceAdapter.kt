@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.persistence.user
 
 import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.port.UserRepository
+import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 class UserPersistenceAdapter(
     private val userRepository: UserJpaRepository
-) : UserRepository {
+) : UserPort {
 
 
     override fun getByIdAndValidateActive(id: Long) =

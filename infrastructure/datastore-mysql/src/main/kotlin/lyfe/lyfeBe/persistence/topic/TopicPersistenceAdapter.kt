@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.persistence.topic
 
 import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.topic.port.TopicRepository
+import lyfe.lyfeBe.topic.port.TopicPort
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class TopicPersistenceAdapter(
     private val topicRepository: TopicJpaRepository
-) : TopicRepository {
+) : TopicPort {
     override fun getById(topicId: Long): Topic {
         return topicRepository.findById(topicId)
             .orElseThrow { RuntimeException("topic not found") }

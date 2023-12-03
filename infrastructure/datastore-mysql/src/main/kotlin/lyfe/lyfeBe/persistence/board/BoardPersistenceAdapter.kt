@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.persistence.board
 
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.port.BoardRepository
+import lyfe.lyfeBe.board.out.BoardPort
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import java.util.*
@@ -9,7 +9,7 @@ import java.util.*
 @Repository
 class BoardPersistenceAdapter(
     private val boardJpaRepository: BoardJpaRepository,
-) : BoardRepository {
+) : BoardPort {
     override fun findById(id: Long): Optional<Board> {
         return boardJpaRepository.findById(id).map { it.toDomain() }
     }

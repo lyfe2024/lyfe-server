@@ -3,7 +3,6 @@ package lyfe.lyfeBe.topic.port
 import lyfe.lyfeBe.topic.Topic
 
 
-interface TopicRepository {
-
+interface TopicPort{
     fun getById(topicId: Long) : Topic
 }
