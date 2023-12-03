@@ -7,7 +7,7 @@ import lyfe.lyfeBe.web.board.req.BoardUpdateReq
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("board")
+@RequestMapping("boards")
 class BoardController(
     private val service: BoardService
 ) {
