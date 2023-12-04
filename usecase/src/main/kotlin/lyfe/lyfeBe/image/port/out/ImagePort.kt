@@ -8,4 +8,5 @@ interface ImagePort {
     fun getById(id: Long): Image
     fun getByUserId(userId: Long): Image
     fun getByIdAndByType(id: Long , type: ImageType): Image
+    fun getByUserIds(userIds: List<Long>): List<Image>
 }
