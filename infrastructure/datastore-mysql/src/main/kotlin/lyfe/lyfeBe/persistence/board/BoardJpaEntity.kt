@@ -89,6 +89,5 @@ class BoardJpaEntity(
                 user = UserJpaEntity.from(board.user),
                 topic = TopicJpaEntity.from(board.topic),
             )
-
     }
 }

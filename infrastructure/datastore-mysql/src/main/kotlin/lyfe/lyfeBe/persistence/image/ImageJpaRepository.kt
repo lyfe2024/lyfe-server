@@ -7,4 +7,5 @@ import java.util.Optional
 interface ImageJpaRepository : JpaRepository<ImageJpaEntity, Long> {
     fun findByIdAndType(id: Long, type: ImageType): Optional<ImageJpaEntity>
     fun findByUserId(userId: Long): Optional<ImageJpaEntity>
+    fun findByUserIdIn(userIds: List<Long>): List<ImageJpaEntity>
 }

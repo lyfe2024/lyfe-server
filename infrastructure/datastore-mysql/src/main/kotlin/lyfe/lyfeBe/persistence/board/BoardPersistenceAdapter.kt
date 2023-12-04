@@ -23,7 +23,7 @@ class BoardPersistenceAdapter(
         return boardJpaRepository.save(update).toDomain()
     }
 
-    override fun findAll(paging: PageRequest) =
+    override fun findAll(paging: PageRequest): MutableList<Board> =
         boardJpaRepository.findAll(paging).map { it.toDomain() }.toList()
 
     //FIXME N+1문제는 어떻게 해결할까?

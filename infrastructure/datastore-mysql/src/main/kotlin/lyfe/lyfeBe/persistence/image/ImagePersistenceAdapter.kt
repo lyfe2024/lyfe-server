@@ -24,4 +24,8 @@ class ImagePersistenceAdapter(
     override fun getByIdAndByType(id: Long, type: ImageType) = imageJpaRepository.findByIdAndType(id, type)
             .orElseThrow { RuntimeException("image not found") }
             .toDomain()
+
+    override fun getByUserIds(userIds: List<Long>) = imageJpaRepository.findByUserIdIn(userIds)
+            .map { it.toDomain() }
+            .toList()
 }
