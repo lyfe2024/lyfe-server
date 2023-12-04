@@ -7,9 +7,8 @@ import java.time.Instant
 data class Board(
     val id: Long ,
     val title: String,
-    val content: String?,
+    val content: String,
     val boardType: BoardType,
-//    val picture: Image?,
     val user: User,
     val topic: Topic,
     val createdAt: Instant?,
@@ -29,8 +28,21 @@ data class Board(
             visibility = visibility
         )
 
-
     companion object {
+
+        fun from(board: Board, user: User) =
+                Board(
+                        id = board.id,
+                        title = board.title,
+                        content = board.content,
+                        boardType = board.boardType,
+                        user = user,
+                        topic = board.topic,
+                        createdAt = Instant.now(),
+                        updatedAt = Instant.now(),
+                        visibility = true
+                )
+
         fun from(boardCreate: BoardCreate, user: User, topic: Topic) =
             Board(
                 id = 0,
