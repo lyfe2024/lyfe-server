@@ -41,8 +41,8 @@ class SecurityConfig(
                     .requestMatchers(
                         "/health", "/",
                         "/v1/images/*",
-                        "/board",
-                        "/board/*"
+                        "/boards",
+                        "/boards/*"
                     ).permitAll()
                     .anyRequest().authenticated()
             }
