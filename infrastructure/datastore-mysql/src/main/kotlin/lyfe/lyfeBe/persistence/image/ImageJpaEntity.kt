@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.image
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.board.BoardJpaEntity
@@ -29,16 +30,37 @@ class ImageJpaEntity(
 
     @ManyToOne
     @JoinColumn(name = "board_id", foreignKey = ForeignKey(name = "fk_image_board_id"))
-    val board: BoardJpaEntity,
+    val board: BoardJpaEntity? = null,
 
 
     @OneToOne
-    @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_image_topic_id"))
-    val user: UserJpaEntity,
+    @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_image_user_id"))
+    val user: UserJpaEntity? = null,
 
     @Embedded
-    val baseEntity: BaseEntity
+    val baseEntity: BaseEntity? = null
 
 ) {
+    fun toDomain(): Image {
+        return Image(
+            id = id,
+            url = url,
+            type = type,
+            width = width,
+            height = height
+        )
+    }
+
+    companion object {
+        fun from(image: Image): ImageJpaEntity {
+            return ImageJpaEntity(
+                id = image.id,
+                url = image.url,
+                type = image.type,
+                width = image.width,
+                height = image.height
+            )
+        }
+    }
 
 }

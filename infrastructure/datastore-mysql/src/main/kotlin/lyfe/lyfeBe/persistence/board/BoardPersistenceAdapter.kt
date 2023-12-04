@@ -10,8 +10,9 @@ import java.util.*
 class BoardPersistenceAdapter(
     private val boardJpaRepository: BoardJpaRepository,
 ) : BoardPort {
-    override fun findById(id: Long): Optional<Board> {
-        return boardJpaRepository.findById(id).map { it.toDomain() }
+    override fun findById(id: Long): Board {
+        return boardJpaRepository.findById(id).orElseThrow { RuntimeException("Board not found") }
+                .toDomain()
     }
 
     override fun create(board: Board) =

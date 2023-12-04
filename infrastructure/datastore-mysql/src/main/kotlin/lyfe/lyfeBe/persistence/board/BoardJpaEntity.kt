@@ -21,7 +21,7 @@ class BoardJpaEntity(
     @field:NotNull
     val title: String,
 
-    val content: String? = null,
+    val content: String,
 
 
     @field:NotNull
@@ -48,7 +48,6 @@ class BoardJpaEntity(
             id = id,
             title = title,
             content = content,
-//            picture = picture,
             boardType = boardType,
             user = user.toDomain(),
             topic = topic.toDomain(),
