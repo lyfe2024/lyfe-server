@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional
 class TopicPersistenceAdapter(
     private val topicRepository: TopicJpaRepository
 ) : TopicPort {
+
+    override fun create(topic: Topic) = topicRepository.save(TopicJpaEntity.from(topic)).toDomain()
+
     override fun getById(topicId: Long): Topic {
         return topicRepository.findById(topicId)
             .orElseThrow { RuntimeException("topic not found") }

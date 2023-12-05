@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.persistence.user
 
+import lyfe.lyfeBe.persistence.board.BoardJpaEntity
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Repository
@@ -22,6 +23,9 @@ class UserPersistenceAdapter(
             .orElseThrow { RuntimeException("user not found") }
 
     }
+
+    override fun create(user: User)=
+            userRepository.save(UserJpaEntity.from(user)).toDomain()
 
     override fun findById(userId: Long) =
         userRepository.findById(userId)

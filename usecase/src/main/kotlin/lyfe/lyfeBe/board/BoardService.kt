@@ -6,6 +6,7 @@ import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,11 +25,11 @@ class BoardService(
     }
 
 
-    fun create(boardCreate: BoardCreate): Long {
+    fun create(boardCreate: BoardCreate): Board {
         val user = userRepository.getById(boardCreate.userId)
         val topic = topicRepository.getById(boardCreate.topicId)
         val board = Board.from(boardCreate, user, topic)
-        return boardRepository.create(board).id
+        return boardRepository.create(board)
     }
 
 
@@ -41,13 +42,30 @@ class BoardService(
         return boardRepository.findById(id)
     }
 
-    fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
-        val pageable = boardsGet.pageable
-        val paging = PageRequest.of(pageable.pageNumber, pageable.pageSize, pageable.sort)
-        val boards = boardRepository.findAll(paging).toList()
-        val userIds = boards.map { it.user.id }.toList()
-        val image = imageRepository.getByUserIds(userIds)
 
-        return BoardDto.toDtos(boards, image.map { it.url }.toList())
+    fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
+        val pageable = createPageRequest(boardsGet.pageable)
+        val boards = fetchBoards(pageable)
+        return boards.map { board ->
+            BoardDto.toDto(board, fetchImageUrl(board.user.id))
+        }.toList()
+    }
+
+
+    private fun createPageRequest(pageable: Pageable): PageRequest {
+        return PageRequest.of(pageable.pageNumber, pageable.pageSize, pageable.sort)
+    }
+
+    private fun fetchBoards(pageable: PageRequest): List<Board> {
+        return boardRepository.findAll(pageable).toList()
+    }
+
+    private fun fetchImageUrl(userId: Long): String {
+        val byId = imageRepository.getById(1L)
+        return imageRepository.getByUserId(userId).url
+    }
+
+    fun List<Board>.getUserIds(): List<Long> {
+        return this.map { it.user.id }
     }
 }

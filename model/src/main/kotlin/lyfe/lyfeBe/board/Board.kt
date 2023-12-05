@@ -30,19 +30,6 @@ data class Board(
 
     companion object {
 
-        fun from(board: Board, user: User) =
-                Board(
-                        id = board.id,
-                        title = board.title,
-                        content = board.content,
-                        boardType = board.boardType,
-                        user = user,
-                        topic = board.topic,
-                        createdAt = Instant.now(),
-                        updatedAt = Instant.now(),
-                        visibility = true
-                )
-
         fun from(boardCreate: BoardCreate, user: User, topic: Topic) =
             Board(
                 id = 0,
