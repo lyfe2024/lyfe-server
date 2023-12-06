@@ -22,12 +22,5 @@ data class BoardDto(
                     updatedAt = board.updatedAt.toString()
             )
         }
-
-        fun toDtos(boards: List<Board>, urls: List<String>): List<BoardDto> {
-            return boards.mapIndexed { index, board ->
-                val url = urls[index]
-                toDto(board, url)
-            }
-        }
     }
 }

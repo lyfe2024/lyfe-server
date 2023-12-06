@@ -27,13 +27,11 @@ class FakeBoardRepository : BoardPort {
         return board
     }
 
-    override fun findAll(paging: PageRequest): List<Board> {
+    override fun findAll(boardId: Long, size: Int): List<Board> {
         return data.subList(
-                paging.offset.toInt(),
-                (paging.offset + paging.pageSize).coerceAtMost(data.size.toLong()).toInt()
+            boardId.toInt(),
+                (boardId + size).coerceAtMost(data.size.toLong()).toInt()
         )
     }
-    fun deleteAll() {
-        data.clear()
-    }
+
 }

@@ -5,8 +5,6 @@ import lyfe.lyfeBe.board.out.BoardPort
 import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,6 +22,13 @@ class BoardService(
         return BoardDto.toDto(board, image.url)
     }
 
+
+    fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
+        val boards = fetchBoards(boardsGet.boardId , boardsGet.size)
+        return boards.map { board ->
+            BoardDto.toDto(board, fetchImageUrl(board.user.id))
+        }.toList()
+    }
 
     fun create(boardCreate: BoardCreate): Board {
         val user = userRepository.getById(boardCreate.userId)
@@ -43,28 +48,11 @@ class BoardService(
     }
 
 
-    fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
-        val pageable = createPageRequest(boardsGet.pageable)
-        val boards = fetchBoards(pageable)
-        return boards.map { board ->
-            BoardDto.toDto(board, fetchImageUrl(board.user.id))
-        }.toList()
-    }
-
-
-    private fun createPageRequest(pageable: Pageable): PageRequest {
-        return PageRequest.of(pageable.pageNumber, pageable.pageSize, pageable.sort)
-    }
-
-    private fun fetchBoards(pageable: PageRequest): List<Board> {
-        return boardRepository.findAll(pageable).toList()
+    private fun fetchBoards(boardId: Long, size: Int): List<Board> {
+        return boardRepository.findAll(boardId, size).toList()
     }
 
     private fun fetchImageUrl(userId: Long): String {
         return imageRepository.getByUserId(userId).url
-    }
-
-    fun List<Board>.getUserIds(): List<Long> {
-        return this.map { it.user.id }
     }
 }

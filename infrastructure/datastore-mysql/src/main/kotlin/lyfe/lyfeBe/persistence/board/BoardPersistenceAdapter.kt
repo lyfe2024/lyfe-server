@@ -4,7 +4,6 @@ import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.out.BoardPort
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
-import java.util.*
 
 @Repository
 class BoardPersistenceAdapter(
@@ -23,8 +22,10 @@ class BoardPersistenceAdapter(
         return boardJpaRepository.save(update).toDomain()
     }
 
-    override fun findAll(paging: PageRequest): MutableList<Board> =
-        boardJpaRepository.findAll(paging).map { it.toDomain() }.toList()
+    override fun findAll(id: Long, size: Int): List<Board> {
+        val pageable = PageRequest.of(0, size)
+      return  boardJpaRepository.findByIdLessThanOrderByIdDesc(id, pageable).map { it.toDomain() }.toList()
 
+    }
     //FIXME N+1문제는 어떻게 해결할까?
 }

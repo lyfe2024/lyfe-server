@@ -18,27 +18,27 @@ class BoardTest(
     Given("BoardCreate, User, Topic 객체가 초기화되었을 때") {
 
         val boardCreate = BoardCreate(
-                "testTile",
-                "testContent",
-                BoardType.BOARD,
-                1L,
-                1L
+            "testTile",
+            "testContent",
+            BoardType.BOARD,
+            1L,
+            1L
         )
-        val user = User(
-                1L,
-                "testName",
-                "testEmail",
-                "testPassword",
-                true,
-                true,
-                Role.USER,
-                UserStatus.ACTIVE,
 
-                )
+        val user = User(
+            1L,
+            "testName",
+            "testEmail",
+            "testPassword",
+            true,
+            true,
+            Role.USER,
+            UserStatus.ACTIVE,
+        )
         val topic = Topic(
-                id = 1L,
-                content = "testTopic",
-                visibility = true
+            id = 1L,
+            content = "testTopic",
+            visibility = true
         )
 
 
@@ -58,35 +58,35 @@ class BoardTest(
     Given("BoardUpdate와 Board 객체가 준비되었을 때") {
 
         val boardUpdate = BoardUpdate(
-                1L,
-                "testTile",
-                "testContent"
+            1L,
+            "testTile",
+            "testContent"
         )
 
         val board = Board(
-                id = 1L,
-                title = "testTile",
-                content = "testContent",
-                boardType = BoardType.BOARD,
-                user = User(
-                        1L,
-                        "testName",
-                        "testEmail",
-                        "testPassword",
-                        true,
-                        true,
-                        Role.USER,
-                        UserStatus.ACTIVE,
+            id = 1L,
+            title = "testTile",
+            content = "testContent",
+            boardType = BoardType.BOARD,
+            user = User(
+                1L,
+                "testName",
+                "testEmail",
+                "testPassword",
+                true,
+                true,
+                Role.USER,
+                UserStatus.ACTIVE,
 
-                        ),
-                topic = Topic(
-                        id = 1L,
-                        content = "testTopic",
-                        visibility = true
                 ),
-                createdAt = null,
-                updatedAt = null,
+            topic = Topic(
+                id = 1L,
+                content = "testTopic",
                 visibility = true
+            ),
+            createdAt = null,
+            updatedAt = null,
+            visibility = true
         )
 
         When("Board 객체를 BoardUpdate 정보로 업데이트했을 때") {

@@ -8,5 +8,5 @@ interface BoardPort {
     fun findById(id: Long): Board
     fun create(board: Board): Board
     fun update(board: Board): Board
-    fun findAll(paging: PageRequest): List<Board>
+    fun findAll(paging: Long, size: Int): List<Board>
 }

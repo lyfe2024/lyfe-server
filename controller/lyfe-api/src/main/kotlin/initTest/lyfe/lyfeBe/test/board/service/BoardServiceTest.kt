@@ -144,11 +144,8 @@ class BoardServiceTest(
         boardService.create(boardCreate)
 
         val boardsGet = BoardsGet(
-                PageRequest.of(
-                        0,
-                        5,
-                        Sort.by(Sort.Direction.DESC, "id")
-                )
+                1L,
+                10
         )
 
 
