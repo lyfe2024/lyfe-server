@@ -61,7 +61,6 @@ class BoardService(
     }
 
     private fun fetchImageUrl(userId: Long): String {
-        val byId = imageRepository.getById(1L)
         return imageRepository.getByUserId(userId).url
     }
 

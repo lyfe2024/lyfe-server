@@ -22,7 +22,10 @@ class FakeUserRepository : UserPort {
         TODO("Not yet implemented")
     }
 
-    override fun getById(userId: Long) = data.find { it.id == userId }!!
+    //    override fun getById(userId: Long) = data.find { it.id == userId }!!
+    override fun getById(userId: Long): User {
+        return data.find { it.id == userId }!!
+    }
 
 
 }

@@ -33,4 +33,7 @@ class FakeBoardRepository : BoardPort {
                 (paging.offset + paging.pageSize).coerceAtMost(data.size.toLong()).toInt()
         )
     }
+    fun deleteAll() {
+        data.clear()
+    }
 }
