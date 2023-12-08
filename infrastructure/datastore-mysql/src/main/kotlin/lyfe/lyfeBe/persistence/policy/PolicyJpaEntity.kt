@@ -1,6 +1,8 @@
 package lyfe.lyfeBe.persistence.policy
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.policy.Policy
+import lyfe.lyfeBe.policy.PolicyType
 import org.jetbrains.annotations.NotNull
 
 @Entity
@@ -18,5 +20,18 @@ class PolicyJpaEntity(
 
     @field:NotNull
     val version: String,
+
+
+    @field:NotNull
+    @Enumerated(EnumType.STRING)
+    val policyType: PolicyType
 ) {
+    fun toDomain(): Policy {
+        return Policy(
+            id = id,
+            title = title,
+            content = content,
+            version = version
+        )
+    }
 }
