@@ -10,14 +10,14 @@ import lyfe.lyfeBe.web.board.BoardGetController
 import lyfe.lyfeBe.web.board.BoardUpdateController
 
 class TestContainer(
-        var boardCreateController: BoardCreateController,
-        var boardUpdateController: BoardUpdateController,
-        var boardGetController: BoardGetController,
-        var boardService: BoardService,
-        var boardRepository: BoardPort,
-        var userRepository: UserPort,
-        var topicRepository: TopicPort,
-        var imageRepository: ImagePort
+    var boardCreateController: BoardCreateController,
+    var boardUpdateController: BoardUpdateController,
+    var boardGetController: BoardGetController,
+    var boardService: BoardService,
+    var boardRepository: BoardPort,
+    var userRepository: UserPort,
+    var topicRepository: TopicPort,
+    var imageRepository: ImagePort
 
 ) {
 
@@ -27,23 +27,27 @@ class TestContainer(
             val userRepository = FakeUserRepository()
             val topicRepository = FakeTopicRepository()
             val imageRepository = FakeImageRepository()
+            val fakeWhiskyRepository = FakeWhiskyRepository()
+            val fakeCommentRepository = FakeCommentRepository()
 
             val boardService = BoardService(
-                    boardRepository,
-                    userRepository,
-                    topicRepository,
-                    imageRepository
+                boardRepository,
+                userRepository,
+                topicRepository,
+                imageRepository,
+                fakeWhiskyRepository,
+                fakeCommentRepository
             )
 
             return TestContainer(
-                    BoardCreateController(boardService),
-                    BoardUpdateController(boardService),
-                    BoardGetController(boardService),
-                    boardService,
-                    boardRepository,
-                    userRepository,
-                    topicRepository,
-                    imageRepository
+                BoardCreateController(boardService),
+                BoardUpdateController(boardService),
+                BoardGetController(boardService),
+                boardService,
+                boardRepository,
+                userRepository,
+                topicRepository,
+                imageRepository
             )
         }
     }

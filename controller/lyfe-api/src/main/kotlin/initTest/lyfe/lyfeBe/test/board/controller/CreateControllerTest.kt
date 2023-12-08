@@ -1,9 +1,9 @@
 package initTest.lyfe.lyfeBe.test.board.controller
 
-import initTest.lyfe.lyfeBe.test.mock.*
+import initTest.lyfe.lyfeBe.test.mock.TestContainer
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.topic.Topic
@@ -11,7 +11,6 @@ import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.web.board.req.BoardSaveReq
-import lyfe.lyfeBe.web.board.req.BoardUpdateReq
 
 
 class CreateControllerTest(
@@ -23,14 +22,14 @@ class CreateControllerTest(
     beforeContainer {
 
         val user = User(
-                id = 1L,
-                email = "testUser@example.com",
-                hashedPassword = "hashedPassword",
-                nickname = "testUser",
-                notificationConsent = true,
-                fcmRegistration = true,
-                role = Role.USER,
-                userStatus = UserStatus.ACTIVE,
+            id = 1L,
+            email = "testUser@example.com",
+            hashedPassword = "hashedPassword",
+            nickname = "testUser",
+            notificationConsent = true,
+            fcmRegistration = true,
+            role = Role.USER,
+            userStatus = UserStatus.ACTIVE,
         )
         testContainer.userRepository.create(user)
 
@@ -39,13 +38,13 @@ class CreateControllerTest(
 
 
         val image = Image(
-                id = 1L,
-                url = "https://example.com/image.jpg",
-                board = null,
-                user = user,
-                type = ImageType.PROFILE,
-                width = 100,
-                height = 100
+            id = 1L,
+            url = "https://example.com/image.jpg",
+            board = null,
+            user = user,
+            type = ImageType.PROFILE,
+            width = 100,
+            height = 100
         )
         testContainer.imageRepository.create(image)
 

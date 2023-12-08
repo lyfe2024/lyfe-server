@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.board.dto
 
 import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.user.dto.UserDTO
 
 data class BoardDto(
@@ -8,18 +9,22 @@ data class BoardDto(
         val user: UserDTO,
         val title: String,
         val content: String,
-        val boardType: String,
+        val boardType: BoardType,
+        val whiskyCount: String,
+        val commentCount: String,
         val updatedAt: String
 ) {
     companion object {
-        fun toDto(board: Board, url: String): BoardDto {
+        fun toDto(param : BoardDtoAssembly): BoardDto {
             return BoardDto(
-                    id = board.id,
-                    user = UserDTO.from(board.user, url),
-                    title = board.title,
-                    content = board.content,
-                    boardType = board.boardType.name,
-                    updatedAt = board.updatedAt.toString()
+                    id = param.board.id,
+                    user = UserDTO.from(param.board.user, param.imageUrl),
+                    title = param.board.title,
+                    content = param.board.content,
+                    boardType = param.board.boardType,
+                    whiskyCount = param.whiskyCount.toString(),
+                    commentCount = param.commentCount.toString(),
+                    updatedAt = param.board.updatedAt.toString()
             )
         }
     }
