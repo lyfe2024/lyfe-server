@@ -31,7 +31,28 @@ class PolicyJpaEntity(
             id = id,
             title = title,
             content = content,
-            version = version
+            version = version,
+            policyType = policyType
         )
+    }
+
+    companion object {
+        fun from(policy: Policy) =
+            PolicyJpaEntity(
+                title = policy.title,
+                content = policy.content,
+                version = policy.version,
+                policyType = policy.policyType
+            )
+
+        fun update(policy: Policy) =
+            PolicyJpaEntity(
+                id = policy.id,
+                title = policy.title,
+                content = policy.content,
+                version = policy.version,
+                policyType = policy.policyType
+            )
+
     }
 }
