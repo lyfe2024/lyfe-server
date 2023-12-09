@@ -42,7 +42,7 @@ class SecurityConfig(
                         "/health", "/",
                         "/v1/images/*",
                         "/boards",
-                        "/boards/*"
+                        "/boards/*",
                         "/v1/**"
                     ).permitAll()
                     .anyRequest().authenticated()

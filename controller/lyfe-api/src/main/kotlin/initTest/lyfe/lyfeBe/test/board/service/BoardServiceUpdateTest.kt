@@ -80,7 +80,7 @@ class BoardServiceUpdateTest(
         val boardCreate = BoardCreate(
             "testTile",
             "testContent",
-            BoardType.BOARD,
+            BoardType.BOARD_CONTENT,
             1L,
             1L
         )

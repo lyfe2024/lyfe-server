@@ -67,7 +67,7 @@ class BoardServiceGetTest(
             id = 1L,
             title = "테스트 게시물",
             content = "게시물 내용입니다.",
-            boardType = BoardType.BOARD,
+            boardType = BoardType.BOARD_CONTENT,
             user = user,
             topic = topic,
             createdAt = Instant.now(),
@@ -120,7 +120,7 @@ class BoardServiceGetTest(
             Then("조회된 게시판의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
                 boardDto.title shouldBe "테스트 게시물"
                 boardDto.content shouldBe "게시물 내용입니다."
-                boardDto.boardType shouldBe BoardType.BOARD
+                boardDto.boardType shouldBe BoardType.BOARD_CONTENT
                 boardDto.user.id shouldBe 1L
                 boardDto.whiskyCount shouldBe "1"
                 boardDto.commentCount shouldBe "1"
@@ -144,7 +144,7 @@ class BoardServiceGetTest(
             Then("조회된 게시판의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
                 boardDtos[0].title shouldBe "테스트 게시물"
                 boardDtos[0].content shouldBe "게시물 내용입니다."
-                boardDtos[0].boardType shouldBe BoardType.BOARD
+                boardDtos[0].boardType shouldBe BoardType.BOARD_CONTENT
                 boardDtos[0].user.id shouldBe 1L
                 boardDtos[0].whiskyCount shouldBe "1"
                 boardDtos[0].commentCount shouldBe "1"

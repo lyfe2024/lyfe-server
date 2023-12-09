@@ -10,8 +10,6 @@ import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
-import lyfe.lyfeBe.whisky.Whisky
-import java.time.LocalDateTime
 
 
 class BoardServiceCreateTest(
@@ -79,7 +77,7 @@ class BoardServiceCreateTest(
         val boardCreate = BoardCreate(
             "testTile",
             "testContent",
-            BoardType.BOARD,
+            BoardType.BOARD_CONTENT,
             1L,
             1L
         )

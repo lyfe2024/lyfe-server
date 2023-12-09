@@ -20,7 +20,7 @@ class BoardTest(
         val boardCreate = BoardCreate(
             "testTile",
             "testContent",
-            BoardType.BOARD,
+            BoardType.BOARD_CONTENT,
             1L,
             1L
         )
@@ -67,7 +67,7 @@ class BoardTest(
             id = 1L,
             title = "testTile",
             content = "testContent",
-            boardType = BoardType.BOARD,
+            boardType = BoardType.BOARD_CONTENT,
             user = User(
                 1L,
                 "testName",

@@ -22,7 +22,7 @@ class BoardMockController {
                     pictureUrl = "https://picsum.photos/420/420"
                 ),
                 date = "2021-01-01",
-                boardType = BoardType.BOARD_PICTURE,
+                boardType = BoardType.BOARD_CONTENT,
                 user = UserResponse(
                     id = 1L,
                     username = "홍길동",
