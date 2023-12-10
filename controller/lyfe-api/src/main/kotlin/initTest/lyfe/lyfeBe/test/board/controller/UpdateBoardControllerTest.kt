@@ -10,8 +10,8 @@ import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
-import lyfe.lyfeBe.web.board.req.BoardSaveReq
-import lyfe.lyfeBe.web.board.req.BoardUpdateReq
+import lyfe.lyfeBe.web.board.req.BoardSaveRequest
+import lyfe.lyfeBe.web.board.req.BoardUpdateRequest
 
 
 class UpdateBoardControllerTest(
@@ -53,7 +53,7 @@ class UpdateBoardControllerTest(
 
     Given("게시판 생성을 위한 요청 데이터가 준비되었을 때") {
 
-        val req = BoardSaveReq(
+        val req = BoardSaveRequest(
             title = "테스트 게시판 제목",
             content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
             boardType = BoardType.BOARD_CONTENT,
@@ -65,7 +65,7 @@ class UpdateBoardControllerTest(
 
         When("게시판을 업데이트 했을 때") {
 
-            val updateReq = BoardUpdateReq(
+            val updateReq = BoardUpdateRequest(
                 title = "바뀐  게시판 제목",
                 content = "바뀐 테스트 내용입니다. 여기에 게시판 내용이 들어갑니다."
             )

@@ -8,8 +8,8 @@ import lyfe.lyfeBe.dto.CommonResponse
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("boards")
-class BoardGetController(
+@RequestMapping("/v1/boards")
+class GetBoardController(
     private val service: BoardService
 ) {
     @GetMapping

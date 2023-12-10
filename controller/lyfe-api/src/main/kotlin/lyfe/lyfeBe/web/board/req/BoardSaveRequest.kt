@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull
 import lyfe.lyfeBe.board.BoardType
 
 
-data class BoardSaveReq(
+data class BoardSaveRequest(
     @NotBlank
     val title: String,
     @NotBlank
