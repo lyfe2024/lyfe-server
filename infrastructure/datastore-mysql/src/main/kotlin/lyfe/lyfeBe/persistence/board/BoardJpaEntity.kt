@@ -1,17 +1,16 @@
 package lyfe.lyfeBe.persistence.board
 
 import jakarta.persistence.*
-import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardCreate
 import lyfe.lyfeBe.board.BoardType
+import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.persistence.BaseEntity
+import lyfe.lyfeBe.persistence.image.ImageListConverter
 import lyfe.lyfeBe.persistence.topic.TopicJpaEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
 import org.jetbrains.annotations.NotNull
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.time.Instant
 
 @Entity
-@EntityListeners(AuditingEntityListener::class)
 @Table(name = "board")
 class BoardJpaEntity(
     @Id

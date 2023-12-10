@@ -1,44 +1,37 @@
 package lyfe.lyfeBe.comment.service
 
-import lyfe.lyfeBe.board.port.out.GetBoardPort
+import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.Comment
-import lyfe.lyfeBe.comment.port.`in`.CreateCommentUseCase
-import lyfe.lyfeBe.comment.port.out.GetCommentPort
-import lyfe.lyfeBe.comment.port.out.SaveCommentPort
-import lyfe.lyfeBe.user.port.out.GetUserPort
+import lyfe.lyfeBe.comment.port.`in`.CreateCommentCommand
+import lyfe.lyfeBe.comment.port.out.CommentPort
+import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional
 @Service
 class CreateCommentService(
-    private val saveCommentPort: SaveCommentPort,
-    private val getUserPort: GetUserPort,
-    private val getBoardPort: GetBoardPort,
-    private val getCommentPort: GetCommentPort
-) : CreateCommentUseCase {
+    private val commentPort: CommentPort,
+    private val userPort: UserPort,
+    private val boardPort: BoardPort,
+) {
+    fun create(command: CreateCommentCommand): Comment {
 
-    override fun create(
-        content: String,
-        commentGroupId: Long?,
-        userId: Long,
-        boardId: Long
-    ): Comment {
+        val user = userPort.getById(id = command.userId)
+        val board = boardPort.getById(id = command.boardId)
 
-        val user = getUserPort.getById(id = userId)
-
-        val board = getBoardPort.getById(id = boardId)
-
-        if (commentGroupId != null) {
-            val groupComment = getCommentPort.getById(id = commentGroupId)
+        command.commentGroupId?.let {
+            val groupComment = commentPort.getById(id = it)
             require(groupComment.commentGroupId == null) { "대댓글은 대댓글을 달 수 없습니다." }
         }
 
-        return Comment.create(
-            content = content,
-            commentGroupId = commentGroupId,
+        val comment = Comment.create(
+            content = command.content,
+            commentGroupId = command.commentGroupId,
             user = user,
             board = board
-        ).let { saveCommentPort.create(it) }
+        )
+
+        return commentPort.create(comment)
     }
 }

@@ -9,7 +9,6 @@ object CommentMapper {
             id = comment.id,
             content = comment.content,
             commentGroupId = comment.commentGroupId,
-            deletedAt = comment.deletedAt,
             userId = comment.user.id,
             boardId = comment.board.id,
             createdAt = comment.createdAt,

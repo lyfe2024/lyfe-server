@@ -1,11 +1,11 @@
-/*
 package lyfe.lyfeBe.comment.port.out
 
 import lyfe.lyfeBe.comment.Comment
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
-interface GetCommentPort {
+interface CommentPort {
+
     fun getById(id: Long): Comment
     fun findAllByBoardId(
         cursorId: Long,
@@ -18,4 +18,7 @@ interface GetCommentPort {
         pageable: Pageable
     ): Page<Comment>
     fun findLastByBoardId(boardId: Long): Comment
-}*/
+
+    fun create(comment: Comment): Comment
+    fun update(comment: Comment): Comment
+}

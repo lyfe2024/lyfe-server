@@ -12,8 +12,10 @@ class TopicJpaEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    @field:NotNull
     val content: String,
 
+    @field:NotNull
     val appliedAt: Instant? = null,
 
     @Embedded
@@ -34,8 +36,8 @@ class TopicJpaEntity(
         fun from(topic: Topic): TopicJpaEntity = TopicJpaEntity(
             id = topic.id,
             content = topic.content,
-            appliedAt = topic.appliedAt
+            appliedAt = topic.appliedAt,
+            baseEntity = BaseEntity(),
         )
-
     }
 }

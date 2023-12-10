@@ -11,34 +11,34 @@ import java.time.Instant
 @Entity
 @Table(name = "user")
 class UserJpaEntity(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
 
-        @field:NotNull
-        val email: String,
+    @field:NotNull
+    val email: String,
 
-        @field:NotNull
-        val hashedPassword: String,
+    @field:NotNull
+    val hashedPassword: String,
 
-        @field:NotNull
-        val nickname: String,
+    @field:NotNull
+    val nickname: String,
 
-        val notificationConsent: Boolean,
-        val fcmRegistration: Boolean,
+    val notificationConsent: Boolean,
+    val fcmRegistration: Boolean,
 
         val withdrawnAt: Instant? = null,
 
-        @field:NotNull
-        @Enumerated(EnumType.STRING)
-        val userStatus: UserStatus,
+    @field:NotNull
+    @Enumerated(EnumType.STRING)
+    val userStatus: UserStatus,
 
-        @field:NotNull
-        @Enumerated(EnumType.STRING)
-        val role: Role,
+    @field:NotNull
+    @Enumerated(EnumType.STRING)
+    val role: Role,
 
-        @Embedded
-        val baseEntity: BaseEntity = BaseEntity()
+    @Embedded
+    val baseEntity: BaseEntity = BaseEntity()
 ) {
     fun toDomain(): User {
         return User(

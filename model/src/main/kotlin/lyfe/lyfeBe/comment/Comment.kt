@@ -29,7 +29,6 @@ data class Comment(
                 board = board,
                 createdAt = Instant.now(),
                 updatedAt = Instant.now(),
-                deletedAt = null,
                 visibility = true,
             )
         }

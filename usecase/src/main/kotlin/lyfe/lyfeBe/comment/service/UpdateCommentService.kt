@@ -1,9 +1,8 @@
 package lyfe.lyfeBe.comment.service
 
 import lyfe.lyfeBe.comment.Comment
-import lyfe.lyfeBe.comment.port.`in`.UpdateCommentUseCase
-import lyfe.lyfeBe.comment.port.out.GetCommentPort
-import lyfe.lyfeBe.comment.port.out.SaveCommentPort
+import lyfe.lyfeBe.comment.port.`in`.UpdateCommentCommand
+import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ForbiddenException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -11,25 +10,20 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @Service
 class UpdateCommentService(
-    private val saveCommentPort: SaveCommentPort,
-    private val getCommentPort: GetCommentPort
-) : UpdateCommentUseCase {
-    override fun update(
-        commentId: Long,
-        content: String,
-        userId: Long
-    ): Comment {
-        val comment = getCommentPort.getById(id = commentId)
+    private val commentPort: CommentPort
+) {
+    fun update(command : UpdateCommentCommand): Comment {
+        val comment = commentPort.getById(id = command.commentId)
 
-        if (comment.user.id != userId) {
+        if (comment.user.id != command.userId) {
             throw ForbiddenException("자신의 댓글만 수정할 수 있습니다.")
         }
 
-        return if (comment.content == content) {
+        return if (comment.content == command.content) {
             comment
         } else {
-            comment.content = content
-            saveCommentPort.update(comment)
+            comment.content = command.content
+            commentPort.update(comment)
         }
     }
 }
