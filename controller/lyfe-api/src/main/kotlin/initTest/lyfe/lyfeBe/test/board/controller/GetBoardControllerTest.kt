@@ -4,6 +4,7 @@ import initTest.lyfe.lyfeBe.test.mock.TestContainer
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.BoardType
+import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.topic.Topic
@@ -95,14 +96,17 @@ class GetBoardControllerTest(
 
         When("게시판 리스트를 조회 했을 때") {
 
-            val res = testContainer.boardGetController.getBoards(1L, 10).result
+            val res: List<BoardDto> = testContainer.boardGetController.getBoards(1L, 10).result
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
+                res.size shouldBe 2
+
+
                 res.forEach { board ->
                     board.title shouldBe req.title
                     board.content shouldBe req.content
                     board.boardType shouldBe req.boardType.toString()
-                    board.user.id shouldBe req.userId //FIXME 데이터가 쌓인다? 초기화?
+                    board.user.id shouldBe req.userId
                 }
             }
         }
