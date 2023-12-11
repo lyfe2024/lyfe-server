@@ -16,9 +16,9 @@ class PolicyService(
         return policyPort.create(policy)
     }
 
-    fun update(policyUpdate: PolicyUpdate): Long {
+    fun update(policyUpdate: PolicyUpdate): Policy {
         val policy = getById(policyUpdate.id).update(policyUpdate)
-        return policyPort.update(policy).id
+        return policyPort.update(policy)
     }
 
     private fun getById(id: Long) = policyPort.findById(id)

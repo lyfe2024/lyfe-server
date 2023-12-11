@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull
 import lyfe.lyfeBe.policy.PolicyType
 
 
-data class PolicySaveReq(
+data class PolicySaveRequest(
     @NotBlank
     val title: String,
     @NotBlank

@@ -18,6 +18,36 @@ create table board
         foreign key (user_id) references user (id)
 );
 
+create table topic
+(
+    id         bigint auto_increment
+        primary key,
+    content    varchar(255) null,
+    applied_at datetime(6)  null,
+    created_at datetime(6)  null,
+    updated_at datetime(6)  null,
+    visibility bit          not null
+);
+
+create table user
+(
+    id                   bigint auto_increment
+        primary key,
+    email                varchar(255)                 null,
+    hashed_password      varchar(255)                 null,
+    nickname             varchar(255)                 null,
+    profile_image        json                         null,
+    role                 enum ('ADMIN', 'USER')       null,
+    user_status          enum ('ACTIVE', 'WITHDRAWN') null,
+    fcm_registration     bit                          not null,
+    notification_consent bit                          not null,
+    created_at           datetime(6)                  null,
+    updated_at           datetime(6)                  null,
+    withdrawn_at         datetime(6)                  null,
+    visibility           bit                          not null,
+);
+
+
 
 create table comment
 (
@@ -65,43 +95,7 @@ create table notification_history
         foreign key (user_id) references user (id)
 );
 
-create table policy
-(
-    id      bigint auto_increment
-        primary key,
-    title   varchar(255) null,
-    content varchar(255) null,
-    version varchar(255) null
-);
 
-create table topic
-(
-    id         bigint auto_increment
-        primary key,
-    content    varchar(255) null,
-    applied_at datetime(6)  null,
-    created_at datetime(6)  null,
-    updated_at datetime(6)  null,
-    visibility bit          not null,
-);
-
-create table user
-(
-    id                   bigint auto_increment
-        primary key,
-    email                varchar(255)                 null,
-    hashed_password      varchar(255)                 null,
-    nickname             varchar(255)                 null,
-    profile_image        json                         null,
-    role                 enum ('ADMIN', 'USER')       null,
-    user_status          enum ('ACTIVE', 'WITHDRAWN') null,
-    fcm_registration     bit                          not null,
-    notification_consent bit                          not null,
-    created_at           datetime(6)                  null,
-    updated_at           datetime(6)                  null,
-    withdrawn_at         datetime(6)                  null,
-    visibility           bit                          not null,
-);
 
 
 create table whisky
@@ -117,6 +111,16 @@ create table whisky
         foreign key (user_id) references user (id)
 );
 
+create table policy
+(
+    id      bigint auto_increment
+        primary key,
+    title   varchar(255) null,
+    content varchar(255) null,
+    version varchar(255) null,
+    policy_type enum ('TERM', 'PERSONAL_INFO_AGREEMENT') null
+
+);
 
 
 
