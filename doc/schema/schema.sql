@@ -3,7 +3,6 @@ create table topic
     id         bigint auto_increment
         primary key,
     content    varchar(255) null,
-    applied_at datetime(6)  null,
     created_at datetime(6)  null,
     updated_at datetime(6)  null,
     visibility bit          not null
@@ -25,28 +24,6 @@ create table user
     withdrawn_at         datetime(6)                  null,
     visibility           bit                          not null
 );
-
-create table image
-(
-    height     int                       not null,
-    visibility bit                       not null,
-    width      int                       not null,
-    board_id   bigint                    null,
-    created_at datetime(6)               null,
-    id         bigint auto_increment
-        primary key,
-    updated_at datetime(6)               null,
-    user_id    bigint                    null,
-    type       enum ('BOARD', 'PROFILE') null,
-    url        varchar(255)              null,
-    constraint UK_l8oylel56xvt5huamif0tfhkh
-        unique (user_id),
-    constraint fk_image_board_id
-        foreign key (board_id) references board (id),
-    constraint fk_image_topic_id
-        foreign key (user_id) references user (id)
-);
-
 
 CREATE TABLE profile_image
 (

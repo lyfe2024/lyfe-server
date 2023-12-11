@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.board
 
 enum class BoardType {
-    BOARD_CONTENT,
+    BOARD,
     BOARD_PICTURE
 }

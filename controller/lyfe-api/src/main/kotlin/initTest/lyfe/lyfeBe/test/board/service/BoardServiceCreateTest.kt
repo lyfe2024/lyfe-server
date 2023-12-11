@@ -77,7 +77,7 @@ class BoardServiceCreateTest(
         val boardCreate = BoardCreate(
             "testTile",
             "testContent",
-            BoardType.BOARD_CONTENT,
+            BoardType.BOARD,
             1L,
             1L
         )
