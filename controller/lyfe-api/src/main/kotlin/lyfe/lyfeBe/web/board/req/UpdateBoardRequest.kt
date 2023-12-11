@@ -1,4 +1,4 @@
-package lyfe.lyfeBe.web.board
+package lyfe.lyfeBe.web.board.req
 
 import lyfe.lyfeBe.board.BoardType
 

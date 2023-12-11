@@ -11,13 +11,12 @@ data class User(
     val nickname: String,
     val notificationConsent: Boolean,
     val fcmRegistration: Boolean,
-    val profileImage: Image?,
     val role: Role,
     val userStatus: UserStatus,
-    val createdAt: Instant?,
-    val updatedAt: Instant?,
-    val withdrawnAt: Instant?,
-    val visibility: Boolean,
+    val createdAt: Instant? = null,
+    val updatedAt: Instant? = null,
+    val withdrawnAt: Instant? = null,
+    val visibility: Boolean? = null,
 ){
     fun validateActive() {
         if (this.withdrawnAt != null) {

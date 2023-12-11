@@ -8,7 +8,6 @@ data class Comment(
     val id: Long,
     val content: String,
     val commentGroupId: Long?,
-    val deletedAt: Instant?,
     val user: User,
     val board: Board,
     val createdAt: Instant?,

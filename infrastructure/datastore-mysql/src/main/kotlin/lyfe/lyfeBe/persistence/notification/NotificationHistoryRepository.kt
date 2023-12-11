@@ -2,5 +2,5 @@ package lyfe.lyfeBe.persistence.notification
 
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface NotificationHistoryRepository: JpaRepository<lyfe.lyfeBe.persistence.notification.NotificationHistoryJpaEntity, Long> {
+interface NotificationHistoryRepository: JpaRepository<NotificationHistoryJpaEntity, Long> {
 }
