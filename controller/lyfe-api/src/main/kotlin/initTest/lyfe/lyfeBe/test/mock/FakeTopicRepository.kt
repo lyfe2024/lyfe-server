@@ -26,6 +26,11 @@ class FakeTopicRepository : TopicPort {
 
     override fun getById(topicId: Long) = data.find { it.id == topicId }!!
 
+    override fun update(from: Topic) {
+        data.removeIf { it.id == from.id }
+        data.add(from)
+    }
+
     fun clear() {
         data.clear()
     }

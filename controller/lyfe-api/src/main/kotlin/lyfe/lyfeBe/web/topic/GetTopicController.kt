@@ -15,7 +15,7 @@ class GetTopicController(
 ) {
 
     @GetMapping("/{topicId}")
-    fun getTopic(
+    fun get(
         @PathVariable topicId: Long
     ) =
         CommonResponse(

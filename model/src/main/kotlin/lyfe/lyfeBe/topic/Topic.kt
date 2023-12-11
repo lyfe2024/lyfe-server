@@ -18,10 +18,10 @@ data class Topic(
             )
         }
 
-        fun from(topicCreate: TopicUpdate): Topic {
+        fun from(topicUpdate: TopicUpdate): Topic {
             return Topic(
-                id = topicCreate.topicId,
-                content = topicCreate.content,
+                id = topicUpdate.topicId,
+                content = topicUpdate.content,
                 visibility = true
             )
         }

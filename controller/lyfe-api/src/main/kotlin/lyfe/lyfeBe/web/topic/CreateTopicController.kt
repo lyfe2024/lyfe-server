@@ -17,7 +17,7 @@ class CreateTopicController(
 ) {
 
     @PostMapping
-    fun createTopic(
+    fun create(
         @Valid @RequestBody req: SaveTopicRequest
     ) =
         CommonResponse(

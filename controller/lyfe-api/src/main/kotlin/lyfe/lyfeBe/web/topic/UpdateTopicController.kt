@@ -14,9 +14,9 @@ class UpdateTopicController(
 ) {
 
     @PutMapping("/{topicId}")
-    fun updateTopic(
-        @Valid @RequestBody req: UpdateTopicRequest,
-        @PathVariable topicId: Long
+    fun update(
+        @PathVariable topicId: Long,
+        @Valid @RequestBody req: UpdateTopicRequest
     ) {
         CommonResponse(
             topicService.update(
