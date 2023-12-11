@@ -1,6 +1,8 @@
 package lyfe.lyfeBe.web.comment
 
-import lyfe.lyfeBe.comment.port.`in`.CreateCommentCommand
+import jakarta.validation.Valid
+import lyfe.lyfeBe.comment.dto.CommentDto
+import lyfe.lyfeBe.comment.CreateComment
 import lyfe.lyfeBe.comment.service.CreateCommentService
 import lyfe.lyfeBe.dto.CommonResponse
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,22 +16,19 @@ class CreateCommentController(
 ) {
     @PostMapping("/v1/comments")
     fun createComment(
-        @RequestBody request: CreateCommentRequest,
+        @Valid @RequestBody req: CreateCommentRequest,
         @RequestParam("comment_board_id") boardId: Long,
 
-        ): CommonResponse<CommentResponse> {
+        ): CommonResponse<CommentDto> {
 
         return service.create(
-            CreateCommentCommand(
-                content = request.content,
-                commentGroupId = request.commentGroupId,
+            CreateComment(
+                content = req.content,
+                commentGroupId = req.commentGroupId,
                 userId = 1L,
                 boardId = boardId
             )
-        )
-            .let { CommentMapper.mapToResponse(it) }
-            .let { CommonResponse(it) }
-
+        ).let { CommonResponse(it) }
 
     }
 }

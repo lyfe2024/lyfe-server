@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.persistence.board
 
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.out.BoardPort
+import lyfe.lyfeBe.board.port.out.BoardPort
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 

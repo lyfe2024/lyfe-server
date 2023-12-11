@@ -1,7 +1,8 @@
 package lyfe.lyfeBe.comment.service
 
 import lyfe.lyfeBe.comment.Comment
-import lyfe.lyfeBe.comment.port.`in`.UpdateCommentCommand
+import lyfe.lyfeBe.comment.UpdateComment
+import lyfe.lyfeBe.comment.dto.CommentDto
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ForbiddenException
 import org.springframework.stereotype.Service
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class UpdateCommentService(
     private val commentPort: CommentPort
 ) {
-    fun update(command : UpdateCommentCommand): Comment {
+    fun update(command : UpdateComment): CommentDto {
         val comment = commentPort.getById(id = command.commentId)
 
         if (comment.user.id != command.userId) {
@@ -24,6 +25,6 @@ class UpdateCommentService(
         } else {
             comment.content = command.content
             commentPort.update(comment)
-        }
+        }.let { CommentDto.from(it) }
     }
 }

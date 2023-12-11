@@ -1,6 +1,6 @@
-package lyfe.lyfeBe.comment.port.`in`
+package lyfe.lyfeBe.comment
 
-data class UpdateCommentCommand(
+data class UpdateComment(
     val commentId: Long,
     val content: String,
     val userId: Long

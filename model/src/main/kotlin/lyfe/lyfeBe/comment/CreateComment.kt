@@ -1,6 +1,6 @@
-package lyfe.lyfeBe.comment.port.`in`
+package lyfe.lyfeBe.comment
 
-data class CreateCommentCommand(
+data class CreateComment(
     val content: String,
     val commentGroupId: Long?,
     val userId: Long,

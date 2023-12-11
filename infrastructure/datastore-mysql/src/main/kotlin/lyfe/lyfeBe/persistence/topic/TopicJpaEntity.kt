@@ -3,6 +3,7 @@ package lyfe.lyfeBe.persistence.topic
 import jakarta.persistence.*
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.topic.Topic
+import org.jetbrains.annotations.NotNull
 import java.time.Instant
 
 @Entity

@@ -1,8 +1,7 @@
 package initTest.lyfe.lyfeBe.test.mock
 
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.out.BoardPort
-import lyfe.lyfeBe.user.User
+import lyfe.lyfeBe.board.port.out.BoardPort
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 

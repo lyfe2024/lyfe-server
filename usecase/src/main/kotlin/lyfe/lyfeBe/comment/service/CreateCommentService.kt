@@ -2,7 +2,8 @@ package lyfe.lyfeBe.comment.service
 
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.Comment
-import lyfe.lyfeBe.comment.port.`in`.CreateCommentCommand
+import lyfe.lyfeBe.comment.dto.CommentDto
+import lyfe.lyfeBe.comment.CreateComment
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Service
@@ -15,10 +16,10 @@ class CreateCommentService(
     private val userPort: UserPort,
     private val boardPort: BoardPort,
 ) {
-    fun create(command: CreateCommentCommand): Comment {
+    fun create(command: CreateComment): CommentDto {
 
-        val user = userPort.getById(id = command.userId)
-        val board = boardPort.getById(id = command.boardId)
+        val user = userPort.getById(userId = command.userId)
+        val board = boardPort.findById(id = command.boardId)
 
         command.commentGroupId?.let {
             val groupComment = commentPort.getById(id = it)
@@ -32,6 +33,6 @@ class CreateCommentService(
             board = board
         )
 
-        return commentPort.create(comment)
+        return commentPort.create(comment).let { CommentDto.from(it) }
     }
 }

@@ -1,7 +1,7 @@
 package initTest.lyfe.lyfeBe.test.mock
 
-import lyfe.lyfeBe.board.BoardService
-import lyfe.lyfeBe.board.out.BoardPort
+import lyfe.lyfeBe.board.service.BoardService
+import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort

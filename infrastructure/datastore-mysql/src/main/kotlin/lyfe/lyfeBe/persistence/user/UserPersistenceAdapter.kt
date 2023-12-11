@@ -1,10 +1,11 @@
 package lyfe.lyfeBe.persistence.user
 
 import lyfe.lyfeBe.error.ResourceNotFoundException
-import lyfe.lyfeBe.user.port.out.GetUserPort
 import lyfe.lyfeBe.user.User
+import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional(readOnly = true)

@@ -2,6 +2,7 @@ package lyfe.lyfeBe.web.board
 
 import jakarta.validation.Valid
 import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.web.board.req.BoardUpdateRequest
 import org.springframework.web.bind.annotation.*
@@ -12,16 +13,16 @@ class UpdateBoardController(
     private val service: BoardService
 ) {
 
-    @PutMapping("{boardId}")
+    @PutMapping("/{boardId}")
     fun update(
         @PathVariable(value = "boardId") boardId: Long,
         @Valid @RequestBody req: BoardUpdateRequest
     ): CommonResponse<Long> =
         service.update(
             BoardUpdate(
-                boardId,
-                req.title,
-                req.content
+                boardId = boardId,
+                title = req.title,
+                content = req.content
             )
         ).let { CommonResponse(it) }
 

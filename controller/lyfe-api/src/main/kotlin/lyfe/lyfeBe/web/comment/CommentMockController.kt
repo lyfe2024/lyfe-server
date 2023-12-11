@@ -47,7 +47,7 @@ class CommentMockController {
                     username = "홍길동",
                     profile = ""
                 ),
-                createdAt = "2021-01-01"
+                createdAt = "2021-01-01",
             )
             commentList.add(commentResponse)
         }

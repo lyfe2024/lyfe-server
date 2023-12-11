@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.web.comment
 
 import lyfe.lyfeBe.comment.Comment
+import lyfe.lyfeBe.web.user.UserResponse
 
 
 object CommentMapper {
@@ -9,10 +10,11 @@ object CommentMapper {
             id = comment.id,
             content = comment.content,
             commentGroupId = comment.commentGroupId,
-            userId = comment.user.id,
-            boardId = comment.board.id,
-            createdAt = comment.createdAt,
-            updatedAt = comment.updatedAt,
-            visibility = comment.visibility,
-            )
+            user = UserResponse(
+                id = comment.user.id,
+                username = comment.user.nickname,
+                profile = "",
+            ),
+            createdAt = comment.createdAt.toString()
+        )
 }

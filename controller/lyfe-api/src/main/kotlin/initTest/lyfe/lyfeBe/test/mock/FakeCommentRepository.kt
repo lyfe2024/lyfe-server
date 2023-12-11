@@ -1,7 +1,7 @@
 package initTest.lyfe.lyfeBe.test.mock
 
-import comment.out.CommentPort
 import lyfe.lyfeBe.comment.Comment
+import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.whisky.Whisky
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
@@ -12,6 +12,21 @@ class FakeCommentRepository : CommentPort {
     private val data: MutableList<Comment> = Collections.synchronizedList(ArrayList())
 
     override fun countByBoardId(boardId: Long) = 1
+    override fun getById(id: Long): Comment {
+        return data.find { it.id == id }!!
+    }
+
+    override fun getCommentsWithCursorAndBoard(cursorId: Long, boardId: Long): List<Comment> {
+        return data.filter { it.board.id == boardId }
+    }
+
+    override fun getCommentsWithCursorAndUser(cursorId: Long, userId: Long): List<Comment> {
+        return data.filter { it.user.id == userId }
+    }
+
+    override fun findLastByBoardId(boardId: Long): Comment {
+        return data.findLast { it.board.id == boardId }!!
+    }
 
     override fun create(comment: Comment): Comment {
         return if (comment.id == 0L) {
@@ -23,6 +38,10 @@ class FakeCommentRepository : CommentPort {
             data.add(comment)
             comment
         }
+    }
+
+    override fun update(comment: Comment): Comment {
+        TODO("Not yet implemented")
     }
 
     fun clear() {

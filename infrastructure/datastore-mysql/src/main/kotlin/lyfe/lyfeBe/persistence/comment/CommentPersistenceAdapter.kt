@@ -1,8 +1,7 @@
 package lyfe.lyfeBe.persistence.comment
 
 import lyfe.lyfeBe.comment.Comment
-import lyfe.lyfeBe.comment.port.out.GetCommentPort
-import lyfe.lyfeBe.comment.port.out.SaveCommentPort
+import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ResourceNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -30,21 +29,19 @@ class CommentPersistenceAdapter(
         commentRepository.findByIdOrNull(id)?.toDomain()
             ?: throw ResourceNotFoundException("해당하는 댓글이 존재하지 않습니다.")
 
-    override fun findAllByBoardId(
+    override fun getCommentsWithCursorAndBoard(
         cursorId : Long,
-        boardId: Long,
-        pageable: Pageable
-    ): Page<Comment> {
-        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(cursorId, boardId, pageable)
+        boardId: Long
+    ): List<Comment> {
+        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(cursorId, boardId)
             .map { it.toDomain() }
     }
 
-    override fun findAllByUserId(
+    override fun getCommentsWithCursorAndUser(
         cursorId: Long,
-        userId: Long,
-        pageable: Pageable
-    ): Page<Comment> {
-        return commentRepository.findAllByUserIdAndIdLessThanOrderByIdDesc(cursorId, userId, pageable)
+        userId: Long
+    ): List<Comment> {
+        return commentRepository.findAllByUserIdAndIdLessThanOrderByIdDesc(cursorId, userId)
             .map { it.toDomain() }
     }
 

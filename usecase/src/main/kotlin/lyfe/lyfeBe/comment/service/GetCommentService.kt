@@ -1,39 +1,32 @@
 package lyfe.lyfeBe.comment.service
 
 import lyfe.lyfeBe.comment.Comment
-import lyfe.lyfeBe.comment.port.`in`.GetCommentByBoardCommand
-import lyfe.lyfeBe.comment.port.`in`.GetCommentByUserIdCommand
+import lyfe.lyfeBe.comment.dto.CommentDto
+import lyfe.lyfeBe.comment.GetCommentByBoard
+import lyfe.lyfeBe.comment.GetCommentByUserId
 import lyfe.lyfeBe.comment.port.out.CommentPort
-import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 
 @Service
 class GetCommentService(
     private val commentPort: CommentPort
 ) {
-    fun getComment(commentId: Long): Comment {
+    fun getComment(commentId: Long): CommentDto {
         return commentPort.getById(id = commentId)
+            .run { CommentDto.from(this) }
     }
 
     /**
      * 해당 게시글의 댓글 전체 조회
      */
-    fun findAllByBoard(command: GetCommentByBoardCommand): Page<Comment> {
-        var lastCommentId = command.cursorId
-        if (command.cursorId == 0L) {
-            lastCommentId = commentPort.findLastByBoardId(command.boardId).id
-        }
-        return commentPort.findAllByBoardId(lastCommentId, command.boardId, command.pageable)
+    fun getCommentsWithCursorAndBoard(command: GetCommentByBoard): List<Comment> {
+        return commentPort.getCommentsWithCursorAndBoard(command.cursorId, command.boardId)
     }
 
     /**
      * 자신의 댓글 전체 조회
      */
-    fun findAllByUserId(command: GetCommentByUserIdCommand): Page<Comment> {
-        var lastCommentId = command.cursorId
-        if (command.cursorId == 0L) {
-            lastCommentId = commentPort.findLastByBoardId(command.boardId).id
-        }
-        return commentPort.findAllByUserId(lastCommentId, command.userId, command.pageable)
+    fun getCommentsWithCursorAndUser(command: GetCommentByUserId): List<Comment> {
+        return commentPort.getCommentsWithCursorAndUser(command.cursorId, command.userId)
     }
 }
