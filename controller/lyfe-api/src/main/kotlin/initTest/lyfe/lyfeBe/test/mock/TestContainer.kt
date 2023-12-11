@@ -5,14 +5,12 @@ import lyfe.lyfeBe.board.out.BoardPort
 import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
-import lyfe.lyfeBe.web.board.BoardCreateController
-import lyfe.lyfeBe.web.board.BoardGetController
-import lyfe.lyfeBe.web.board.BoardUpdateController
+import lyfe.lyfeBe.web.board.*
 
 class TestContainer(
-    var boardCreateController: BoardCreateController,
-    var boardUpdateController: BoardUpdateController,
-    var boardGetController: BoardGetController,
+    var createBoardController: CreateBoardController,
+    var updateBoardController: UpdateBoardController,
+    var getBoardController: GetBoardController,
     var boardService: BoardService,
     var boardRepository: BoardPort,
     var userRepository: UserPort,
@@ -20,9 +18,9 @@ class TestContainer(
     var imageRepository: ImagePort
 
 ) {
-
     companion object {
         fun build(): TestContainer {
+
             val boardRepository = FakeBoardRepository()
             val userRepository = FakeUserRepository()
             val topicRepository = FakeTopicRepository()
@@ -39,10 +37,14 @@ class TestContainer(
                 fakeCommentRepository
             )
 
+            val createBoardController = CreateBoardController(boardService)
+            val updateBoardController = UpdateBoardController(boardService)
+            val getBoardController = GetBoardController(boardService)
+
             return TestContainer(
-                BoardCreateController(boardService),
-                BoardUpdateController(boardService),
-                BoardGetController(boardService),
+                createBoardController,
+                updateBoardController,
+                getBoardController,
                 boardService,
                 boardRepository,
                 userRepository,

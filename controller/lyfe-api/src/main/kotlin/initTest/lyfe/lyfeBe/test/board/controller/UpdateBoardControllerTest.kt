@@ -61,7 +61,7 @@ class UpdateBoardControllerTest(
             topicId = 1L
         )
 
-        testContainer.boardCreateController.create(req)
+        testContainer.createBoardController.create(req)
 
         When("게시판을 업데이트 했을 때") {
 
@@ -70,7 +70,7 @@ class UpdateBoardControllerTest(
                 content = "바뀐 테스트 내용입니다. 여기에 게시판 내용이 들어갑니다."
             )
 
-            val boardId = testContainer.boardUpdateController.update(1L, updateReq)
+            val boardId = testContainer.updateBoardController.update(1L, updateReq)
             val board = testContainer.boardService.getById(boardId.result)
 
             Then("업데이트된 게시판의 제목과 내용이 요청된 값과 일치해야 한다") {

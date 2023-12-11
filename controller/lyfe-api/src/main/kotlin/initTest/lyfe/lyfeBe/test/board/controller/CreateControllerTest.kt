@@ -62,7 +62,7 @@ class CreateControllerTest(
             topicId = 1L
         )
 
-        val board = testContainer.boardCreateController.create(req)
+        val board = testContainer.createBoardController.create(req)
 
 
 

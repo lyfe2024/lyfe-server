@@ -29,6 +29,6 @@ class GetBoardController(
 
 
     private fun getEffectiveCursorId(cursorId: Long?): Long {
-        return cursorId ?: Long.MAX_VALUE
+        return cursorId?.takeIf { it != 0L } ?: Long.MAX_VALUE
     }
 }
