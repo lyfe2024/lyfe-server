@@ -6,16 +6,19 @@ import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.policy.Policy
 import lyfe.lyfeBe.policy.PolicyType
 import lyfe.lyfeBe.web.policy.req.PolicySaveRequest
+import lyfe.lyfeBe.web.policy.req.PolicyUpdateReq
 
 
-class CreatePolicyControllerTest(
+class GetPolicyControllerTest(
 ) : BehaviorSpec({
 
     val testContainer = TestContainer.build()
 
 
 
-    Given("정책 데이터가 저장 되고") {
+
+
+    Given("조회할 정책을 저장하고") {
 
         val policySaveRequest = PolicySaveRequest(
             title = "testTitle",
@@ -26,17 +29,16 @@ class CreatePolicyControllerTest(
         testContainer.createPolicyController.createPolicy(policySaveRequest)
 
 
-        When("정책을 타입으로 조회했을 때 ") {
-
-            val newPolicy = testContainer
-                .getPolicyController
+        When("저장된 정책을 타입으로 조회할 때 ") {
+            val policy = testContainer.getPolicyController
                 .getPolicy(PolicyType.TERM).result
 
-            Then("해당 타입에 해당되는 정책이 조회가 된다 ") { //FIXIME 좀더 정책적으로 기획디면 추후 수정
-                newPolicy.title shouldBe "testTitle"                   // 예를들면 타입은 유니크?
-                newPolicy.content shouldBe "testContent"
-                newPolicy.version shouldBe "testVersion"
-                newPolicy.policyType shouldBe PolicyType.TERM
+
+            Then("생성된 정책과 조회된 정책의 값 검증") {
+                policy.title shouldBe policySaveRequest.title
+                policy.content shouldBe policySaveRequest.content
+                policy.version shouldBe policySaveRequest.version
+                policy.policyType shouldBe policySaveRequest.policyType
             }
         }
     }

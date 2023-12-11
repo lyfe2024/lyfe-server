@@ -18,17 +18,4 @@ class GetPolicyController(
 
     @GetMapping("/{type}")
     fun getPolicy(@PathVariable type: PolicyType) = CommonResponse(service.getPolicy(type))
-
-    @PostMapping
-    fun createPolicy(@Valid @RequestBody req: PolicySaveRequest) =
-        CommonResponse(
-            service.create(
-                PolicyCreate(
-                    title = req.title,
-                    content = req.content,
-                    version = req.version,
-                    policyType = req.policyType
-                )
-            )
-        )
 }
