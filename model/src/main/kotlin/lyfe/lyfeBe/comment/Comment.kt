@@ -14,17 +14,27 @@ data class Comment(
     val updatedAt: Instant?,
     val visibility: Boolean,
 ){
+    fun update(commentUpdate: CommentUpdate) =
+        Comment(
+            id = commentUpdate.commentId,
+            content = commentUpdate.content,
+            commentGroupId = commentGroupId,
+            user = user,
+            board = board,
+            createdAt = createdAt,
+            updatedAt = Instant.now(),
+            visibility = visibility
+        )
     companion object {
-        fun create(
-            content: String,
-            commentGroupId: Long?,
+        fun from(
+            commentCreate: CommentCreate,
             user: User,
             board: Board,
         ): Comment {
             return Comment(
                 id = 0,
-                content = content,
-                commentGroupId = commentGroupId,
+                content = commentCreate.content,
+                commentGroupId = commentCreate.commentGroupId,
                 user = user,
                 board = board,
                 createdAt = Instant.now(),

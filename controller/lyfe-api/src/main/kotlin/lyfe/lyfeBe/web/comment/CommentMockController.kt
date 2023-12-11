@@ -2,6 +2,8 @@ package lyfe.lyfeBe.web.comment
 
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.dto.PageInfo
+import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
+import lyfe.lyfeBe.web.comment.req.UpdateCommentRequest
 import lyfe.lyfeBe.web.user.UserResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -17,7 +19,7 @@ class CommentMockController {
     @PostMapping("/v1/boards/{boardId}/comments")
     fun createComment(
         @PathVariable boardId: String,
-        @RequestBody createCommentRequest: CreateCommentRequest
+        @RequestBody createCommentRequest: SaveCommentRequest
     ): CommonResponse<CommentIdResponse> {
         return CommonResponse(CommentIdResponse(1L))
     }

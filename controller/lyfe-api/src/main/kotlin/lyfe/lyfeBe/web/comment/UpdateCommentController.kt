@@ -1,9 +1,11 @@
 package lyfe.lyfeBe.web.comment
 
-import lyfe.lyfeBe.comment.UpdateComment
-import lyfe.lyfeBe.comment.dto.CommentDto
-import lyfe.lyfeBe.comment.service.UpdateCommentService
+import jakarta.validation.Valid
+import lyfe.lyfeBe.comment.CommentUpdate
+import lyfe.lyfeBe.comment.dto.SaveCommentDto
+import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.dto.CommonResponse
+import lyfe.lyfeBe.web.comment.req.UpdateCommentRequest
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UpdateCommentController(
-    private val service: UpdateCommentService
+    private val service: CommentService
 ) {
 
     @PutMapping("/v1/comments/{commentId}")
-    fun updateComment(
+    fun update(
         @PathVariable commentId: Long,
-        @RequestBody request: UpdateCommentRequest,
+        @Valid @RequestBody request: UpdateCommentRequest,
 
-        ): CommonResponse<CommentDto> {
+        ): CommonResponse<SaveCommentDto> {
 
         return service.update(
-            UpdateComment(
+            CommentUpdate(
                 commentId = commentId,
                 content = request.content,
                 userId = 1L

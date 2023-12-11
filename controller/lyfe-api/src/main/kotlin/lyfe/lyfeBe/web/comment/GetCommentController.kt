@@ -2,9 +2,9 @@ package lyfe.lyfeBe.web.comment
 
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.comment.dto.CommentDto
-import lyfe.lyfeBe.comment.GetCommentByBoard
-import lyfe.lyfeBe.comment.GetCommentByUserId
-import lyfe.lyfeBe.comment.service.GetCommentService
+import lyfe.lyfeBe.comment.CommentGetsByBoard
+import lyfe.lyfeBe.comment.CommentGetsByUserId
+import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.dto.CommonResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class GetCommentController(
-    private val service: GetCommentService
+    private val service: CommentService
 ) {
 
 
@@ -22,9 +22,9 @@ class GetCommentController(
      */
     @GetMapping("/v1/comments/{commentId}")
     fun getComment(
-        @PathVariable commentId: String
+        @PathVariable commentId: Long
     ): CommonResponse<CommentDto> {
-        return service.getComment(commentId.toLong())
+        return service.getById(commentId)
             .run { CommonResponse(this) }
     }
 
@@ -39,7 +39,7 @@ class GetCommentController(
 
         val commentId = getEffectiveCursorId(cursorId)
         return service.getCommentsWithCursorAndBoard(
-            GetCommentByBoard(
+            CommentGetsByBoard(
                 boardId = boardId,
                 cursorId = commentId
             )
@@ -47,19 +47,17 @@ class GetCommentController(
     }
 
     /**
-     * 특정 게시글 댓글 목록 조회
+     * 자신이 작성한 댓글 조회
      */
     @GetMapping("/v1/comments")
     fun getMyCommentList(
         @RequestParam(name = "comment_user_id") userId: Long,
-        @RequestParam(name = "comment_board_id") boardId: Long,
         @RequestParam(required = false) cursorId: Long,
     ): CommonResponse<List<Comment>> {
 
         val commentId = getEffectiveCursorId(cursorId)
         return service.getCommentsWithCursorAndUser(
-            GetCommentByUserId(
-                boardId = boardId,
+            CommentGetsByUserId(
                 userId = userId,
                 cursorId = commentId
             )

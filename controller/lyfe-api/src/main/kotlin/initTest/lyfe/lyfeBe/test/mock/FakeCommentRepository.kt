@@ -2,7 +2,6 @@ package initTest.lyfe.lyfeBe.test.mock
 
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.comment.port.out.CommentPort
-import lyfe.lyfeBe.whisky.Whisky
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -41,7 +40,11 @@ class FakeCommentRepository : CommentPort {
     }
 
     override fun update(comment: Comment): Comment {
-        TODO("Not yet implemented")
+        val index = data.indexOfFirst { it.id == comment.id }
+        if (index != -1) {
+            data[index] = comment
+        }
+        return comment
     }
 
     fun clear() {

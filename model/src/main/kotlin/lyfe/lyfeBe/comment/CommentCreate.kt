@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.comment
 
-data class CreateComment(
+data class CommentCreate(
     val content: String,
     val commentGroupId: Long?,
     val userId: Long,

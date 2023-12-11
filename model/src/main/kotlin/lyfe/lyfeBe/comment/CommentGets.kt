@@ -1,13 +1,12 @@
 package lyfe.lyfeBe.comment
 
 
-data class GetCommentByBoard(
+data class CommentGetsByBoard(
     val boardId: Long,
     val cursorId: Long,
 )
 
-data class GetCommentByUserId(
-    val boardId: Long,
+data class CommentGetsByUserId(
     val userId: Long,
     val cursorId: Long,
 )
