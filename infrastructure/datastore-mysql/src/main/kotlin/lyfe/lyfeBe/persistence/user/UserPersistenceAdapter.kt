@@ -1,26 +1,34 @@
 package lyfe.lyfeBe.persistence.user
 
-import lyfe.lyfeBe.error.ResourceNotFoundException
-import lyfe.lyfeBe.user.port.out.GetUserPort
+import lyfe.lyfeBe.persistence.board.BoardJpaEntity
 import lyfe.lyfeBe.user.User
-import org.springframework.data.repository.findByIdOrNull
-import org.springframework.stereotype.Component
+import lyfe.lyfeBe.user.port.out.UserPort
+import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional(readOnly = true)
-@Component
+@Repository
 class UserPersistenceAdapter(
-    private val userRepository: UserRepository
-) : GetUserPort {
+    private val userRepository: UserJpaRepository
+) : UserPort {
 
-    override fun getById(id: Long): User =
-        userRepository.findByIdOrNull(id)
-            ?.let { UserMapper.mapToDomainEntity(it) }
-            ?: throw ResourceNotFoundException("해당하는 유저가 존재하지 않습니다.")
 
-    override fun getByIdAndValidateActive(id: Long): User =
-        getById(id = id).apply {
-            validateActive()
-        }
+    override fun getByIdAndValidateActive(id: Long) =
+        userRepository.findById(id)
+            .orElseThrow { RuntimeException("user not found") }
+            .toDomain() //FIXME N+1문제는 어떻게 해결할까? 이부분얘기필요
 
+    override fun getById(userId: Long): User {
+        return userRepository.findById(userId).map(UserJpaEntity::toDomain)
+            .orElseThrow { RuntimeException("user not found") }
+
+    }
+
+    override fun create(user: User)=
+            userRepository.save(UserJpaEntity.from(user)).toDomain()
+
+    override fun findById(userId: Long) =
+        userRepository.findById(userId)
+            .orElseThrow { RuntimeException("user not found") }
+            .toDomain()
 }
