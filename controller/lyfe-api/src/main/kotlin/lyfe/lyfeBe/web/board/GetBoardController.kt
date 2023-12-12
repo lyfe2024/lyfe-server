@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.web.board
 
 import lyfe.lyfeBe.board.BoardGet
-import lyfe.lyfeBe.board.BoardService
+import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.board.BoardsGet
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.dto.CommonResponse
@@ -22,7 +22,7 @@ class GetBoardController(
     }
 
 
-    @GetMapping("{boardId}")
+    @GetMapping("/{boardId}")
     fun get(
         @PathVariable(value = "boardId") boardId: Long,
     ) = CommonResponse(service.get(BoardGet(boardId)))

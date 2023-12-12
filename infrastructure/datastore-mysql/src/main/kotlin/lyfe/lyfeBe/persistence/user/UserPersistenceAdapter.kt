@@ -1,6 +1,6 @@
 package lyfe.lyfeBe.persistence.user
 
-import lyfe.lyfeBe.persistence.board.BoardJpaEntity
+import lyfe.lyfeBe.error.ResourceNotFoundException
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Repository
@@ -15,12 +15,12 @@ class UserPersistenceAdapter(
 
     override fun getByIdAndValidateActive(id: Long) =
         userRepository.findById(id)
-            .orElseThrow { RuntimeException("user not found") }
+            .orElseThrow { ResourceNotFoundException("user not found") }
             .toDomain() //FIXME N+1문제는 어떻게 해결할까? 이부분얘기필요
 
     override fun getById(userId: Long): User {
         return userRepository.findById(userId).map(UserJpaEntity::toDomain)
-            .orElseThrow { RuntimeException("user not found") }
+            .orElseThrow { ResourceNotFoundException("user not found") }
 
     }
 
@@ -29,6 +29,6 @@ class UserPersistenceAdapter(
 
     override fun findById(userId: Long) =
         userRepository.findById(userId)
-            .orElseThrow { RuntimeException("user not found") }
+            .orElseThrow { ResourceNotFoundException("user not found") }
             .toDomain()
 }

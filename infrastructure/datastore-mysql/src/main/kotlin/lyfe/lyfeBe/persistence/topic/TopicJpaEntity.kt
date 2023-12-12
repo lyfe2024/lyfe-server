@@ -3,17 +3,17 @@ package lyfe.lyfeBe.persistence.topic
 import jakarta.persistence.*
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.topic.Topic
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import org.jetbrains.annotations.NotNull
 import java.time.Instant
 
 @Entity
-@EntityListeners(AuditingEntityListener::class)
 @Table(name = "topic")
 class TopicJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    @field:NotNull
     val content: String,
 
     @Embedded
@@ -32,8 +32,12 @@ class TopicJpaEntity(
     companion object {
         fun from(topic: Topic): TopicJpaEntity = TopicJpaEntity(
             id = topic.id,
-            content = topic.content
+            content = topic.content,
+            baseEntity = BaseEntity(
+                createdAt = topic.createdAt,
+                updatedAt = topic.updatedAt,
+                visibility = topic.visibility
+            )
         )
-
     }
 }

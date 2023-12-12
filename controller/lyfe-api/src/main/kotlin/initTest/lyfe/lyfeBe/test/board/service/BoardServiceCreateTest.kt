@@ -4,6 +4,7 @@ import initTest.lyfe.lyfeBe.test.mock.*
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.topic.Topic
@@ -41,6 +42,7 @@ class BoardServiceCreateTest(
             fcmRegistration = true,
             role = Role.USER,
             userStatus = UserStatus.ACTIVE,
+            visibility = true
         )
         fakeUserRepository.create(user)
 
@@ -85,7 +87,9 @@ class BoardServiceCreateTest(
 
         When("게시판 생성 요청을 처리할 때") {
 
-            val newBoard = boardService.create(boardCreate)
+            val newBoardId = boardService.create(boardCreate)
+
+            val newBoard = fakeBoardRepository.getById(newBoardId.id)
 
             Then("생성된 게시판의 속성이 요청과 일치하는지 확인할 때") {
                 newBoard.title shouldBe boardCreate.title

@@ -1,7 +1,9 @@
 package initTest.lyfe.lyfeBe.test.mock
 
-import lyfe.lyfeBe.board.BoardService
-import lyfe.lyfeBe.board.out.BoardPort
+import lyfe.lyfeBe.board.service.BoardService
+import lyfe.lyfeBe.board.port.out.BoardPort
+import lyfe.lyfeBe.comment.port.out.CommentPort
+import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.topic.port.TopicService
@@ -10,6 +12,9 @@ import lyfe.lyfeBe.web.board.*
 import lyfe.lyfeBe.web.topic.CreateTopicController
 import lyfe.lyfeBe.web.topic.GetTopicController
 import lyfe.lyfeBe.web.topic.UpdateTopicController
+import lyfe.lyfeBe.web.comment.CreateCommentController
+import lyfe.lyfeBe.web.comment.GetCommentController
+import lyfe.lyfeBe.web.comment.UpdateCommentController
 
 class TestContainer(
     var createBoardController: CreateBoardController,
@@ -18,8 +23,13 @@ class TestContainer(
     var createTopicController: CreateTopicController,
     var updateTopicController: UpdateTopicController,
     var getTopicController: GetTopicController,
+    var createCommentController: CreateCommentController,
+    var updateCommentController: UpdateCommentController,
+    var getCommentController: GetCommentController,
     var boardService: BoardService,
     var boardRepository: BoardPort,
+    var commentService: CommentService,
+    var commentRepository: CommentPort,
     var userRepository: UserPort,
     var topicRepository: TopicPort,
     var imageRepository: ImagePort
@@ -33,7 +43,7 @@ class TestContainer(
             val topicRepository = FakeTopicRepository()
             val imageRepository = FakeImageRepository()
             val fakeWhiskyRepository = FakeWhiskyRepository()
-            val fakeCommentRepository = FakeCommentRepository()
+            val commentRepository = FakeCommentRepository()
 
             val boardService = BoardService(
                 boardRepository,
@@ -41,7 +51,13 @@ class TestContainer(
                 topicRepository,
                 imageRepository,
                 fakeWhiskyRepository,
-                fakeCommentRepository
+                commentRepository
+            )
+
+            val commentService = CommentService(
+                commentRepository,
+                userRepository,
+                boardRepository
             )
 
             val topicService : TopicService = TopicService(
@@ -51,12 +67,28 @@ class TestContainer(
             val createBoardController = CreateBoardController(boardService)
             val updateBoardController = UpdateBoardController(boardService)
             val getBoardController = GetBoardController(boardService)
+            val createCommentController = CreateCommentController(commentService)
+            val updateCommentController = UpdateCommentController(commentService)
+            val getCommentController = GetCommentController(commentService)
 
             val createTopicController = CreateTopicController(topicService)
             val updateTopicController = UpdateTopicController(topicService)
             val getTopicController = GetTopicController(topicService)
 
             return TestContainer(
+                createBoardController = createBoardController,
+                updateBoardController = updateBoardController,
+                getBoardController = getBoardController,
+                createCommentController = createCommentController,
+                updateCommentController = updateCommentController,
+                getCommentController = getCommentController,
+                boardService = boardService,
+                boardRepository = boardRepository,
+                commentService = commentService,
+                commentRepository = commentRepository,
+                userRepository = userRepository,
+                topicRepository = topicRepository,
+                imageRepository = imageRepository
                 createBoardController,
                 updateBoardController,
                 getBoardController,

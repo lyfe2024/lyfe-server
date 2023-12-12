@@ -1,7 +1,9 @@
 package lyfe.lyfeBe.persistence.comment
 
-import comment.out.CommentPort
 import lyfe.lyfeBe.comment.Comment
+import lyfe.lyfeBe.comment.port.out.CommentPort
+import lyfe.lyfeBe.error.ResourceNotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -11,6 +13,43 @@ class CommentPersistenceAdapter(
     private val commentRepository: CommentRepository
 ) : CommentPort {
     override fun countByBoardId(boardId: Long) = commentRepository.countByBoardId(boardId)
-    override fun create(comment: Comment) =
-        commentRepository.save(CommentJpaEntity.from(comment)).toDomain()
+
+    @Transactional
+    override fun create(comment: Comment): Comment {
+        check(comment.id == 0L) { "ID가 0 or null이 아니면 생성할 수 없습니다." }
+        return commentRepository.save(CommentJpaEntity.from(comment)).toDomain()
+    }
+
+    @Transactional
+    override fun update(comment: Comment): Comment {
+        check(comment.id != 0L) { "ID가 0인 Comment는 업데이트할 수 없습니다." }
+        return commentRepository.save(CommentJpaEntity.from(comment)).toDomain()
+    }
+
+    override fun getById(id: Long): Comment =
+        commentRepository.findByIdOrNull(id)?.toDomain()
+            ?: throw ResourceNotFoundException("해당하는 댓글이 존재하지 않습니다.")
+
+    override fun getCommentsWithCursorAndBoard(
+        cursorId : Long,
+        boardId: Long
+    ): List<Comment> {
+        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(cursorId, boardId)
+            .map { it.toDomain() }
+    }
+
+    override fun getCommentsWithCursorAndUser(
+        cursorId: Long,
+        userId: Long
+    ): List<Comment> {
+        return commentRepository.findAllByUserIdAndIdLessThanOrderByIdDesc(cursorId, userId)
+            .map { it.toDomain() }
+    }
+
+    override fun findLastByBoardId(boardId: Long): Comment {
+        return commentRepository.findFirstByBoardIdOrderByIdDesc(boardId)?.toDomain()
+            ?: throw ResourceNotFoundException("해당하는 댓글이 존재하지 않습니다.")
+    }
+
+
 }

@@ -16,7 +16,6 @@
 //            board = BoardMapper.mapToDomainEntity(comment.board),
 //            createdAt = comment.baseEntity.createdAt,
 //            updatedAt = comment.baseEntity.updatedAt,
-//            deletedAt = comment.deletedAt,
 //            visibility = comment.baseEntity.visibility,
 //        )
 //
@@ -27,7 +26,6 @@
 //            commentGroupId = comment.commentGroupId,
 //            user = UserMapper.mapToJpaEntity(comment.user),
 //            board = BoardMapper.mapToJpaEntity(comment.board),
-//            deletedAt = comment.deletedAt,
 //            baseEntity = BaseEntity(
 //                createdAt = comment.createdAt,
 //                updatedAt = comment.updatedAt,

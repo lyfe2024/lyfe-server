@@ -31,6 +31,7 @@ class UpdateBoardControllerTest(
             fcmRegistration = true,
             role = Role.USER,
             userStatus = UserStatus.ACTIVE,
+            visibility = true
         )
         testContainer.userRepository.create(user)
 
@@ -71,7 +72,8 @@ class UpdateBoardControllerTest(
             )
 
             val boardId = testContainer.updateBoardController.update(1L, updateReq)
-            val board = testContainer.boardService.getById(boardId.result)
+
+            val board = testContainer.boardService.getById(boardId.result.id)
 
             Then("업데이트된 게시판의 제목과 내용이 요청된 값과 일치해야 한다") {
                 board.title shouldBe updateReq.title

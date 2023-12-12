@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.persistence.topic
 
+import lyfe.lyfeBe.error.ResourceNotFoundException
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.port.TopicPort
 import org.springframework.stereotype.Component
@@ -13,7 +14,7 @@ class TopicPersistenceAdapter(
 
     override fun getById(topicId: Long): Topic {
         return topicRepository.findById(topicId)
-            .orElseThrow { RuntimeException("topic not found") }
+            .orElseThrow { ResourceNotFoundException("topic not found") }
             .toDomain()
     }
 

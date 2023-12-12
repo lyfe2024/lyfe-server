@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.web
 
+import lyfe.lyfeBe.dto.CommonResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -11,5 +12,8 @@ class HealthController(
 
     @GetMapping("/health", "/")
     fun healthCheck(): String = profile
+
+    @GetMapping("/health2")
+    fun healthCheck2(): CommonResponse<Long> = CommonResponse(1L)
 
 }

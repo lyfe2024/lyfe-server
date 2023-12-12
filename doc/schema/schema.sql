@@ -25,6 +25,7 @@ create table user
     visibility           bit                          not null
 );
 
+
 CREATE TABLE profile_image
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -56,6 +57,7 @@ create table board
     constraint fk_board_user_id
         foreign key (user_id) references user (id)
 );
+
 
 
 CREATE TABLE board_image
