@@ -4,9 +4,10 @@ import jakarta.persistence.*
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.board.BoardJpaEntity
+import lyfe.lyfeBe.persistence.board.BoardMapper
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
+import lyfe.lyfeBe.persistence.user.UserMapper
 import org.jetbrains.annotations.NotNull
-import java.time.Instant
 
 @Entity
 @Table(name = "comment")
@@ -34,7 +35,7 @@ class CommentJpaEntity(
     val baseEntity: BaseEntity = BaseEntity()
 
 ) {
-    fun toDomain() =
+    fun toDomain(): Comment =
         Comment(
             id = id,
             content = content,
@@ -45,14 +46,14 @@ class CommentJpaEntity(
             updatedAt = baseEntity.updatedAt,
             visibility = baseEntity.visibility,
         )
-
     companion object {
-        fun from(comment: Comment) =
+        fun from(comment: Comment): CommentJpaEntity =
             CommentJpaEntity(
+                id = comment.id,
                 content = comment.content,
                 commentGroupId = comment.commentGroupId,
-                user = UserJpaEntity.from(comment.user),
-                board = BoardJpaEntity.from(comment.board),
+                user = UserMapper.mapToJpaEntity(comment.user),
+                board = BoardMapper.mapToJpaEntity(comment.board),
                 baseEntity = BaseEntity(
                     createdAt = comment.createdAt,
                     updatedAt = comment.updatedAt,
@@ -60,4 +61,6 @@ class CommentJpaEntity(
                 )
             )
     }
+
+
 }

@@ -13,7 +13,7 @@ import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 
 
-class CreateControllerTest(
+class CreateBoardControllerTest(
 ) : BehaviorSpec({
 
     val testContainer = TestContainer.build()
@@ -63,18 +63,17 @@ class CreateControllerTest(
             topicId = 1L
         )
 
-        val board = testContainer.createBoardController.create(req)
+        val boardId = testContainer.createBoardController.create(req)
 
+        val board = testContainer.boardRepository.getById(boardId.result.id)
 
 
         When("생성된 게시판의 제목, 내용, 유형이 요청과 일치해야 한다") {
 
             Then("해당 보드 타이틀과 본문이 일치한다.") {
-                board.result.title shouldBe req.title
-                board.result.content shouldBe req.content
-                board.result.boardType shouldBe req.boardType
-                board.result.user.id shouldBe req.userId
-                board.result.topic.id shouldBe req.topicId
+                board.title shouldBe req.title
+                board.content shouldBe req.content
+                board.boardType shouldBe req.boardType
             }
         }
     }

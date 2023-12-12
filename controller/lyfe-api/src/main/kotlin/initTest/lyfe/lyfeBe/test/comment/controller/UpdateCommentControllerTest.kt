@@ -68,7 +68,6 @@ class UpdateCommentControllerTest(
             )
 
             val commentId = testContainer.updateCommentController.update(1L, updateReq)
-            println(commentId.result.id)
 
             val comment = testContainer.commentService.getById(commentId.result.id)
 

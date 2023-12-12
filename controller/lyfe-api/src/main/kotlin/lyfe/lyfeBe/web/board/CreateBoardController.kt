@@ -3,6 +3,7 @@ package lyfe.lyfeBe.web.board
 import jakarta.validation.Valid
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardCreate
+import lyfe.lyfeBe.board.dto.SaveBoardDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
@@ -19,7 +20,7 @@ class CreateBoardController(
     @PostMapping
     fun create(
         @Valid @RequestBody req: BoardSaveRequest
-    ): CommonResponse<Board> = service.create(
+    ): CommonResponse<SaveBoardDto> = service.create(
         BoardCreate(
             title = req.title,
             content = req.content,

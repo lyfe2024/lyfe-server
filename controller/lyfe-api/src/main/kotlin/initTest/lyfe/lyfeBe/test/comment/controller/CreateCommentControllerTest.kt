@@ -61,12 +61,15 @@ class CreateCommentControllerTest (
             commentGroupId = null
         )
 
-        val comment = testContainer.createCommentController.create(req, 1L)
+        val commentId = testContainer.createCommentController.create(req, 1L)
+
+        val comment = testContainer.commentService.getById(commentId.result.id)
 
         When("생성된 댓글의 id가 일치해야 한다") {
 
             Then("해당 댓글의 id와 본문이 일치한다.") {
-                comment.result.id shouldBe 1L
+                comment.id shouldBe commentId.result.id
+                comment.content shouldBe req.content
             }
         }
 

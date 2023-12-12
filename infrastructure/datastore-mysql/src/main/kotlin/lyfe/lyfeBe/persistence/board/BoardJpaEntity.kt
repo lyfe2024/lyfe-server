@@ -2,7 +2,6 @@ package lyfe.lyfeBe.persistence.board
 
 import jakarta.persistence.*
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardCreate
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.topic.TopicJpaEntity

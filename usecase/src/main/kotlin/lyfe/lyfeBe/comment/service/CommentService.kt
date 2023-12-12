@@ -31,8 +31,7 @@ class CommentService(
 
         val comment = Comment.from(commentCreate, user, board)
 
-        return commentPort.create(comment)
-            .let { SaveCommentDto.from(it) }
+        return SaveCommentDto(commentPort.create(comment).id)
     }
 
     fun getById(commentId: Long): CommentDto {
@@ -62,7 +61,6 @@ class CommentService(
             throw ForbiddenException("자신의 댓글만 수정할 수 있습니다.")
         }
 
-        return commentPort.update(comment)
-            .let { SaveCommentDto.from(it) }
+        return SaveCommentDto(commentPort.update(comment).id)
     }
 }

@@ -1,5 +1,5 @@
 package lyfe.lyfeBe.comment.dto
 
-data class CommentListResponse(
+data class GetCommentsDto(
     val commentList: List<CommentDto>
 )
