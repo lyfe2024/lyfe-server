@@ -3,11 +3,11 @@ INSERT INTO user (fcm_registration, notification_consent, visibility, created_at
 VALUES (1, 0, 1, NOW(), NOW(), NULL, 'user2@example.com', 'hashedpassword2', 'nickname2', 'ADMIN', 'ACTIVE');
 
 
-INSERT INTO topic (visibility, applied_at, created_at, updated_at, content)
-VALUES (1, NOW(), NOW(), NOW(), 'Topic Content 1');
+INSERT INTO topic (visibility, created_at, updated_at, content)
+VALUES (1,  NOW(), NOW(), 'Topic Content 1');
 
-INSERT INTO topic (visibility, applied_at, created_at, updated_at, content)
-VALUES (1, NOW(), NOW(), NOW(), 'Topic Content 2');
+INSERT INTO topic (visibility, created_at, updated_at, content)
+VALUES (1,  NOW(), NOW(), 'Topic Content 2');
 
 INSERT INTO board (visibility, created_at, updated_at, user_id, topic_id, board_type, content, title)
 VALUES (1, NOW(), NOW(), 1, 1, 'BOARD', 'Conent', 'title');
