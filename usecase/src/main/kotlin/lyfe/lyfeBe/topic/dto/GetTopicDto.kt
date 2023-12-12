@@ -16,5 +16,7 @@ class GetTopicDto(
                 createdAt = topic.createdAt.toString()
             )
 
+        fun toDtoList(topics: List<Topic>): List<GetTopicDto> =
+            topics.map { toDto(it) }
     }
 }

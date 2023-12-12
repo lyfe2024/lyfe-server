@@ -3,6 +3,8 @@ create table topic
     id         bigint auto_increment
         primary key,
     content    varchar(255) null,
+    applied_at datetime(6)  null,
+
     created_at datetime(6)  null,
     updated_at datetime(6)  null,
     visibility bit          not null

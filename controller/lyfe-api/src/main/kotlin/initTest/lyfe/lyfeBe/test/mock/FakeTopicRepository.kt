@@ -1,10 +1,9 @@
 package initTest.lyfe.lyfeBe.test.mock
 
-import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.port.TopicPort
-import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.port.out.UserPort
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -29,6 +28,10 @@ class FakeTopicRepository : TopicPort {
     override fun update(from: Topic) {
         data.removeIf { it.id == from.id }
         data.add(from)
+    }
+
+    override fun getPast(date: String, pageable1: Long, pageable: Pageable): Page<Topic> {
+        TODO("Not yet implemented")
     }
 
     fun clear() {

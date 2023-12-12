@@ -16,6 +16,9 @@ class TopicJpaEntity(
     @field:NotNull
     val content: String,
 
+    @field:NotNull
+    val appliedAt: Instant? = null,
+
     @Embedded
     val baseEntity: BaseEntity = BaseEntity()
 ) {
