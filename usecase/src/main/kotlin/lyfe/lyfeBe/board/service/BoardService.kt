@@ -1,9 +1,11 @@
-package lyfe.lyfeBe.board
+package lyfe.lyfeBe.board.service
 
-import comment.out.CommentPort
+import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.dto.BoardDtoAssembly
-import lyfe.lyfeBe.board.out.BoardPort
+import lyfe.lyfeBe.board.dto.SaveBoardDto
+import lyfe.lyfeBe.board.port.out.BoardPort
+import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
@@ -46,21 +48,21 @@ class BoardService(
         }.toList()
     }
 
-    fun create(boardCreate: BoardCreate): Board {
+    fun create(boardCreate: BoardCreate): SaveBoardDto {
         val user = userport.getById(boardCreate.userId)
         val topic = topicport.getById(boardCreate.topicId)
         val board = Board.from(boardCreate, user, topic)
-        return boardport.create(board)
+        return SaveBoardDto(boardport.create(board).id)
     }
 
 
-    fun update(boardUpdate: BoardUpdate): Long {
+    fun update(boardUpdate: BoardUpdate): SaveBoardDto {
         val board = getById(boardUpdate.boardId).update(boardUpdate)
-        return boardport.update(board).id
+        return SaveBoardDto(boardport.update(board).id)
     }
 
     fun getById(id: Long): Board {
-        return boardport.findById(id)
+        return boardport.getById(id)
     }
 
 

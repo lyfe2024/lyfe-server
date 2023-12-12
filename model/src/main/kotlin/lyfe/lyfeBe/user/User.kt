@@ -1,7 +1,6 @@
 package lyfe.lyfeBe.user
 
 import lyfe.lyfeBe.error.ResourceNotFoundException
-import lyfe.lyfeBe.image.Image
 import java.time.Instant
 
 data class User(
@@ -16,7 +15,7 @@ data class User(
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
     val withdrawnAt: Instant? = null,
-    val visibility: Boolean? = null,
+    val visibility: Boolean,
 ){
     fun validateActive() {
         if (this.withdrawnAt != null) {

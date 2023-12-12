@@ -31,6 +31,7 @@ class GetBoardControllerTest(
             fcmRegistration = true,
             role = Role.USER,
             userStatus = UserStatus.ACTIVE,
+            visibility = true
         )
         testContainer.userRepository.create(user)
 
@@ -60,7 +61,7 @@ class GetBoardControllerTest(
         val req = BoardSaveRequest(
             title = "테스트 게시판 제목",
             content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
-            boardType = BoardType.BOARD_CONTENT,
+            boardType = BoardType.BOARD,
             userId = 1L,
             topicId = 1L
         )
@@ -84,7 +85,7 @@ class GetBoardControllerTest(
         val req = BoardSaveRequest(
             title = "테스트 게시판 제목",
             content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
-            boardType = BoardType.BOARD_CONTENT,
+            boardType = BoardType.BOARD,
             userId = 1L,
             topicId = 1L
         )

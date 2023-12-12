@@ -75,7 +75,7 @@ class UserMockController {
                 id = i.toLong(),
                 title = "타이틀$i",
                 content = "내용$i",
-                boardType = BoardType.BOARD_CONTENT,
+                boardType = BoardType.BOARD,
                 createdAt = "2021-01-01",
                 updatedAt = "2021-01-01",
                 user = UserResponse(

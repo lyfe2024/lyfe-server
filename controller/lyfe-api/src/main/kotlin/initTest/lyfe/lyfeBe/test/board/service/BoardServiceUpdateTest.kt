@@ -4,14 +4,13 @@ import initTest.lyfe.lyfeBe.test.mock.*
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
-import lyfe.lyfeBe.whisky.Whisky
-import java.time.LocalDateTime
 
 
 class BoardServiceUpdateTest(
@@ -43,6 +42,7 @@ class BoardServiceUpdateTest(
             fcmRegistration = true,
             role = Role.USER,
             userStatus = UserStatus.ACTIVE,
+            visibility = true
         )
         fakeUserRepository.create(user)
 
@@ -80,7 +80,7 @@ class BoardServiceUpdateTest(
         val boardCreate = BoardCreate(
             "testTile",
             "testContent",
-            BoardType.BOARD_CONTENT,
+            BoardType.BOARD,
             1L,
             1L
         )
@@ -96,7 +96,7 @@ class BoardServiceUpdateTest(
 
             val boardId = boardService.update(boardUpdate)
 
-            val newBoard = fakeBoardRepository.findById(boardId)
+            val newBoard = fakeBoardRepository.getById(boardId.id)
             Then("업데이트된 게시판의 속성이 업데이트 요청과 일치하는지 확인할 때") {
                 newBoard.title shouldBe boardUpdate.title
                 newBoard.content shouldBe boardUpdate.content
