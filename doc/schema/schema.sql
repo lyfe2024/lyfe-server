@@ -26,27 +26,6 @@ create table user
     visibility           bit                          not null
 );
 
-create table image
-(
-    height     int                       not null,
-    visibility bit                       not null,
-    width      int                       not null,
-    board_id   bigint                    null,
-    created_at datetime(6)               null,
-    id         bigint auto_increment
-        primary key,
-    updated_at datetime(6)               null,
-    user_id    bigint                    null,
-    type       enum ('BOARD', 'PROFILE') null,
-    url        varchar(255)              null,
-    constraint UK_l8oylel56xvt5huamif0tfhkh
-        unique (user_id),
-    constraint fk_image_board_id
-        foreign key (board_id) references board (id),
-    constraint fk_image_topic_id
-        foreign key (user_id) references user (id)
-);
-
 
 CREATE TABLE profile_image
 (
@@ -81,6 +60,7 @@ create table board
 );
 
 
+
 CREATE TABLE board_image
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -92,22 +72,6 @@ CREATE TABLE board_image
     updated_at datetime(6)  null,
     FOREIGN KEY (board_id) REFERENCES board (id)
 );
-
-
-create table whisky
-(
-    id         bigint auto_increment
-        primary key,
-    board_id   bigint      null,
-    user_id    bigint      null,
-    created_at datetime(6) null,
-    constraint fk_whisky_board_id
-        foreign key (board_id) references board (id),
-    constraint fk_whisky_user_id
-        foreign key (user_id) references user (id)
-);
-
-
 
 
 create table comment
@@ -156,16 +120,32 @@ create table notification_history
         foreign key (user_id) references user (id)
 );
 
+
+
+create table whisky
+(
+    id         bigint auto_increment
+        primary key,
+    board_id   bigint      null,
+    user_id    bigint      null,
+    created_at datetime(6) null,
+    constraint fk_whisky_board_id
+        foreign key (board_id) references board (id),
+    constraint fk_whisky_user_id
+        foreign key (user_id) references user (id)
+);
+
+
 create table policy
 (
     id      bigint auto_increment
         primary key,
     title   varchar(255) null,
     content varchar(255) null,
-    version varchar(255) null
+    version varchar(255) null,
+    policy_type enum ('TERM', 'PERSONAL_INFO_AGREEMENT') null
+
 );
-
-
 
 
 
