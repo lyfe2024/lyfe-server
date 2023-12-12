@@ -42,6 +42,7 @@ class BoardServiceUpdateTest(
             fcmRegistration = true,
             role = Role.USER,
             userStatus = UserStatus.ACTIVE,
+            visibility = true
         )
         fakeUserRepository.create(user)
 
@@ -95,7 +96,7 @@ class BoardServiceUpdateTest(
 
             val boardId = boardService.update(boardUpdate)
 
-            val newBoard = fakeBoardRepository.findById(boardId)
+            val newBoard = fakeBoardRepository.getById(boardId)
             Then("업데이트된 게시판의 속성이 업데이트 요청과 일치하는지 확인할 때") {
                 newBoard.title shouldBe boardUpdate.title
                 newBoard.content shouldBe boardUpdate.content

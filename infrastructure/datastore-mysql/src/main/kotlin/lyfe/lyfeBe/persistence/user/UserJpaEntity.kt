@@ -27,7 +27,7 @@ class UserJpaEntity(
     val notificationConsent: Boolean,
     val fcmRegistration: Boolean,
 
-        val withdrawnAt: Instant? = null,
+    val withdrawnAt: Instant? = null,
 
     @field:NotNull
     @Enumerated(EnumType.STRING)
@@ -42,33 +42,38 @@ class UserJpaEntity(
 ) {
     fun toDomain(): User {
         return User(
-                id = id,
-                email = email,
-                hashedPassword = hashedPassword,
-                nickname = nickname,
-                notificationConsent = notificationConsent,
-                fcmRegistration = fcmRegistration,
-                withdrawnAt = withdrawnAt,
-                userStatus = userStatus,
-                role = role,
-                createdAt = baseEntity.createdAt,
-                updatedAt = baseEntity.updatedAt,
-                visibility = baseEntity.visibility
+            id = id,
+            email = email,
+            hashedPassword = hashedPassword,
+            nickname = nickname,
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            withdrawnAt = withdrawnAt,
+            userStatus = userStatus,
+            role = role,
+            createdAt = baseEntity.createdAt,
+            updatedAt = baseEntity.updatedAt,
+            visibility = baseEntity.visibility
         )
 
     }
 
     companion object {
         fun from(user: User): UserJpaEntity = UserJpaEntity(
-                id = user.id,
-                email = user.email,
-                hashedPassword = user.hashedPassword,
-                nickname = user.nickname,
-                notificationConsent = user.notificationConsent,
-                fcmRegistration = user.fcmRegistration,
-                withdrawnAt = user.withdrawnAt,
-                userStatus = user.userStatus,
-                role = user.role,
+            id = user.id,
+            email = user.email,
+            hashedPassword = user.hashedPassword,
+            nickname = user.nickname,
+            notificationConsent = user.notificationConsent,
+            fcmRegistration = user.fcmRegistration,
+            withdrawnAt = user.withdrawnAt,
+            userStatus = user.userStatus,
+            role = user.role,
+            baseEntity = BaseEntity(
+                createdAt = user.createdAt,
+                updatedAt = user.updatedAt,
+                visibility = user.visibility
+            )
         )
     }
 }

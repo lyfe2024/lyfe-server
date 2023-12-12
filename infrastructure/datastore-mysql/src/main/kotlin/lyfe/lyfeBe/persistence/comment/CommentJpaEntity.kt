@@ -22,10 +22,12 @@ class CommentJpaEntity(
 
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_comment_user_id"))
     val user: UserJpaEntity,
 
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", foreignKey = ForeignKey(name = "fk_comment_board_id"))
     val board: BoardJpaEntity,
 
     @Embedded
@@ -47,12 +49,15 @@ class CommentJpaEntity(
     companion object {
         fun from(comment: Comment) =
             CommentJpaEntity(
-                id = comment.id,
                 content = comment.content,
                 commentGroupId = comment.commentGroupId,
                 user = UserJpaEntity.from(comment.user),
                 board = BoardJpaEntity.from(comment.board),
-                baseEntity = BaseEntity(),
+                baseEntity = BaseEntity(
+                    createdAt = comment.createdAt,
+                    updatedAt = comment.updatedAt,
+                    visibility = comment.visibility
+                )
             )
     }
 }

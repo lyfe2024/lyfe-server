@@ -34,6 +34,7 @@ class BoardTest(
             true,
             Role.USER,
             UserStatus.ACTIVE,
+            visibility = true
         )
         val topic = Topic(
             id = 1L,
@@ -77,7 +78,7 @@ class BoardTest(
                 true,
                 Role.USER,
                 UserStatus.ACTIVE,
-
+                visibility = true
                 ),
             topic = Topic(
                 id = 1L,

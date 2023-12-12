@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import lyfe.lyfeBe.auth.port.`in`.AuthenticationUseCase
 import lyfe.lyfeBe.auth.JwtTokenValidator
+import lyfe.lyfeBe.error.UnauthenticatedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
@@ -32,7 +33,7 @@ class JwtAuthenticationFilter(
         try {
             val authentication = authenticationUseCase.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
-        } catch (e: RuntimeException) {
+        } catch (e: UnauthenticatedException) {
             logger.error("Authentication failed: ${e.message}")
             SecurityContextHolder.clearContext()
         }

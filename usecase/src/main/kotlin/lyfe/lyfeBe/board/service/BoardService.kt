@@ -61,7 +61,7 @@ class BoardService(
     }
 
     fun getById(id: Long): Board {
-        return boardport.findById(id)
+        return boardport.getById(id)
     }
 
 

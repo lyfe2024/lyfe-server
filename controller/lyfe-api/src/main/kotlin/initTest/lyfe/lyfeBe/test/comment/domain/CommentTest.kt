@@ -34,6 +34,7 @@ class CommentTest(
             true,
             Role.USER,
             UserStatus.ACTIVE,
+            visibility = true
         )
         val board = Board(
             id = 1L,
@@ -79,6 +80,7 @@ class CommentTest(
             true,
             Role.USER,
             UserStatus.ACTIVE,
+            visibility = true
         )
         val board = Board(
             id = 1L,

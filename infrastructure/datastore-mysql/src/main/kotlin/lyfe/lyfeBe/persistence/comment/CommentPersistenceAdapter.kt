@@ -15,11 +15,14 @@ class CommentPersistenceAdapter(
     override fun countByBoardId(boardId: Long) = commentRepository.countByBoardId(boardId)
 
     @Transactional
-    override fun create(comment: Comment): Comment {
+    override fun create(
+        comment: Comment
+    ): Comment {
         check(comment.id == 0L) { "ID가 0 or null이 아니면 생성할 수 없습니다." }
         return commentRepository.save(CommentJpaEntity.from(comment)).toDomain()
     }
 
+    @Transactional
     override fun update(comment: Comment): Comment {
         check(comment.id != 0L) { "ID가 0인 Comment는 업데이트할 수 없습니다." }
         return commentRepository.save(CommentJpaEntity.from(comment)).toDomain()

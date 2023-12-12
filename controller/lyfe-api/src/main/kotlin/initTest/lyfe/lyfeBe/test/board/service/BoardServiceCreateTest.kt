@@ -42,6 +42,7 @@ class BoardServiceCreateTest(
             fcmRegistration = true,
             role = Role.USER,
             userStatus = UserStatus.ACTIVE,
+            visibility = true
         )
         fakeUserRepository.create(user)
 

@@ -2,16 +2,20 @@ package lyfe.lyfeBe.persistence.board
 
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.port.out.BoardPort
+import lyfe.lyfeBe.error.ResourceNotFoundException
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 @Repository
 class BoardPersistenceAdapter(
     private val boardJpaRepository: BoardJpaRepository,
 ) : BoardPort {
-    override fun findById(id: Long): Board {
-        return boardJpaRepository.findById(id).orElseThrow { RuntimeException("Board not found") }
-                .toDomain()
+    override fun getById(id: Long): Board {
+        return boardJpaRepository.findByIdOrNull(id)?.toDomain()
+            ?: throw ResourceNotFoundException("해당하는 게시글이 존재하지 않습니다.")
     }
 
     override fun create(board: Board) =

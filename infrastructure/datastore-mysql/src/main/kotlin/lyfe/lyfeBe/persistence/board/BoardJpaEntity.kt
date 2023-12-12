@@ -56,18 +56,6 @@ class BoardJpaEntity(
     }
 
     companion object {
-        fun from(
-            userCreate: BoardCreate,
-            user: UserJpaEntity,
-            topic: TopicJpaEntity
-        ): BoardJpaEntity =
-            BoardJpaEntity(
-                title = userCreate.title,
-                content = userCreate.content,
-                boardType = userCreate.boardType,
-                user = user,
-                topic = topic
-            )
 
         fun from(board: Board) =
             BoardJpaEntity(
@@ -76,6 +64,11 @@ class BoardJpaEntity(
                 boardType = board.boardType,
                 user = UserJpaEntity.from(board.user),
                 topic = TopicJpaEntity.from(board.topic),
+                baseEntity = BaseEntity(
+                    createdAt = board.createdAt,
+                    updatedAt = board.updatedAt,
+                    visibility = board.visibility
+                )
             )
 
         fun update(board: Board) =

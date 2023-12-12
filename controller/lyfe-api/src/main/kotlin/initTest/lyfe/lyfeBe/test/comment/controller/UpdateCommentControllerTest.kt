@@ -29,6 +29,7 @@ class UpdateCommentControllerTest(
             fcmRegistration = true,
             role = Role.USER,
             userStatus = UserStatus.ACTIVE,
+            visibility = true
         )
         testContainer.userRepository.create(user)
 

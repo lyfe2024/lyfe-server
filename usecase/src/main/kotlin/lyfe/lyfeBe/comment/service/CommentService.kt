@@ -10,28 +10,26 @@ import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 class CommentService(
     private val commentPort: CommentPort,
     private val userPort: UserPort,
     private val boardPort: BoardPort,
 ) {
-    fun create(command: CommentCreate): SaveCommentDto {
 
-        val user = userPort.getById(userId = command.userId)
-        val board = boardPort.findById(id = command.boardId)
+    @Transactional
+    fun create(commentCreate: CommentCreate): SaveCommentDto {
 
-        command.commentGroupId?.let {
+        val user = userPort.getById(userId = commentCreate.userId)
+        val board = boardPort.getById(id = commentCreate.boardId)
+
+        commentCreate.commentGroupId?.let {
             val groupComment = commentPort.getById(id = it)
             require(groupComment.commentGroupId == null) { "대댓글은 대댓글을 달 수 없습니다." }
         }
 
-        val comment = Comment.from(
-            commentCreate = command,
-            user = user,
-            board = board
-        )
+        val comment = Comment.from(commentCreate, user, board)
 
         return commentPort.create(comment)
             .let { SaveCommentDto.from(it) }
@@ -56,6 +54,7 @@ class CommentService(
         return commentPort.getCommentsWithCursorAndUser(command.cursorId, command.userId)
     }
 
+    @Transactional
     fun update(commentUpdate : CommentUpdate): SaveCommentDto {
         val comment = commentPort.getById(id = commentUpdate.commentId).update(commentUpdate)
 
