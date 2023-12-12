@@ -79,6 +79,9 @@ class TestContainer(
                 createBoardController = createBoardController,
                 updateBoardController = updateBoardController,
                 getBoardController = getBoardController,
+                createTopicController,
+                updateTopicController,
+                getTopicController,
                 createCommentController = createCommentController,
                 updateCommentController = updateCommentController,
                 getCommentController = getCommentController,
@@ -89,17 +92,6 @@ class TestContainer(
                 userRepository = userRepository,
                 topicRepository = topicRepository,
                 imageRepository = imageRepository
-                createBoardController,
-                updateBoardController,
-                getBoardController,
-                createTopicController,
-                updateTopicController,
-                getTopicController,
-                boardService,
-                boardRepository,
-                userRepository,
-                topicRepository,
-                imageRepository
             )
         }
     }
