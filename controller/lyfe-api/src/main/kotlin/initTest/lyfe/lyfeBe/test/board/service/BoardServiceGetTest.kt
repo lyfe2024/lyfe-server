@@ -13,6 +13,8 @@ import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.whisky.Whisky
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import java.time.Instant
 
 
@@ -133,9 +135,16 @@ class BoardServiceGetTest(
     Given("게시판 생성 복수요청이 준비되고 실행되었을 때") {
         val cursorId = Long.MAX_VALUE
 
+        val pageable = PageRequest.of(
+            0, // 페이지 번호 (0부터 시작)
+            5, // 페이지 크기
+            Sort.by("id").descending()
+        )
+
         val boardsGet = BoardsGet(
             boardId = cursorId,
-            size = 1
+            pageable  = pageable
+
         )
 
 

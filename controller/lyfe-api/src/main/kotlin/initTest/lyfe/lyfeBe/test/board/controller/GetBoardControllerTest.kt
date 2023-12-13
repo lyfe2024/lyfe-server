@@ -12,6 +12,8 @@ import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 
 
 class GetBoardControllerTest(
@@ -95,7 +97,13 @@ class GetBoardControllerTest(
 
         When("게시판 리스트를 조회 했을 때") {
 
-            val res: List<BoardDto> = testContainer.boardController.getBoards(0, 10).result
+            val of = PageRequest.of(
+                0, // 페이지 번호 (0부터 시작)
+                5, // 페이지 크기
+                Sort.by("id").descending()
+            )
+
+            val res: List<BoardDto> = testContainer.boardController.getBoards(0, of).result
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
                 res.forEach { board ->

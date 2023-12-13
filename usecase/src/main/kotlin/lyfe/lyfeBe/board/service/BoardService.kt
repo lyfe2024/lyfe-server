@@ -10,6 +10,7 @@ import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -36,7 +37,7 @@ class BoardService(
     }
 
     fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
-        val boards = fetchBoards(boardsGet.boardId, boardsGet.size)
+        val boards = fetchBoards(boardsGet.boardId, boardsGet.pageable)
 
         return boards.map { board ->
             val image = fetchImageUrl(board.user.id)
@@ -66,8 +67,8 @@ class BoardService(
     }
 
 
-    private fun fetchBoards(boardId: Long, size: Int): List<Board> {
-        return boardport.findAll(boardId, size).toList()
+    private fun fetchBoards(boardId: Long, pageable: Pageable): List<Board> {
+        return boardport.findByIdCursorId(boardId, pageable).toList()
     }
 
     private fun fetchImageUrl(userId: Long): String {

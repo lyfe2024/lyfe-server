@@ -29,6 +29,5 @@ class TopicPersistenceAdapter(
             DateConverter.toInstant(date),
             cursorId,
             pageable
-        )
-            .map { it.toDomain() }
+        ).map { it.toDomain() }
 }

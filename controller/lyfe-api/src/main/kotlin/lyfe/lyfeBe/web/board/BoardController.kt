@@ -8,6 +8,9 @@ import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.board.req.BoardUpdateRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -18,10 +21,11 @@ class BoardController(
     @GetMapping
     fun getBoards(
         @RequestParam(required = false) cursorId: Long?,
-        @RequestParam(required = false, defaultValue = "10") size: Int
-    ): CommonResponse<List<BoardDto>> {
+        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+
+        ): CommonResponse<List<BoardDto>> {
         val boardId = getEffectiveCursorId(cursorId)
-        return CommonResponse(service.getBoards(BoardsGet(boardId, size)))
+        return CommonResponse(service.getBoards(BoardsGet(boardId, pageable)))
     }
 
 
