@@ -3,7 +3,10 @@ package initTest.lyfe.lyfeBe.test.board.service
 import initTest.lyfe.lyfeBe.test.mock.*
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardGet
+import lyfe.lyfeBe.board.BoardType
+import lyfe.lyfeBe.board.BoardsGet
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.image.Image
@@ -143,7 +146,7 @@ class BoardServiceGetTest(
 
         val boardsGet = BoardsGet(
             boardId = cursorId,
-            pageable  = pageable
+            pageable = pageable
 
         )
 
@@ -153,13 +156,16 @@ class BoardServiceGetTest(
             val boardDtos = boardService.getBoards(boardsGet)
 
             Then("조회된 게시판의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
-                boardDtos[0].title shouldBe "테스트 게시물"
-                boardDtos[0].content shouldBe "게시물 내용입니다."
-                boardDtos[0].boardType shouldBe BoardType.BOARD
-                boardDtos[0].user.id shouldBe 1L
-                boardDtos[0].whiskyCount shouldBe "1"
-                boardDtos[0].commentCount shouldBe "1"
+                boardDtos.forEach { boardDto ->
+                    boardDto.title shouldBe "테스트 게시물"
+                    boardDto.content shouldBe "게시물 내용입니다."
+                    boardDto.boardType shouldBe BoardType.BOARD
+                    boardDto.user.id shouldBe 1L
+                    boardDto.whiskyCount shouldBe "1"
+                    boardDto.commentCount shouldBe "1"
+                }
             }
+
         }
     }
 })

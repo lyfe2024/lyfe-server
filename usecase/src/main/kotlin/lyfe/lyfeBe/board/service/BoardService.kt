@@ -4,6 +4,7 @@ import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.dto.BoardDtoAssembly
 import lyfe.lyfeBe.board.dto.SaveBoardDto
+import lyfe.lyfeBe.board.dto.UpdateBoardDto
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.image.port.out.ImagePort
@@ -57,9 +58,9 @@ class BoardService(
     }
 
 
-    fun update(boardUpdate: BoardUpdate): SaveBoardDto {
+    fun update(boardUpdate: BoardUpdate): UpdateBoardDto {
         val board = getById(boardUpdate.boardId).update(boardUpdate)
-        return SaveBoardDto(boardport.update(board).id)
+        return UpdateBoardDto(boardport.update(board).id)
     }
 
     fun getById(id: Long): Board {

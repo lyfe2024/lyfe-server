@@ -1,9 +1,11 @@
 package lyfe.lyfeBe.web.board
 
 import jakarta.validation.Valid
-import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.BoardCreate
+import lyfe.lyfeBe.board.BoardGet
+import lyfe.lyfeBe.board.BoardUpdate
+import lyfe.lyfeBe.board.BoardsGet
 import lyfe.lyfeBe.board.dto.BoardDto
-import lyfe.lyfeBe.board.dto.SaveBoardDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
@@ -42,30 +44,30 @@ class BoardController(
     @PostMapping
     fun create(
         @Valid @RequestBody req: BoardSaveRequest
-    ): CommonResponse<SaveBoardDto> = service.create(
-        BoardCreate(
-            title = req.title,
-            content = req.content,
-            boardType = req.boardType,
-            userId = req.userId,
-            topicId = req.topicId
+    ) = CommonResponse(
+        service.create(
+            BoardCreate(
+                title = req.title,
+                content = req.content,
+                boardType = req.boardType,
+                userId = req.userId,
+                topicId = req.topicId
+            )
         )
-    ).let { CommonResponse(it) }
-
-
+    )
 
 
     @PutMapping("/{boardId}")
     fun update(
         @PathVariable(value = "boardId") boardId: Long,
         @Valid @RequestBody req: BoardUpdateRequest
-    ): CommonResponse<SaveBoardDto> =
+    ) = CommonResponse(
         service.update(
             BoardUpdate(
                 boardId = boardId,
                 title = req.title,
                 content = req.content
             )
-        ).let { CommonResponse(it) }
-
+        )
+    )
 }
