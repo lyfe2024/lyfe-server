@@ -4,7 +4,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-class dateConverter {
+class DateConverter {
 
     companion object {
         fun toInstant(date: String): Instant {

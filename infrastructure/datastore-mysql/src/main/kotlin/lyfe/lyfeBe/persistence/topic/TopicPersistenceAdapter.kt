@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.persistence.topic
 
 import lyfe.lyfeBe.error.ResourceNotFoundException
-import lyfe.lyfeBe.fomatter.dateConverter
+import lyfe.lyfeBe.fomatter.DateConverter
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.port.TopicPort
 import org.springframework.data.domain.Pageable
@@ -26,7 +26,7 @@ class TopicPersistenceAdapter(
 
     override fun getPast(date: String, cursorId: Long, pageable: Pageable) =
         topicRepository.findPastTopics(
-            dateConverter.toInstant(date),
+            DateConverter.toInstant(date),
             cursorId,
             pageable
         )

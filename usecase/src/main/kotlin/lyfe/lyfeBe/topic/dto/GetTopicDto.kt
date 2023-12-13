@@ -5,7 +5,7 @@ import lyfe.lyfeBe.topic.Topic
 class GetTopicDto(
     val id: Long,
     val content: String,
-    val createdAt: String
+    val appliedAt: String
 ) {
 
     companion object {
@@ -13,7 +13,7 @@ class GetTopicDto(
             GetTopicDto(
                 id = topic.id,
                 content = topic.content,
-                createdAt = topic.createdAt.toString()
+                appliedAt = topic.appliedAt.toString()
             )
 
         fun toDtoList(topics: List<Topic>): List<GetTopicDto> =

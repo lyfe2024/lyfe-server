@@ -7,6 +7,7 @@ data class Topic(
     val content: String,
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
+    val appliedAt: Instant? = null,
     val visibility: Boolean,
 ) {
     companion object {
