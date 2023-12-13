@@ -60,10 +60,10 @@ class GetCommentControllerTest(
             commentGroupId = null
         )
 
-        testContainer.createCommentController.create(req, 1L)
+        testContainer.commentController.create(req, 1L)
 
         When("댓글을 조회 했을 때") {
-            val res = testContainer.getCommentController.getComment(1L).result
+            val res = testContainer.commentController.getComment(1L).result
 
             Then("저장된 댓글의 필드와 응답값과 일치해야 한다.") {
                 res.commentGroupId shouldBe null
@@ -82,17 +82,17 @@ class GetCommentControllerTest(
             commentGroupId = null
         )
 
-        testContainer.createCommentController.create(req, 1L)
+        testContainer.commentController.create(req, 1L)
 
         val req2 = SaveCommentRequest(
             content = "테스트 댓글 내용입니다. 여기에 댓글 내용이 들어갑니다.",
             commentGroupId = 1L
         )
 
-        testContainer.createCommentController.create(req2, 1L)
+        testContainer.commentController.create(req2, 1L)
 
         When("댓글 리스트를 조회 했을 때"){
-            val res = testContainer.getCommentController.getLatestCommentList(1L, 0).result
+            val res = testContainer.commentController.getLatestCommentList(1L, 0).result
 
             Then("저장된 댓글의 필드와 응답값과 일치해야 한다."){
                 res[0].commentGroupId shouldBe req.commentGroupId

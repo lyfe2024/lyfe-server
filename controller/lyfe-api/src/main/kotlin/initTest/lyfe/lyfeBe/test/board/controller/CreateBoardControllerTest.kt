@@ -63,7 +63,7 @@ class CreateBoardControllerTest(
             topicId = 1L
         )
 
-        val boardId = testContainer.createBoardController.create(req)
+        val boardId = testContainer.boardController.create(req)
 
         val board = testContainer.boardRepository.getById(boardId.result.id)
 

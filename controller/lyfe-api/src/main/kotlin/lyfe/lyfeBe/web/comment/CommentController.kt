@@ -1,21 +1,19 @@
 package lyfe.lyfeBe.web.comment
 
-import lyfe.lyfeBe.comment.Comment
+import jakarta.validation.Valid
+import lyfe.lyfeBe.comment.*
 import lyfe.lyfeBe.comment.dto.CommentDto
-import lyfe.lyfeBe.comment.CommentGetsByBoard
-import lyfe.lyfeBe.comment.CommentGetsByUserId
+import lyfe.lyfeBe.comment.dto.SaveCommentDto
 import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.dto.CommonResponse
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
+import lyfe.lyfeBe.web.comment.req.UpdateCommentRequest
+import org.springframework.web.bind.annotation.*
 
 @RestController
-class GetCommentController(
+class CommentController(
     private val service: CommentService
 ) {
-
 
     /**
      * 댓글 id 로 1건 조회
@@ -68,5 +66,39 @@ class GetCommentController(
         return cursorId?.takeIf { it != 0L } ?: Long.MAX_VALUE
     }
 
+
+    @PostMapping("/v1/comments")
+    fun create(
+        @Valid @RequestBody req: SaveCommentRequest,
+        @RequestParam("comment_board_id") boardId: Long,
+
+        ): CommonResponse<SaveCommentDto> {
+
+        return service.create(
+            CommentCreate(
+                content = req.content,
+                commentGroupId = req.commentGroupId,
+                userId = 1L,
+                boardId = boardId
+            )
+        ).let { CommonResponse(it) }
+
+    }
+
+    @PutMapping("/v1/comments/{commentId}")
+    fun update(
+        @PathVariable commentId: Long,
+        @Valid @RequestBody request: UpdateCommentRequest,
+
+        ): CommonResponse<SaveCommentDto> {
+
+        return service.update(
+            CommentUpdate(
+                commentId = commentId,
+                content = request.content,
+                userId = 1L
+            )
+        ).let { CommonResponse(it) }
+    }
 
 }

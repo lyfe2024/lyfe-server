@@ -17,7 +17,7 @@ class UpdateControllerTest(
         val req = SaveTopicRequest(
             content = "testTopic",
         )
-        testContainer.createTopicController.create(req).result
+        testContainer.topicController.create(req).result
 
 
         When("토픽 업데이트 요청을 처리할 하고 조회 했을때") {
@@ -26,8 +26,8 @@ class UpdateControllerTest(
                 content = "testsetestsetestestes",
             )
 
-            testContainer.updateTopicController.update(1L, updateTopicRequest)
-            val getTopicDto = testContainer.getTopicController.get(1L).result
+            testContainer.topicController.update(1L, updateTopicRequest)
+            val getTopicDto = testContainer.topicController.get(1L).result
 
             Then("생성된 게시판의 속성이 요청과 일치하는지 확인할 때") {
                 getTopicDto.id shouldBe 1L

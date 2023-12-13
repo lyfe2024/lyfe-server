@@ -2,7 +2,6 @@ package initTest.lyfe.lyfeBe.test.topic.service
 
 import initTest.lyfe.lyfeBe.test.mock.FakeTopicRepository
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.topic.TopicCreate
 import lyfe.lyfeBe.topic.TopicGet
@@ -71,7 +70,7 @@ class GetTopicServiceTest(
 
 
             Then("생성된 게시판의 속성이 요청과 일치하는지 확인할 때") {
-                past.size shouldBeLessThan 5
+                past.size shouldBe 5
                 past.forEach {
                     it.content shouldBe topicCreate.content
                 }

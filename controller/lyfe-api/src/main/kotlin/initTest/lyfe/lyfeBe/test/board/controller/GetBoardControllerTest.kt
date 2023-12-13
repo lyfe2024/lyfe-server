@@ -66,10 +66,10 @@ class GetBoardControllerTest(
             topicId = 1L
         )
 
-        testContainer.createBoardController.create(req)
+        testContainer.boardController.create(req)
 
         When("게시판을 조회 했을 때") {
-            val res = testContainer.getBoardController.get(1L).result
+            val res = testContainer.boardController.get(1L).result
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
                 res.title shouldBe req.title
@@ -90,12 +90,12 @@ class GetBoardControllerTest(
             topicId = 1L
         )
 
-        testContainer.createBoardController.create(req)
-        testContainer.createBoardController.create(req)
+        testContainer.boardController.create(req)
+        testContainer.boardController.create(req)
 
         When("게시판 리스트를 조회 했을 때") {
 
-            val res: List<BoardDto> = testContainer.getBoardController.getBoards(0, 10).result
+            val res: List<BoardDto> = testContainer.boardController.getBoards(0, 10).result
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
                 res.forEach { board ->
