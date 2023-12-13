@@ -4,6 +4,7 @@ create table topic
         primary key,
     content    varchar(255) null,
     applied_at datetime(6)  null,
+
     created_at datetime(6)  null,
     updated_at datetime(6)  null,
     visibility bit          not null
@@ -74,6 +75,22 @@ CREATE TABLE board_image
 );
 
 
+create table whisky
+(
+    id         bigint auto_increment
+        primary key,
+    board_id   bigint      null,
+    user_id    bigint      null,
+    created_at datetime(6) null,
+    constraint fk_whisky_board_id
+        foreign key (board_id) references board (id),
+    constraint fk_whisky_user_id
+        foreign key (user_id) references user (id)
+);
+
+
+
+
 create table comment
 (
     id               bigint auto_increment
@@ -120,32 +137,16 @@ create table notification_history
         foreign key (user_id) references user (id)
 );
 
-
-
-create table whisky
-(
-    id         bigint auto_increment
-        primary key,
-    board_id   bigint      null,
-    user_id    bigint      null,
-    created_at datetime(6) null,
-    constraint fk_whisky_board_id
-        foreign key (board_id) references board (id),
-    constraint fk_whisky_user_id
-        foreign key (user_id) references user (id)
-);
-
-
 create table policy
 (
     id      bigint auto_increment
         primary key,
     title   varchar(255) null,
     content varchar(255) null,
-    version varchar(255) null,
-    policy_type enum ('TERM', 'PERSONAL_INFO_AGREEMENT') null
-
+    version varchar(255) null
 );
+
+
 
 
 

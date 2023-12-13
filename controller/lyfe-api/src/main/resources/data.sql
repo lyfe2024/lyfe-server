@@ -1,8 +1,11 @@
-INSERT INTO policy (content, policy_type, title, version) VALUES ('개인정보 처리 방침에 대한 내용', 'PERSONAL_INFO_AGREEMENT', '개인정보 처리 방침', '1.0');
+INSERT INTO policy (content, policy_type, title, version)
+VALUES ('개인정보 처리 방침에 대한 내용', 'PERSONAL_INFO_AGREEMENT', '개인정보 처리 방침', '1.0');
 
-INSERT INTO policy (content, policy_type, title, version) VALUES ('서비스 이용 약관에 대한 내용', 'TERM', '서비스 이용 약관', '1.0');
+INSERT INTO policy (content, policy_type, title, version)
+VALUES ('서비스 이용 약관에 대한 내용', 'TERM', '서비스 이용 약관', '1.0');
 
-INSERT INTO user (fcm_registration, notification_consent, visibility, created_at, updated_at, withdrawn_at, email, hashed_password, nickname, role, user_status)
+INSERT INTO user (fcm_registration, notification_consent, visibility, created_at, updated_at, withdrawn_at, email,
+                  hashed_password, nickname, role, user_status)
 VALUES (1, 0, 1, NOW(), NOW(), NULL, 'user2@example.com', 'hashedpassword2', 'nickname2', 'ADMIN', 'ACTIVE');
 
 

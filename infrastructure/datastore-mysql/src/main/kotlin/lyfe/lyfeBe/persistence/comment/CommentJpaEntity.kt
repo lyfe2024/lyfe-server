@@ -4,7 +4,6 @@ import jakarta.persistence.*
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.board.BoardJpaEntity
-import lyfe.lyfeBe.persistence.board.BoardMapper
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
 import lyfe.lyfeBe.persistence.user.UserMapper
 import org.jetbrains.annotations.NotNull
@@ -53,7 +52,7 @@ class CommentJpaEntity(
                 content = comment.content,
                 commentGroupId = comment.commentGroupId,
                 user = UserMapper.mapToJpaEntity(comment.user),
-                board = BoardMapper.mapToJpaEntity(comment.board),
+                board = BoardJpaEntity.from(comment.board),
                 baseEntity = BaseEntity(
                     createdAt = comment.createdAt,
                     updatedAt = comment.updatedAt,

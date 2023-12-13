@@ -26,9 +26,9 @@ class TopicJpaEntity(
         return Topic(
             id = id,
             content = content,
-            appliedAt = appliedAt,
             createdAt = baseEntity.createdAt,
             updatedAt = baseEntity.updatedAt,
+            appliedAt = appliedAt,
             visibility = baseEntity.visibility
         )
     }
@@ -37,7 +37,6 @@ class TopicJpaEntity(
         fun from(topic: Topic): TopicJpaEntity = TopicJpaEntity(
             id = topic.id,
             content = topic.content,
-            appliedAt = topic.appliedAt,
             baseEntity = BaseEntity(
                 createdAt = topic.createdAt,
                 updatedAt = topic.updatedAt,

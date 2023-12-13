@@ -13,7 +13,7 @@ class NotificationMockController {
         val notificationList = generateList(10) { i ->
             val notificationType = when ((i % 4) + 1) {
                 1 -> NotificationType.BOARD_PICTURE
-                2 -> NotificationType.BOARD_CONTENT
+                2 -> NotificationType.BOARD
                 3 -> NotificationType.COMMENT
                 4 -> NotificationType.WHISKY
                 else -> throw IllegalArgumentException("Invalid id")

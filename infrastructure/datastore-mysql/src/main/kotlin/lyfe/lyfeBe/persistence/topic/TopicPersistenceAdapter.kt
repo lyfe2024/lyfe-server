@@ -1,12 +1,12 @@
 package lyfe.lyfeBe.persistence.topic
 
 import lyfe.lyfeBe.error.ResourceNotFoundException
+import lyfe.lyfeBe.fomatter.DateConverter
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.port.TopicPort
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
-@Transactional(readOnly = true)
 @Component
 class TopicPersistenceAdapter(
     private val topicRepository: TopicJpaRepository
@@ -19,4 +19,16 @@ class TopicPersistenceAdapter(
             .orElseThrow { ResourceNotFoundException("topic not found") }
             .toDomain()
     }
+
+    override fun update(from: Topic) {
+        topicRepository.save(TopicJpaEntity.from(from))
+    }
+
+    override fun getPast(date: String, cursorId: Long, pageable: Pageable) =
+        topicRepository.findPastTopics(
+            DateConverter.toInstant(date),
+            cursorId,
+            pageable
+        )
+            .map { it.toDomain() }
 }
