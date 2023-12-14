@@ -8,6 +8,9 @@ import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
 import lyfe.lyfeBe.web.comment.req.UpdateCommentRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -33,13 +36,15 @@ class CommentController(
     fun getLatestCommentList(
         @RequestParam(name = "comment_board_id") boardId: Long,
         @RequestParam(required = false) cursorId: Long,
-    ): CommonResponse<List<Comment>> {
+        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
+        ): CommonResponse<List<Comment>> {
 
         val commentId = getEffectiveCursorId(cursorId)
         return service.getCommentsWithCursorAndBoard(
             CommentGetsByBoard(
                 boardId = boardId,
-                cursorId = commentId
+                cursorId = commentId,
+                        pageable = pageable
             )
         ).let { CommonResponse(it) }
     }

@@ -21,6 +21,7 @@ class TestContainer(
     var commentService: CommentService,
     var commentRepository: CommentPort,
     var userRepository: UserPort,
+    var topicService: TopicService,
     var topicRepository: TopicPort,
     var imageRepository: ImagePort
 
@@ -50,7 +51,7 @@ class TestContainer(
                 boardRepository
             )
 
-            val topicService: TopicService = TopicService(
+            val topicService = TopicService(
                 topicRepository
             )
 
@@ -68,6 +69,7 @@ class TestContainer(
                 commentService = commentService,
                 commentRepository = commentRepository,
                 userRepository = userRepository,
+                topicService = topicService,
                 topicRepository = topicRepository,
                 imageRepository = imageRepository
             )

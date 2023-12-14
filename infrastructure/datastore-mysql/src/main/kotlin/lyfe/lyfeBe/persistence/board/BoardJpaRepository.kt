@@ -12,5 +12,5 @@ import java.time.Instant
 interface BoardJpaRepository: JpaRepository<BoardJpaEntity, Long> {
 
     @Query("SELECT t FROM BoardJpaEntity t WHERE t.id < :cursorId")
-    fun findByIdCursorId(boardId: Long, pageable: Pageable): Page<BoardJpaEntity>
+    fun findByIdCursorId(cursorId: Long, pageable: Pageable): Page<BoardJpaEntity>
 }

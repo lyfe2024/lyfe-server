@@ -107,11 +107,6 @@ class BoardServiceGetTest(
     }
 
     afterContainer {
-        fakeBoardRepository.clear()
-        fakeUserRepository.clear()
-        fakeTopicRepository.clear()
-        fakeImageRepository.clear()
-        fakeWhiskyRepository.clear()
         fakeCommentRepository.clear()
     }
 
