@@ -21,7 +21,7 @@ import org.springframework.data.domain.Sort
 import java.time.Instant
 
 
-class BoardServiceGetTest(
+class GetBoardServiceGetTest(
 ) : BehaviorSpec({
 
     val fakeBoardRepository = FakeBoardRepository()
