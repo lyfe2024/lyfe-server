@@ -2,6 +2,9 @@ package initTest.lyfe.lyfeBe.test.mock
 
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.port.out.BoardPort
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -32,15 +35,22 @@ class FakeBoardRepository : BoardPort {
         return board
     }
 
-    override fun findAll(paging: Long, size: Int): List<Board> {
-        // 데이터 리스트를 ID 기준으로 내림차순 정렬
-        val sortedData = data.sortedByDescending { it.id }
 
-        // paging 값보다 작거나 같은 ID를 가진 데이터 선택
-        val filteredData = sortedData.takeWhile { it.id <= paging }
 
-        // 상위 size 개수만큼의 데이터 반환
-        return filteredData.take(size)
+    override fun findByIdCursorId(boardId: Long, paging: Pageable): Page<Board> {
+
+        // data 리스트에서 필터링 및 정렬을 수행
+        val filteredData = data.filter {
+             it.id < boardId
+        }.sortedByDescending { it.id }
+
+        // 페이징 처리
+        val pageStart = paging.pageNumber * paging.pageSize
+        val pageEnd = (pageStart + paging.pageSize).coerceAtMost(filteredData.size)
+        val pageContent = filteredData.subList(pageStart, pageEnd)
+
+        return PageImpl(pageContent, paging, paging.pageSize.toLong())
+
     }
 
     fun clear() {

@@ -2,6 +2,7 @@ package initTest.lyfe.lyfeBe.test.mock
 
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.comment.port.out.CommentPort
+import org.springframework.data.domain.Pageable
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -15,7 +16,7 @@ class FakeCommentRepository : CommentPort {
         return data.find { it.id == id }!!
     }
 
-    override fun getCommentsWithCursorAndBoard(cursorId: Long, boardId: Long): List<Comment> {
+    override fun getCommentsWithCursorAndBoard(cursorId: Long, boardId: Long, pageable: Pageable): List<Comment> {
         return data.filter { it.board.id == boardId }
     }
 

@@ -1,4 +1,4 @@
-package initTest.mock
+package initTest.lyfe.lyfeBe.test.mock
 
 import lyfe.lyfeBe.policy.Policy
 import lyfe.lyfeBe.policy.PolicyType

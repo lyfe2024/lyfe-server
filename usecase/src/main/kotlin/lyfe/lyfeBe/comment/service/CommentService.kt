@@ -43,7 +43,7 @@ class CommentService(
      * 해당 게시글의 댓글 전체 조회
      */
     fun getCommentsWithCursorAndBoard(command: CommentGetsByBoard): List<Comment> {
-        return commentPort.getCommentsWithCursorAndBoard(command.cursorId, command.boardId)
+        return commentPort.getCommentsWithCursorAndBoard(command.cursorId, command.boardId, command.pageable)
     }
 
     /**
@@ -54,7 +54,7 @@ class CommentService(
     }
 
     @Transactional
-    fun update(commentUpdate : CommentUpdate): SaveCommentDto {
+    fun update(commentUpdate: CommentUpdate): SaveCommentDto {
         val comment = commentPort.getById(id = commentUpdate.commentId).update(commentUpdate)
 
         if (comment.user.id != commentUpdate.userId) {

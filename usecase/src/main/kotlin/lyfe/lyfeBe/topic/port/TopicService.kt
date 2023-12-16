@@ -21,8 +21,8 @@ class TopicService(
         GetTopicDto.toDto(topicPort.getById(topicGet.topicId))
 
     fun getPast(topicPastGet: TopicPastGet): List<GetTopicDto> {
-        val topics = topicPort.getPast(topicPastGet.date, topicPastGet.cursorId, topicPastGet.pageable)
-        return GetTopicDto.toDtoList(topics.content)
+        val topics = topicPort.getPast(topicPastGet.date, topicPastGet.cursorId, topicPastGet.pageable).toList()
+        return GetTopicDto.toDtoList(topics)
 
     }
 

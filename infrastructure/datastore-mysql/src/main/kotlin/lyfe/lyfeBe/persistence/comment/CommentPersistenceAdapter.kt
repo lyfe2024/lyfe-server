@@ -3,6 +3,7 @@ package lyfe.lyfeBe.persistence.comment
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ResourceNotFoundException
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -31,11 +32,12 @@ class CommentPersistenceAdapter(
             ?: throw ResourceNotFoundException("해당하는 댓글이 존재하지 않습니다.")
 
     override fun getCommentsWithCursorAndBoard(
-        cursorId : Long,
-        boardId: Long
+        cursorId: Long,
+        boardId: Long,
+        pageable: Pageable
     ): List<Comment> {
-        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(cursorId, boardId)
-            .map { it.toDomain() }
+        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(cursorId, boardId, pageable)
+            .map { it.toDomain() }.toList()
     }
 
     override fun getCommentsWithCursorAndUser(
