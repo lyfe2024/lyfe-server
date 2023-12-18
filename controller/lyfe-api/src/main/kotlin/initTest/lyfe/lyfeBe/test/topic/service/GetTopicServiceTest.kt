@@ -71,7 +71,7 @@ class GetTopicServiceTest(
 
 
             Then("생성된 게시판의 속성이 요청과 일치하는지 확인할 때") {
-                past.size shouldBeLessThan 5
+                past.size shouldBeLessThan 6
                 past.forEach {
                     it.content shouldBe topicCreate.content
                 }

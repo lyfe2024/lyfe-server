@@ -22,4 +22,23 @@ data class User(
             throw ResourceNotFoundException("탈퇴한 유저입니다.")
         }
     }
+
+    companion object {
+        fun from(user: User): User {
+            return User(
+                id = user.id,
+                email = user.email,
+                hashedPassword = user.hashedPassword,
+                nickname = user.nickname,
+                notificationConsent = user.notificationConsent,
+                fcmRegistration = user.fcmRegistration,
+                role = user.role,
+                userStatus = user.userStatus,
+                createdAt = user.createdAt,
+                updatedAt = user.updatedAt,
+                withdrawnAt = user.withdrawnAt,
+                visibility = user.visibility
+            )
+        }
+    }
 }
