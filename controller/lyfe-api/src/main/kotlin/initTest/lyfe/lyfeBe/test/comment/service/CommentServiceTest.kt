@@ -14,6 +14,8 @@ import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import java.time.Instant
 
 class CommentServiceTest(
@@ -138,9 +140,16 @@ class CommentServiceTest(
     Given("댓글 생성 복수 요청이 준비되고 실행되었을 때") {
         val cursorId = Long.MAX_VALUE
 
+        val pageable = PageRequest.of(
+            0, // 페이지 번호 (0부터 시작)
+            5, // 페이지 크기
+            Sort.by("id").descending()
+        )
+
         val commentGetsByBoard = CommentGetsByBoard(
+            boardId = 1L,
             cursorId = cursorId,
-            boardId = 1L
+            pageable = pageable
         )
 
         When("한 게시물에 생성된 여러 댓글의 정보를 조회할 때(id 내림차순)") {
@@ -158,6 +167,7 @@ class CommentServiceTest(
 
             val commentsDto = commentService.getCommentsWithCursorAndUser(
                 CommentGetsByUserId(
+
                     cursorId = cursorId,
                     userId = 1L
                 )

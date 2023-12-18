@@ -4,12 +4,14 @@ import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.dto.BoardDtoAssembly
 import lyfe.lyfeBe.board.dto.SaveBoardDto
+import lyfe.lyfeBe.board.dto.UpdateBoardDto
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -36,7 +38,7 @@ class BoardService(
     }
 
     fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
-        val boards = fetchBoards(boardsGet.boardId, boardsGet.size)
+        val boards = fetchBoards(boardsGet.boardId, boardsGet.pageable)
 
         return boards.map { board ->
             val image = fetchImageUrl(board.user.id)
@@ -56,9 +58,9 @@ class BoardService(
     }
 
 
-    fun update(boardUpdate: BoardUpdate): SaveBoardDto {
+    fun update(boardUpdate: BoardUpdate): UpdateBoardDto {
         val board = getById(boardUpdate.boardId).update(boardUpdate)
-        return SaveBoardDto(boardport.update(board).id)
+        return UpdateBoardDto(boardport.update(board).id)
     }
 
     fun getById(id: Long): Board {
@@ -66,8 +68,8 @@ class BoardService(
     }
 
 
-    private fun fetchBoards(boardId: Long, size: Int): List<Board> {
-        return boardport.findAll(boardId, size).toList()
+    private fun fetchBoards(boardId: Long, pageable: Pageable): List<Board> {
+        return boardport.findByIdCursorId(boardId, pageable).toList()
     }
 
     private fun fetchImageUrl(userId: Long): String {

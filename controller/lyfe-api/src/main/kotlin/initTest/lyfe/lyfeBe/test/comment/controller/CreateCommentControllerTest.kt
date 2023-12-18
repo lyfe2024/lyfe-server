@@ -61,7 +61,7 @@ class CreateCommentControllerTest (
             commentGroupId = null
         )
 
-        val commentId = testContainer.createCommentController.create(req, 1L)
+        val commentId = testContainer.commentController.create(req, 1L)
 
         val comment = testContainer.commentService.getById(commentId.result.id)
 

@@ -19,9 +19,9 @@ class CreateControllerTest(
 
         When("토픽 생성 요청을 처리할 하고 조회 했을때") {
 
-            val saveDto = testContainer.createTopicController.create(req).result
+            val saveDto = testContainer.topicController.create(req).result
 
-            val getTopic = testContainer.getTopicController.get(saveDto.id)
+            val getTopic = testContainer.topicController.get(saveDto.id)
 
             Then("생성된 토픽의 속성이 요청과 일치하는지 확인할 때") {
                 getTopic.result.content shouldBe req.content

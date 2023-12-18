@@ -1,13 +1,15 @@
 package lyfe.lyfeBe.comment.port.out
 
 import lyfe.lyfeBe.comment.Comment
+import org.springframework.data.domain.Pageable
 
 interface CommentPort {
 
     fun getById(id: Long): Comment
     fun getCommentsWithCursorAndBoard(
         cursorId: Long,
-        boardId: Long
+        boardId: Long,
+        pageable: Pageable
     ): List<Comment>
     fun getCommentsWithCursorAndUser(
         cursorId: Long,

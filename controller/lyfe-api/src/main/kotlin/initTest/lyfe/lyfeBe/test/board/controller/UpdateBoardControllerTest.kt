@@ -62,7 +62,7 @@ class UpdateBoardControllerTest(
             topicId = 1L
         )
 
-        testContainer.createBoardController.create(req)
+        testContainer.boardController.create(req)
 
         When("게시판을 업데이트 했을 때") {
 
@@ -71,7 +71,7 @@ class UpdateBoardControllerTest(
                 content = "바뀐 테스트 내용입니다. 여기에 게시판 내용이 들어갑니다."
             )
 
-            val boardId = testContainer.updateBoardController.update(1L, updateReq)
+            val boardId = testContainer.boardController.update(1L, updateReq)
 
             val board = testContainer.boardService.getById(boardId.result.id)
 

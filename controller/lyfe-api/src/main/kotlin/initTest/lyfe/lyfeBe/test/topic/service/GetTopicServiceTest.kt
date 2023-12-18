@@ -2,7 +2,6 @@ package initTest.lyfe.lyfeBe.test.topic.service
 
 import initTest.lyfe.lyfeBe.test.mock.FakeTopicRepository
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.topic.TopicCreate
 import lyfe.lyfeBe.topic.TopicGet
@@ -58,14 +57,16 @@ class GetTopicServiceTest(
 
         When("토픽 날짜로 과거 조회 요청을 처리할 때") {
 
+            val pageable = PageRequest.of(
+                0, // 페이지 번호 (0부터 시작)
+                5, // 페이지 크기
+                Sort.by("id").descending()
+            )
+
             val topicpastGet = TopicPastGet(
                 "9999-12-31",
                 Long.MAX_VALUE,
-                PageRequest.of(
-                    0, // 페이지 번호 (0부터 시작)
-                    5, // 페이지 크기
-                    Sort.by("id").descending()
-                )
+                pageable
             )
             val past = topicService.getPast(topicpastGet)
 

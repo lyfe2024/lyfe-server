@@ -59,7 +59,7 @@ class UpdateCommentControllerTest(
             commentGroupId = null
         )
 
-       testContainer.createCommentController.create(req, 1L)
+       testContainer.commentController.create(req, 1L)
 
         When("댓글을 업데이트 했을 때") {
 
@@ -67,7 +67,7 @@ class UpdateCommentControllerTest(
                 content = "바뀐 댓글 내용입니다. 여기에 댓글 내용이 들어갑니다."
             )
 
-            val commentId = testContainer.updateCommentController.update(1L, updateReq)
+            val commentId = testContainer.commentController.update(1L, updateReq)
 
             val comment = testContainer.commentService.getById(commentId.result.id)
 

@@ -13,7 +13,7 @@ import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
 
 
-class BoardServiceUpdateTest(
+class UpdateBoardServiceTest(
 ) : BehaviorSpec({
 
     val fakeBoardRepository = FakeBoardRepository()
