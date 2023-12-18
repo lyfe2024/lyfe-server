@@ -1,4 +1,4 @@
-package initTest.policy.domain
+package initTest.lyfe.lyfeBe.test.policy.domain
 
 import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.BehaviorSpec

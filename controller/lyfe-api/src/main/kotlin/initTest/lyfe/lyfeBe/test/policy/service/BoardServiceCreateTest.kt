@@ -1,4 +1,4 @@
-package initTest.policy.service
+package initTest.lyfe.lyfeBe.test.policy.service
 
 import initTest.mock.FakePolicyRepository
 import io.kotest.core.spec.style.BehaviorSpec

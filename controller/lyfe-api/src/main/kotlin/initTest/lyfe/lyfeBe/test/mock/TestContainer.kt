@@ -15,6 +15,9 @@ import lyfe.lyfeBe.web.topic.UpdateTopicController
 import lyfe.lyfeBe.web.comment.CreateCommentController
 import lyfe.lyfeBe.web.comment.GetCommentController
 import lyfe.lyfeBe.web.comment.UpdateCommentController
+import lyfe.lyfeBe.web.whisky.WhiskyController
+import lyfe.lyfeBe.whisky.WhiskyService
+import lyfe.lyfeBe.whisky.out.WhiskyPort
 
 class TestContainer(
     var createBoardController: CreateBoardController,
@@ -26,13 +29,16 @@ class TestContainer(
     var createCommentController: CreateCommentController,
     var updateCommentController: UpdateCommentController,
     var getCommentController: GetCommentController,
+    var whiskyController: WhiskyController,
     var boardService: BoardService,
     var boardRepository: BoardPort,
     var commentService: CommentService,
+    var whiskyService: WhiskyService,
     var commentRepository: CommentPort,
     var userRepository: UserPort,
     var topicRepository: TopicPort,
-    var imageRepository: ImagePort
+    var imageRepository: ImagePort,
+    var whiskyRepository: WhiskyPort
 
 ) {
     companion object {
@@ -64,6 +70,12 @@ class TestContainer(
                 topicRepository
             )
 
+            val whiskyService = WhiskyService(
+                fakeWhiskyRepository,
+                userRepository,
+                boardRepository
+            )
+
             val createBoardController = CreateBoardController(boardService)
             val updateBoardController = UpdateBoardController(boardService)
             val getBoardController = GetBoardController(boardService)
@@ -75,6 +87,8 @@ class TestContainer(
             val updateTopicController = UpdateTopicController(topicService)
             val getTopicController = GetTopicController(topicService)
 
+            val whiskyController = WhiskyController(whiskyService)
+
             return TestContainer(
                 createBoardController = createBoardController,
                 updateBoardController = updateBoardController,
@@ -85,13 +99,16 @@ class TestContainer(
                 createCommentController = createCommentController,
                 updateCommentController = updateCommentController,
                 getCommentController = getCommentController,
+                whiskyController= whiskyController,
                 boardService = boardService,
                 boardRepository = boardRepository,
                 commentService = commentService,
+                whiskyService = whiskyService,
                 commentRepository = commentRepository,
                 userRepository = userRepository,
                 topicRepository = topicRepository,
-                imageRepository = imageRepository
+                imageRepository = imageRepository,
+                whiskyRepository = fakeWhiskyRepository
             )
         }
     }

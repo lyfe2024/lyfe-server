@@ -26,14 +26,11 @@ class WhiskyService(
             Whisky.from(board, user)
         ).id
 
-        println("id = ${id}")
         return SaveWhiskyDto.from(id)
     }
 
     @Transactional
     fun delete(whiskyDelete: WhiskyDelete) {
-            whiskyPort.delete(whiskyDelete.boardId, whiskyDelete.userId)
+        whiskyPort.delete(whiskyDelete.boardId, whiskyDelete.userId)
     }
-
-
 }

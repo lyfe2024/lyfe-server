@@ -26,4 +26,6 @@ class WhiskyPersistenceAdapter(
     override fun delete(boardId: Long, userId: Long) {
         whiskyRepository.deleteByBoardIdAndUserId(boardId, userId)
     }
+
+    override fun get(whiskyId: Long) = whiskyRepository.findById(whiskyId).get().toDomain()
 }

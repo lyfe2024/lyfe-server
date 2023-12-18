@@ -9,4 +9,6 @@ interface WhiskyPort {
     fun assertNoExistingWhisky(boardId: Long, userId: Long)
     fun delete(boardId: Long, userId: Long)
 
+    fun get(whiskyId: Long): Whisky
+
 }

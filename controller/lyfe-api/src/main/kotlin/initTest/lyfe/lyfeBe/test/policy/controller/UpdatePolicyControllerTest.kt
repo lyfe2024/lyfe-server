@@ -1,4 +1,4 @@
-package initTest.policy.controller
+package initTest.lyfe.lyfeBe.test.policy.controller
 
 import initTest.mock.TestContainer
 import io.kotest.core.spec.style.BehaviorSpec
