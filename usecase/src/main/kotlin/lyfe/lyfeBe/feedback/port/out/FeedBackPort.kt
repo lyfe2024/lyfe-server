@@ -7,4 +7,5 @@ import org.springframework.data.domain.Pageable
 
 interface FeedBackPort {
     fun create(feedBack: Feedback) : Feedback
+    fun getById(id: Long): Feedback
 }

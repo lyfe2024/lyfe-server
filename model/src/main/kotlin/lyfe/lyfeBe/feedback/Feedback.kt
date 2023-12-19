@@ -9,4 +9,13 @@ data class Feedback(
     val checked: Boolean = false,
     val createdAt: Instant? = null,
     val user: User
-)
+) {
+    companion object {
+        fun from(feedBack: String, user: User): Feedback {
+            return Feedback(
+                content = feedBack,
+                user = user
+            )
+        }
+    }
+}

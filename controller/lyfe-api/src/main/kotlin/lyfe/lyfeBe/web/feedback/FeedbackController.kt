@@ -1,7 +1,6 @@
 package lyfe.lyfeBe.web.feedback
 
 import jakarta.validation.Valid
-import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.feedback.FeedBackCreate
 import lyfe.lyfeBe.feedback.FeedBackService
@@ -17,7 +16,7 @@ class FeedbackController (
 ){
 
     @PostMapping
-    fun createFeedback(
+    fun create(
         @RequestBody @Valid req: CreateFeedbackRequest
     ): CommonResponse<FeedbackIdResponse>
     {
