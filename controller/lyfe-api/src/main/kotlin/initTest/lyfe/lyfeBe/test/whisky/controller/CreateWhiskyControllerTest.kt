@@ -45,7 +45,7 @@ class CreateWhiskyControllerTest(
             topicId = 1L
         )
 
-        testContainer.createBoardController.create(req)
+        testContainer.boardController.create(req)
     }
 
 

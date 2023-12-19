@@ -12,6 +12,9 @@ import lyfe.lyfeBe.web.board.*
 
 import lyfe.lyfeBe.web.comment.CommentController
 import lyfe.lyfeBe.web.topic.TopicController
+import lyfe.lyfeBe.web.whisky.WhiskyController
+import lyfe.lyfeBe.whisky.WhiskyService
+import lyfe.lyfeBe.whisky.out.WhiskyPort
 
 class TestContainer(
     var boardController: BoardController,

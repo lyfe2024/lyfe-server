@@ -2,6 +2,7 @@ package initTest.lyfe.lyfeBe.test.topic.service
 
 import initTest.lyfe.lyfeBe.test.mock.FakeTopicRepository
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.topic.TopicCreate
 import lyfe.lyfeBe.topic.TopicGet
