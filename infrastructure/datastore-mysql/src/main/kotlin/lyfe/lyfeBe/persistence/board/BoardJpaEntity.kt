@@ -58,6 +58,7 @@ class BoardJpaEntity(
 
         fun from(board: Board) =
             BoardJpaEntity(
+                id = board.id,
                 title = board.title,
                 content = board.content,
                 boardType = board.boardType,
