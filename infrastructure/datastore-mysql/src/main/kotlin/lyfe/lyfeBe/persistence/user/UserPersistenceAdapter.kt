@@ -24,11 +24,20 @@ class UserPersistenceAdapter(
 
     }
 
-    override fun create(user: User)=
-            userRepository.save(UserJpaEntity.from(user)).toDomain()
+    override fun getByEmail(email: String): User? {
+        return userRepository.findByEmail(email)?.toDomain()
+    }
+
+    override fun create(user: User) =
+        userRepository.save(UserJpaEntity.from(user)).toDomain()
 
     override fun findById(userId: Long) =
         userRepository.findById(userId)
             .orElseThrow { ResourceNotFoundException("user not found") }
             .toDomain()
+
+    override fun updateRefreshToken(user: User): User {
+        val update = UserJpaEntity.update(user)
+        return userRepository.save(update).toDomain()
+    }
 }

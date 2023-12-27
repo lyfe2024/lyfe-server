@@ -31,6 +31,14 @@ class FakeUserRepository : UserPort {
         return data.find { it.id == userId }!!
     }
 
+    override fun getByEmail(email: String): User? {
+        return data.find { it.email == email }
+    }
+
+    override fun findByEmail(email: String): User? {
+        return data.find { it.email == email }
+    }
+
     fun clear() {
         data.clear()
     }
