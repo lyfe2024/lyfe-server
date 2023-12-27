@@ -12,6 +12,7 @@ object JwtTokenValidator {
 
     const val AUTHORIZATION_HEADER = "Authorization"
     const val BEARER_TYPE = "Bearer"
+    const val AUTHORITIES_KEY = "AUTH"
 
     fun verifyToken(token: String): Claims =
         try {
