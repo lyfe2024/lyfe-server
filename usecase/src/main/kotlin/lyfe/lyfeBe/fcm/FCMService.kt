@@ -1,19 +1,19 @@
 package lyfe.lyfeBe.fcm
 
-import com.google.firebase.messaging.*
-import lyfe.lyfeBe.notification.NotificationContent
-import lyfe.lyfeBe.notification.NotificationType
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.Message
+import lyfe.lyfeBe.notification.NotificationSend
 import org.springframework.stereotype.Service
 
 @Service
 class FCMService {
 
-    fun sendMessage(token: String, title: NotificationType, body: NotificationContent): String {
+    fun sendMessage(send: NotificationSend): String {
 
         val message = Message.builder()
-            .setToken(token)
-            .setAndroidConfig(FcmNotificationBuilder.androidConfig(title, body))
-            .setApnsConfig(FcmNotificationBuilder.iosConfig(title, body))
+            .setToken(send.token)
+            .setAndroidConfig(FcmNotificationBuilder.androidConfig(send.type, send.content))
+            .setApnsConfig(FcmNotificationBuilder.iosConfig(send.type, send.content))
             .build()
         return FirebaseMessaging.getInstance().send(message)
     }

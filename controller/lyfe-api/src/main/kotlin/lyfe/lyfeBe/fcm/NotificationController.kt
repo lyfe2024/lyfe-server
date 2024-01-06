@@ -2,6 +2,7 @@ package lyfe.lyfeBe.fcm
 
 import com.google.firebase.messaging.Message
 import lyfe.lyfeBe.fcm.req.NotificationRequest
+import lyfe.lyfeBe.notification.NotificationSend
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -10,10 +11,17 @@ class NotificationController(private val fcmService: FCMService) {
 
     @PostMapping("/send")
     fun sendNotification(@RequestBody request: NotificationRequest): String {
-        return fcmService.sendMessage(request.token, request.notificationType, request.notificationContent)
+        return fcmService.sendMessage(
+            NotificationSend(
+                userId = request.userId,
+                token = request.token,
+                type = request.notificationType,
+                content = request.notificationContent
+            )
+
+        )
     }
 
-    // 메시지 조회 엔드포인트
     @GetMapping("/list")
     fun listMessages(): List<Message> {
         return fcmService.listMessages()
