@@ -10,7 +10,7 @@ class NotificationController(private val fcmService: FCMService) {
 
     @PostMapping("/send")
     fun sendNotification(@RequestBody request: NotificationRequest): String {
-        return fcmService.sendMessage(request.topic, request.title, request.body)
+        return fcmService.sendMessage(request.token, request.notificationType, request.notificationContent)
     }
 
     // 메시지 조회 엔드포인트
