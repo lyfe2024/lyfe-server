@@ -1,8 +1,12 @@
 package lyfe.lyfeBe.fcm
 
-import com.google.firebase.messaging.Message
+import FcmMessageDto
 import lyfe.lyfeBe.fcm.req.NotificationRequest
+import lyfe.lyfeBe.notification.NotificationGet
 import lyfe.lyfeBe.notification.NotificationSend
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -22,9 +26,18 @@ class NotificationController(private val fcmService: FCMService) {
         )
     }
 
-    @GetMapping("/list")
-    fun listMessages(): List<Message> {
-        return fcmService.listMessages()
+    @GetMapping
+    fun getMessages(
+        @RequestParam(required = false) cursorId: Long?,
+        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+    ): List<FcmMessageDto> {
+        val notificationId = getEffectiveCursorId(cursorId)
+         return fcmService.getNotificationHistories(NotificationGet(notificationId , pageable))
     }
+
+    private fun getEffectiveCursorId(cursorId: Long?): Long {
+        return cursorId?.takeIf { it != 0L } ?: Long.MAX_VALUE
+    }
+
 }
 
