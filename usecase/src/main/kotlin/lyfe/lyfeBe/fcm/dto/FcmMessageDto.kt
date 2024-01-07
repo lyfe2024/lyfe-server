@@ -22,16 +22,10 @@ data class FcmMessageDto(
                 updatedAt = notification.updatedAt
             )
         }
+
         fun toDtos(notifications: List<NotificationHistory>): List<FcmMessageDto> {
-            return notifications.map {
-                FcmMessageDto(
-                    id = it.id,
-                    content = it.content,
-                    notificationType = it.notificationType,
-                    user = it.user,
-                    createdAt = it.createdAt,
-                    updatedAt = it.updatedAt
-                )
+            return notifications.map { notificationHistory ->
+                toDto(notificationHistory)
             }
         }
     }

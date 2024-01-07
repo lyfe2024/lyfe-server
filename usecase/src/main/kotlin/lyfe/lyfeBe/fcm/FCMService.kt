@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class FCMService(
     private val fcmPort: FcmPort,
-    private val userport: UserPort
+    private val userPort: UserPort
 
 
     ) {
@@ -29,13 +29,13 @@ class FCMService(
 
         FirebaseMessaging.getInstance().send(message)
 
-        val user = userport.getById(send.userId)
+        val user = userPort.getById(send.userId)
         return fcmPort.save(NotificationHistory.from(send,user)).id.toString()
     }
 
     @Transactional(readOnly = true)
-    fun getNotificationHistories(notiGet: NotificationGet): List<FcmMessageDto> {
-        val notificationHistories = fcmPort.findByIdCursorId(notiGet.notificationId, notiGet.pageable).toList()
+    fun getNotificationHistories(notificationGet: NotificationGet): List<FcmMessageDto> {
+        val notificationHistories = fcmPort.findByIdCursorId(notificationGet.notificationId, notificationGet.pageable).toList()
         return FcmMessageDto.toDtos(notificationHistories)
     }
 }

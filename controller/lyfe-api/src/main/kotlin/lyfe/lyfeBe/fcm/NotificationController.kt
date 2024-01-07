@@ -27,7 +27,7 @@ class NotificationController(private val fcmService: FCMService) {
     }
 
     @GetMapping
-    fun getMessages(
+    fun getNotificationHistories(
         @RequestParam(required = false) cursorId: Long?,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
     ): List<FcmMessageDto> {
