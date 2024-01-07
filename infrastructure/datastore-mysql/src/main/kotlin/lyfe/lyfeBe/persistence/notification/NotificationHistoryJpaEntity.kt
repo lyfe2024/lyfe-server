@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.notification
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.notification.NotificationHistory
 import lyfe.lyfeBe.notification.NotificationType
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
@@ -28,4 +29,25 @@ class NotificationHistoryJpaEntity(
     val baseEntity: BaseEntity = BaseEntity()
 
 ) {
+    fun toDomain(): NotificationHistory {
+        return NotificationHistory(
+            id = id,
+            content = content,
+            notificationType = notificationType,
+            user = user.toDomain(),
+            createdAt = baseEntity.createdAt,
+            updatedAt = baseEntity.updatedAt
+        )
+    }
+
+    companion object {
+        fun from(notificationHistory: NotificationHistory): NotificationHistoryJpaEntity {
+            return NotificationHistoryJpaEntity(
+                id = notificationHistory.id,
+                content = notificationHistory.content,
+                notificationType = notificationHistory.notificationType,
+                user = UserJpaEntity.from(notificationHistory.user)
+            )
+        }
+    }
 }

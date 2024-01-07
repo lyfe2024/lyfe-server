@@ -55,6 +55,9 @@ subprojects {
 		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+		implementation ("com.google.firebase:firebase-admin:9.2.0")
+
+
 		implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
 
 
