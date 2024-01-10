@@ -1,129 +1,124 @@
 package lyfe.lyfeBe.auth.service
 
-import lyfe.lyfeBe.auth.*
-import lyfe.lyfeBe.auth.JwtTokenValidator.verifyToken
-import lyfe.lyfeBe.auth.dto.*
-import lyfe.lyfeBe.auth.dto.apple.AppleLoginRequest
-import lyfe.lyfeBe.auth.dto.google.GoogleLoginRequest
-import lyfe.lyfeBe.auth.dto.kakao.KakaoLoginRequest
+import lyfe.lyfeBe.auth.AuthLogin
+import lyfe.lyfeBe.auth.RefreshToken
+import lyfe.lyfeBe.auth.RefreshTokenCreate
+import lyfe.lyfeBe.auth.dto.JoinDto
+import lyfe.lyfeBe.auth.dto.LoginDto
+import lyfe.lyfeBe.auth.dto.OAuthIdAndRefreshTokenDto
+import lyfe.lyfeBe.auth.dto.TokenDto
 import lyfe.lyfeBe.auth.port.out.RefreshTokenPort
-import lyfe.lyfeBe.auth.service.apple.AppleService
-import lyfe.lyfeBe.auth.service.google.GoogleService
-import lyfe.lyfeBe.auth.service.kakao.KakaoService
+import lyfe.lyfeBe.auth.service.JwtTokenInfo.EMAIL_CLAIM
 import lyfe.lyfeBe.error.ResourceNotFoundException
-import lyfe.lyfeBe.error.UnauthenticatedException
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserCreate
 import lyfe.lyfeBe.user.UserJoin
 import lyfe.lyfeBe.user.port.out.UserPort
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class AuthService(
     private val userPort: UserPort,
     private val refreshTokenPort: RefreshTokenPort,
     private val jwtTokenProvider: JwtTokenProvider,
-    private val kakaoService: KakaoService,
-    private val googleService: GoogleService,
-    private val appleService: AppleService
+    private val jwtTokenValidator: JwtTokenValidator,
+    private val authProviderServices: List<AuthProviderService>,
+    private val authenticationService: AuthenticationService,
+    private val authenticationManager: AuthenticationManager,
+    private val passwordEncoder: PasswordEncoder
 ) {
-    companion object {
-        const val EMAIL_CLAIM: String = "email"
-    }
+
     fun loginAccess(authLogin: AuthLogin): Any {
-        val socialIdAndRefreshToken = fetchSocialEmail(
-            socialType = authLogin.socialType,
-            authorizationCode = authLogin.authorizationCode,
-            identityToken = authLogin.identityToken
-        )
+        val socialIdAndRefreshToken = fetchSocialEmail(authLogin)
         val socialEmail = "${socialIdAndRefreshToken.oAuthId}@${authLogin.socialType.name}"
         val user = userPort.getByEmail(socialEmail)
-        if (user == null) {
-            return createUserIfNotExists(socialIdAndRefreshToken, socialEmail, authLogin.socialType)
-        }else if(user.role == Role.GUEST){
-            return JoinDto(userToken = jwtTokenProvider.createTokenForOAuth2(socialEmail))
-        }
-
-        val loginUser = login(LoginDto.toDto(user))
-
-        return TokenDto(
-            accessToken = loginUser.accessToken,
-            refreshToken = loginUser.refreshToken
-        )
+            ?: return JoinDto(jwtTokenProvider.createTokenForOAuth2(socialEmail, socialIdAndRefreshToken.refreshToken))
+        return login(LoginDto.fromUser(user))
     }
 
     fun join(userJoin: UserJoin): TokenDto {
-        val claims = verifyToken(userJoin.userToken)
+        val claims = jwtTokenValidator.verifyToken(userJoin.userToken)
         val email = claims[EMAIL_CLAIM] as String
-        val user = userPort.getByEmail(email)?.updateNickName(userJoin.nickname)
-            ?: throw ResourceNotFoundException("회원가입이 필요합니다.")
-        return login(LoginDto.toDto(user))
+
+        val user = User.from(userJoin, email, passwordEncoder.encode(email+"lyfe"))
+        userPort.create(user)
+
+        return login(LoginDto.fromUser(user))
     }
 
     fun login(loginDto: LoginDto): TokenDto {
-        val authentication = loginDto.toAuthentication()
-        val principal = authentication.principal as PrincipalDetails
-
-        val generateToken = jwtTokenProvider.generateToken(authentication = loginDto.toAuthentication())
-        val user = userPort.findByEmail(principal.username)
-            ?: throw ResourceNotFoundException("회원가입이 필요합니다.")
-
-        val refreshToken = RefreshToken.from(RefreshTokenCreate(generateToken.refreshToken), user)
-        refreshTokenPort.create(refreshToken)
-
-        return TokenDto(
-            accessToken = generateToken.accessToken,
-            refreshToken = generateToken.refreshToken
-        )
-    }
-
-    private fun createUserIfNotExists(
-        oAuthIdAndRefreshTokenDto: OAuthIdAndRefreshTokenDto,
-        socialEmail: String,
-        socialType: SocialType
-    ): JoinDto {
-        val userCreate = UserCreate(
-            email = socialEmail,
-            nickname = "",
-            socialId = oAuthIdAndRefreshTokenDto.oAuthId,
-            socialType = socialType,
-            socialRefreshToken = oAuthIdAndRefreshTokenDto.refreshToken,
-            role = Role.GUEST
-        )
-
-        userPort.create(User.from(userCreate))
-        return JoinDto(userToken = jwtTokenProvider.createTokenForOAuth2(oAuthIdAndRefreshTokenDto.oAuthId))
-    }
-
-    fun fetchSocialEmail(
-        socialType: SocialType,
-        authorizationCode: String,
-        identityToken: String?,
-    ): OAuthIdAndRefreshTokenDto {
-        return when (socialType) {
-            SocialType.KAKAO -> kakaoService.fetchKakaoToken(KakaoLoginRequest(authorizationCode))
-            SocialType.GOOGLE -> googleService.fetchGoogleToken(GoogleLoginRequest(authorizationCode))
-            SocialType.APPLE -> appleService.fetchAppleToken(AppleLoginRequest(authorizationCode, identityToken!!))
-        }
-    }
-
-    fun reIssueToken(token : String): TokenDto {
-        val authentication = jwtTokenProvider.getAuthentication(refreshToken = token)
-            ?: throw ResourceNotFoundException("로그인이 필요합니다.")
-
-        val principal = authentication.principal as PrincipalDetails
+        val authentication = authenticationManager.authenticate(loginDto.toAuthentication())
         val generateToken = jwtTokenProvider.generateToken(authentication = authentication)
+        val user = getUser(authentication.name)
 
-        val user = userPort.findByEmail(principal.username)
-            ?: throw ResourceNotFoundException("회원가입이 필요합니다.")
+        saveOrUpdateRefreshToken(generateToken.refreshToken, user)
 
-        val refreshToken = RefreshToken.from(RefreshTokenCreate(generateToken.refreshToken), user)
+        return TokenDto(
+            accessToken = generateToken.accessToken,
+            refreshToken = generateToken.refreshToken
+        )
+    }
+
+    fun adminLogin(loginDto: LoginDto): TokenDto {
+        val authentication = authenticationManager.authenticate(loginDto.toAuthentication())
+        val generateToken = jwtTokenProvider.generateToken(authentication = authentication)
+        val user = getUser(authentication.name)
+        if(user.role != Role.ADMIN) throw ResourceNotFoundException("관리자만 접근 가능합니다.")
+
+        saveOrUpdateRefreshToken(generateToken.refreshToken, user)
+
+        return TokenDto(
+            accessToken = generateToken.accessToken,
+            refreshToken = generateToken.refreshToken
+        )
+    }
+
+    fun reIssueToken(token: String): TokenDto {
+        val authentication = authenticationService.getAuthentication(token = token)
+        val generateToken = jwtTokenProvider.generateToken(authentication = authentication)
+        val user = getUser(authentication.name)
+
+        val refreshToken = RefreshToken.from(
+            RefreshTokenCreate(
+                userId = user.id,
+                refreshToken = generateToken.refreshToken,
+                user = user
+            )
+        )
         refreshTokenPort.create(refreshToken)
 
         return TokenDto(
             accessToken = generateToken.accessToken,
             refreshToken = generateToken.refreshToken
         )
+    }
+
+    fun saveOrUpdateRefreshToken(token: String, user: User) {
+        val findByUserToken = refreshTokenPort.findByUser(user)
+        val refreshToken = RefreshToken.from(
+            RefreshTokenCreate(
+                userId = user.id,
+                refreshToken = token,
+                user = user
+            )
+        )
+        if (findByUserToken != null) { refreshTokenPort.create(refreshToken) }
+        else refreshTokenPort.update(refreshToken)
+    }
+
+    fun fetchSocialEmail(authLogin: AuthLogin): OAuthIdAndRefreshTokenDto {
+        val authProviderService = authProviderServices
+            .find { it isSupport(authLogin.socialType) }
+            ?: throw ResourceNotFoundException("지원하지 않는 소셜 로그인입니다.")
+        return authProviderService.fetchAuthToken(authLogin)
+    }
+
+    private fun getUser(email: String): User {
+        return userPort.getByEmail(email)
+            ?: throw ResourceNotFoundException("회원가입이 필요합니다.")
     }
 }

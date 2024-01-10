@@ -20,6 +20,9 @@ dependencies {
     testImplementation("io.kotest:kotest-extensions-spring:4.4.0")
     testImplementation("io.mockk:mockk:1.13.7")
 
+    // https://mvnrepository.com/artifact/io.github.oshai/kotlin-logging
+    implementation("io.github.oshai:kotlin-logging:5.0.0")
+
     implementation(project(":model"))
     implementation(project(":util:common-util"))
 }

@@ -1,10 +1,12 @@
 package lyfe.lyfeBe.web.auth
 
 import lyfe.lyfeBe.auth.AuthLogin
-import lyfe.lyfeBe.web.auth.req.AuthRequest
+import lyfe.lyfeBe.auth.dto.LoginDto
 import lyfe.lyfeBe.auth.service.AuthService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.user.UserJoin
+import lyfe.lyfeBe.web.auth.req.AdminLoginRequest
+import lyfe.lyfeBe.web.auth.req.AuthRequest
 import lyfe.lyfeBe.web.auth.req.JoinRequest
 import lyfe.lyfeBe.web.auth.req.RefreshTokenRequest
 import org.springframework.web.bind.annotation.PostMapping
@@ -50,6 +52,18 @@ class AuthController(
     ) = CommonResponse(
         service.reIssueToken(
             req.token
+        )
+    )
+
+    @PostMapping("/admin")
+    fun admin(
+        @RequestBody req: AdminLoginRequest
+    ) = CommonResponse(
+        service.adminLogin(
+            LoginDto(
+                email = req.email,
+                password = req.password
+            )
         )
     )
 }

@@ -8,7 +8,7 @@ data class LoginDto(
     val password: String,
 ) {
     companion object {
-        fun toDto(user: User): LoginDto {
+        fun fromUser(user: User): LoginDto {
             return LoginDto(
                 email = user.email,
                 password = user.email + "lyfe",

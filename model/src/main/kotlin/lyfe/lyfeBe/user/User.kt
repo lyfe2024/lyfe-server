@@ -45,6 +45,23 @@ data class User(
         )
 
     companion object {
+        fun from(userJoin: UserJoin, email: String, password: String) =
+            User(
+                id = 0,
+                email = email,
+                hashedPassword = password,
+                nickname = userJoin.nickname,
+                socialId = email.split("@")[0],
+                socialType = SocialType.valueOf(email.split("@")[1]),
+                socialRefreshToken = userJoin.userToken,
+                notificationConsent = false,
+                fcmRegistration = false,
+                role = Role.USER,
+                userStatus = UserStatus.ACTIVE,
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+                withdrawnAt = null,
+            )
 
         fun update(userJoin: UserJoin, user: User) =
             User(
@@ -63,7 +80,7 @@ data class User(
                 updatedAt = Instant.now(),
                 withdrawnAt = user.withdrawnAt,
             )
-        
+
         fun from(user: User): User {
             return User(
                 id = user.id,

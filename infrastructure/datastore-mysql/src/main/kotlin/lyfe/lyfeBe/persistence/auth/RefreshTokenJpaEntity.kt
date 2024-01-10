@@ -2,14 +2,10 @@ package lyfe.lyfeBe.persistence.auth
 
 import jakarta.persistence.*
 import lyfe.lyfeBe.auth.RefreshToken
-import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
-import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import org.jetbrains.annotations.NotNull
 import org.springframework.data.annotation.CreatedDate
 import java.time.Instant
-import java.time.ZonedDateTime
 
 
 @Entity
@@ -41,6 +37,13 @@ class RefreshTokenJpaEntity(
 
     companion object {
         fun from(refreshToken: RefreshToken) =
+            RefreshTokenJpaEntity(
+                id = refreshToken.id,
+                refreshToken = refreshToken.refreshToken,
+                user = UserJpaEntity.from(refreshToken.user),
+            )
+
+        fun update(refreshToken: RefreshToken) =
             RefreshTokenJpaEntity(
                 id = refreshToken.id,
                 refreshToken = refreshToken.refreshToken,

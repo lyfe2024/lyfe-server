@@ -9,12 +9,11 @@ data class RefreshToken(
 ){
 
     companion object {
-
-        fun from(refreshTokenCreate: RefreshTokenCreate, user: User) =
+        fun from(refreshTokenCreate: RefreshTokenCreate) =
             RefreshToken(
-                id = 0,
+                id = refreshTokenCreate.userId,
                 refreshToken = refreshTokenCreate.refreshToken,
-                user = user
+                user = refreshTokenCreate.user,
             )
     }
 }
