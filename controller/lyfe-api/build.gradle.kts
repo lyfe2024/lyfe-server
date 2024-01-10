@@ -14,6 +14,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 
+    // https://mvnrepository.com/artifact/io.github.oshai/kotlin-logging
+    implementation("io.github.oshai:kotlin-logging:5.0.0")
+
     implementation(project(":util:common-util"))
     implementation(project(":model"))
     implementation(project(":usecase"))
