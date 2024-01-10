@@ -15,7 +15,7 @@ class WhiskyController(
     private val service: WhiskyService
 ) {
 
-    @PostMapping("/boards/likes")
+    @PostMapping("/boards")
     fun create(
         @RequestBody @Valid req: WhiskySaveRequest
     ): CommonResponse<SaveWhiskyDto> =
@@ -28,11 +28,10 @@ class WhiskyController(
         )
 
 
-    @DeleteMapping("/boards/{boardId}/users/{userId}/like")
+    @DeleteMapping("/boards/{boardId}/users/{userId}")
     fun delete(
         @PathVariable boardId: Long,
         @PathVariable userId: Long
-
     ) = service.delete(
         WhiskyDelete(
             boardId, userId
