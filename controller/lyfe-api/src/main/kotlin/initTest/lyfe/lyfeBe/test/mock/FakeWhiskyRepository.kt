@@ -1,6 +1,5 @@
 package initTest.lyfe.lyfeBe.test.mock
 
-import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.whisky.Whisky
 import lyfe.lyfeBe.whisky.out.WhiskyPort
 import java.util.*
@@ -25,7 +24,24 @@ class FakeWhiskyRepository : WhiskyPort {
         }
     }
 
+    override fun update(boardId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun assertNoExistingWhisky(boardId: Long, userId: Long) {
+        val existingWhisky = data.find { it.board.id == boardId && it.user.id == userId }
+        if (existingWhisky != null) {
+            throw IllegalStateException("이미 좋아요를 누른 게시글입니다.")
+        }
+    }
+
+    override fun delete(boardId: Long, userId: Long) {
+        data.removeIf { it.board.id == boardId && it.user.id == userId }
+    }
+
     fun clear() {
         data.clear()
     }
+
+    override fun get(whiskyId: Long) = data.find { it.id == whiskyId }!!
 }

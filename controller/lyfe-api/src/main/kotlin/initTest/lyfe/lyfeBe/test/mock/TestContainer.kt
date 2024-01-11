@@ -11,25 +11,31 @@ import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.topic.port.TopicService
 import lyfe.lyfeBe.user.port.out.UserPort
-import lyfe.lyfeBe.web.board.BoardController
+import lyfe.lyfeBe.web.board.*
+
 import lyfe.lyfeBe.web.comment.CommentController
 import lyfe.lyfeBe.web.topic.TopicController
+import lyfe.lyfeBe.web.whisky.WhiskyController
+import lyfe.lyfeBe.whisky.WhiskyService
+import lyfe.lyfeBe.whisky.out.WhiskyPort
 
 class TestContainer(
     var boardController: BoardController,
     var topicController: TopicController,
     var commentController: CommentController,
     var notificationController: NotificationController,
+    var whiskyController: WhiskyController,
     var boardService: BoardService,
     var boardRepository: BoardPort,
     var commentService: CommentService,
-    var fcmService: FCMService,
+    var whiskyService: WhiskyService,
     var commentRepository: CommentPort,
     var userRepository: UserPort,
     var topicService: TopicService,
     var topicRepository: TopicPort,
     var imageRepository: ImagePort,
-    var fakeNotificationRepository: FcmPort
+    var fakeNotificationRepository: FcmPort,
+    var whiskyRepository: WhiskyPort
 
 ) {
     companion object {
@@ -67,28 +73,38 @@ class TestContainer(
                 userRepository
             )
 
+            val whiskyService = WhiskyService(
+                fakeWhiskyRepository,
+                userRepository,
+                boardRepository
+            )
+
+
             val boardController = BoardController(boardService)
             val commentController = CommentController(commentService)
 
             val topicController = TopicController(topicService)
 
             val notificationController = NotificationController(fcmService)
+            val whiskyController = WhiskyController(whiskyService)
 
             return TestContainer(
                 boardController = boardController,
                 topicController = topicController,
                 commentController = commentController,
                 notificationController = notificationController,
+                whiskyController= whiskyController,
                 boardService = boardService,
                 boardRepository = boardRepository,
                 commentService = commentService,
-                fcmService = fcmService,
+                whiskyService = whiskyService,
                 commentRepository = commentRepository,
                 userRepository = userRepository,
                 topicService = topicService,
                 topicRepository = topicRepository,
                 imageRepository = imageRepository,
-                fakeNotificationRepository = fakeNotificationRepository
+                fakeNotificationRepository = fakeNotificationRepository,
+                whiskyRepository = fakeWhiskyRepository
             )
         }
     }
