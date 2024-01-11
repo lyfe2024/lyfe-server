@@ -42,5 +42,19 @@ data class Board(
                 updatedAt = Instant.now(),
                 visibility = true
             )
+
+        fun from(boardCreate: Board): Board {
+            return Board(
+                id = boardCreate.id,
+                title = boardCreate.title,
+                content = boardCreate.content,
+                boardType = boardCreate.boardType,
+                user = boardCreate.user,
+                topic = boardCreate.topic,
+                createdAt = boardCreate.createdAt,
+                updatedAt = boardCreate.updatedAt,
+                visibility = boardCreate.visibility
+            )
+        }
     }
 }
