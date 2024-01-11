@@ -29,5 +29,4 @@ class BoardPersistenceAdapter(
 
     override fun findByIdCursorId(boardId: Long, paging: Pageable) =
         boardJpaRepository.findByIdCursorId(boardId, paging).map { it.toDomain() }
-    //FIXME N+1문제는 어떻게 해결할까?
 }
