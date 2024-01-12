@@ -6,6 +6,7 @@ import lyfe.lyfeBe.comment.dto.CommentDto
 import lyfe.lyfeBe.comment.dto.SaveCommentDto
 import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.dto.CommonResponse
+import lyfe.lyfeBe.utils.ControllerUtils.Companion.getEffectiveCursorId
 import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
 import lyfe.lyfeBe.web.comment.req.UpdateCommentRequest
 import org.springframework.data.domain.Pageable
@@ -66,11 +67,6 @@ class CommentController(
             )
         ).let { CommonResponse(it) }
     }
-
-    private fun getEffectiveCursorId(cursorId: Long?): Long {
-        return cursorId?.takeIf { it != 0L } ?: Long.MAX_VALUE
-    }
-
 
     @PostMapping("/v1/comments")
     fun create(
