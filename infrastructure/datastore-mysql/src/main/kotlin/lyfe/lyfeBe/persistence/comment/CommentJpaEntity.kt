@@ -42,8 +42,7 @@ class CommentJpaEntity(
             user = user.toDomain(),
             board = board.toDomain(),
             createdAt = baseEntity.createdAt,
-            updatedAt = baseEntity.updatedAt,
-            visibility = baseEntity.visibility,
+            updatedAt = baseEntity.updatedAt
         )
     companion object {
         fun from(comment: Comment): CommentJpaEntity =
@@ -55,8 +54,7 @@ class CommentJpaEntity(
                 board = BoardJpaEntity.from(comment.board),
                 baseEntity = BaseEntity(
                     createdAt = comment.createdAt,
-                    updatedAt = comment.updatedAt,
-                    visibility = comment.visibility
+                    updatedAt = comment.updatedAt
                 )
             )
     }

@@ -49,8 +49,7 @@ class BoardJpaEntity(
             user = user.toDomain(),
             topic = topic.toDomain(),
             createdAt = baseEntity.createdAt,
-            updatedAt = baseEntity.updatedAt,
-            visibility = baseEntity.visibility
+            updatedAt = baseEntity.updatedAt
         )
     }
 
@@ -66,8 +65,7 @@ class BoardJpaEntity(
                 topic = TopicJpaEntity.from(board.topic),
                 baseEntity = BaseEntity(
                     createdAt = board.createdAt,
-                    updatedAt = board.updatedAt,
-                    visibility = board.visibility
+                    updatedAt = board.updatedAt
                 )
             )
 

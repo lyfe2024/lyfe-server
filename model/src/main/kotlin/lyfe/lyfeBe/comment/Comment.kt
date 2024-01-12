@@ -11,8 +11,7 @@ data class Comment(
     val user: User,
     val board: Board,
     val createdAt: Instant?,
-    val updatedAt: Instant?,
-    val visibility: Boolean,
+    val updatedAt: Instant?
 ){
     fun update(commentUpdate: CommentUpdate) =
         Comment(
@@ -22,8 +21,7 @@ data class Comment(
             user = user,
             board = board,
             createdAt = createdAt,
-            updatedAt = Instant.now(),
-            visibility = visibility
+            updatedAt = Instant.now()
         )
     companion object {
         fun from(
@@ -38,8 +36,7 @@ data class Comment(
                 user = user,
                 board = board,
                 createdAt = Instant.now(),
-                updatedAt = Instant.now(),
-                visibility = true,
+                updatedAt = Instant.now()
             )
         }
     }

@@ -36,8 +36,7 @@ class NotificationTest(
             true,
             true,
             Role.USER,
-            UserStatus.ACTIVE,
-            visibility = true
+            UserStatus.ACTIVE
         )
 
 

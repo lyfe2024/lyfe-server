@@ -14,10 +14,7 @@ class BaseEntity(
     @LastModifiedDate
     var createdAt: Instant? = null,
     @LastModifiedDate
-    var updatedAt: Instant? = null,
-    var visibility: Boolean = true
+    var updatedAt: Instant? = null
 ) {
-    fun softDelete() {
-        visibility = false
-    }
+
 }

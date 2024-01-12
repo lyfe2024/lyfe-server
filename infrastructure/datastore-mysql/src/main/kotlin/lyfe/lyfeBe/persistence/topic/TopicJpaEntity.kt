@@ -28,8 +28,7 @@ class TopicJpaEntity(
             content = content,
             createdAt = baseEntity.createdAt,
             updatedAt = baseEntity.updatedAt,
-            appliedAt = appliedAt,
-            visibility = baseEntity.visibility
+            appliedAt = appliedAt
         )
     }
 
@@ -39,8 +38,7 @@ class TopicJpaEntity(
             content = topic.content,
             baseEntity = BaseEntity(
                 createdAt = topic.createdAt,
-                updatedAt = topic.updatedAt,
-                visibility = topic.visibility
+                updatedAt = topic.updatedAt
             )
         )
     }

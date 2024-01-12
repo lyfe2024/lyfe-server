@@ -6,8 +6,7 @@ create table topic
     applied_at datetime(6)  null,
 
     created_at datetime(6)  null,
-    updated_at datetime(6)  null,
-    visibility bit          not null
+    updated_at datetime(6)  null
 );
 
 create table user
@@ -23,8 +22,7 @@ create table user
     notification_consent bit                          not null,
     created_at           datetime(6)                  null,
     updated_at           datetime(6)                  null,
-    withdrawn_at         datetime(6)                  null,
-    visibility           bit                          not null
+    withdrawn_at         datetime(6)                  null
 );
 
 
@@ -50,7 +48,6 @@ create table board
     board_type enum ('BOARD', 'BOARD_PICTURE') null,
     topic_id   bigint                          null,
     user_id    bigint                          null,
-    visibility bit                             not null,
     created_at datetime(6)                     null,
     updated_at datetime(6)                     null,
     deleted_at datetime(6)                     null,
@@ -102,7 +99,6 @@ create table comment
     created_at       datetime(6)  null,
     updated_at       datetime(6)  null,
     deleted_at       datetime(6)  null,
-    visibility       bit          not null,
     constraint FK8kcum44fvpupyw6f5baccx25c
         foreign key (user_id) references user (id),
     constraint FKlij9oor1nav89jeat35s6kbp1
@@ -132,7 +128,6 @@ create table notification_history
     user_id           bigint                                               null,
     created_at        datetime(6)                                          null,
     updated_at        datetime(6)                                          null,
-    visibility        bit                                                  not null,
     constraint fk_notification_history_user_id
         foreign key (user_id) references user (id)
 );

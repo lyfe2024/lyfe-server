@@ -29,12 +29,11 @@ class CreateBoardControllerTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE,
-            visibility = true
+            userStatus = UserStatus.ACTIVE
         )
         testContainer.userRepository.create(user)
 
-        val topic = Topic(1L, "testTopic", visibility = true)
+        val topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
 
 

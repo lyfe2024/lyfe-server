@@ -12,8 +12,7 @@ data class Board(
     val user: User,
     val topic: Topic,
     val createdAt: Instant?,
-    val updatedAt: Instant?,
-    val visibility: Boolean,
+    val updatedAt: Instant?
 ) {
     fun update(boardUpdate: BoardUpdate) =
          Board(
@@ -24,8 +23,7 @@ data class Board(
             user = user,
             topic = topic,
             createdAt = createdAt,
-            updatedAt = Instant.now(),
-            visibility = visibility
+            updatedAt = Instant.now()
         )
 
     companion object {
@@ -39,8 +37,7 @@ data class Board(
                 user = user,
                 topic = topic,
                 createdAt = Instant.now(),
-                updatedAt = Instant.now(),
-                visibility = true
+                updatedAt = Instant.now()
             )
 
         fun from(boardCreate: Board): Board {
@@ -52,8 +49,7 @@ data class Board(
                 user = boardCreate.user,
                 topic = boardCreate.topic,
                 createdAt = boardCreate.createdAt,
-                updatedAt = boardCreate.updatedAt,
-                visibility = boardCreate.visibility
+                updatedAt = boardCreate.updatedAt
             )
         }
     }

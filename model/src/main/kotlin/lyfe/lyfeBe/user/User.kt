@@ -14,8 +14,7 @@ data class User(
     val userStatus: UserStatus,
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
-    val withdrawnAt: Instant? = null,
-    val visibility: Boolean,
+    val withdrawnAt: Instant? = null
 ){
     fun validateActive() {
         if (this.withdrawnAt != null) {
@@ -36,8 +35,7 @@ data class User(
                 userStatus = user.userStatus,
                 createdAt = user.createdAt,
                 updatedAt = user.updatedAt,
-                withdrawnAt = user.withdrawnAt,
-                visibility = user.visibility
+                withdrawnAt = user.withdrawnAt
             )
         }
     }

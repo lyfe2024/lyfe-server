@@ -49,12 +49,11 @@ class GetBoardServiceGetTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE,
-            visibility = true
+            userStatus = UserStatus.ACTIVE
         )
         fakeUserRepository.create(user)
 
-        val topic = Topic(0, "testTopic", visibility = true)
+        val topic = Topic(0, "testTopic")
         fakeTopicRepository.create(topic)
 
 
@@ -78,8 +77,7 @@ class GetBoardServiceGetTest(
             user = user,
             topic = topic,
             createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-            visibility = true
+            updatedAt = Instant.now()
         )
 
         fakeBoardRepository.create(board)
@@ -99,8 +97,7 @@ class GetBoardServiceGetTest(
             user = user,
             board = board,
             createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-            visibility = true
+            updatedAt = Instant.now()
         )
 
         fakeCommentRepository.create(comment)
