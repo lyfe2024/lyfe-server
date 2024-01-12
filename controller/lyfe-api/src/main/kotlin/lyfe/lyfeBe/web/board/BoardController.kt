@@ -31,6 +31,17 @@ class BoardController(
     }
 
 
+
+    @GetMapping("/popular")
+    fun getPopularBoards(
+        @RequestParam(required = false) cursorId: Long?,
+        @PageableDefault(size = 10, page = 0) pageable: Pageable,
+    ): CommonResponse<List<BoardDto>> {
+        val boardId = getEffectiveCursorId(cursorId)
+        return CommonResponse(service.getPopularBoards(BoardsGet(boardId, pageable)))
+    }
+
+
     @GetMapping("/{boardId}")
     fun get(
         @PathVariable(value = "boardId") boardId: Long,
