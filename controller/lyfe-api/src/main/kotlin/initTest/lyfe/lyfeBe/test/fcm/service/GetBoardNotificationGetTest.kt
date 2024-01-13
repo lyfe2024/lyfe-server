@@ -39,8 +39,7 @@ class GetBoardNotificationGetTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE,
-            visibility = true
+            userStatus = UserStatus.ACTIVE
         )
         fakeUserRepository.create(user)
 

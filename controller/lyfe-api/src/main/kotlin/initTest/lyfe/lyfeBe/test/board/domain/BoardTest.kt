@@ -33,13 +33,11 @@ class BoardTest(
             true,
             true,
             Role.USER,
-            UserStatus.ACTIVE,
-            visibility = true
+            UserStatus.ACTIVE
         )
         val topic = Topic(
             id = 1L,
-            content = "testTopic",
-            visibility = true
+            content = "testTopic"
         )
 
 
@@ -77,17 +75,14 @@ class BoardTest(
                 true,
                 true,
                 Role.USER,
-                UserStatus.ACTIVE,
-                visibility = true
+                UserStatus.ACTIVE
                 ),
             topic = Topic(
                 id = 1L,
-                content = "testTopic",
-                visibility = true
+                content = "testTopic"
             ),
             createdAt = null,
-            updatedAt = null,
-            visibility = true
+            updatedAt = null
         )
 
         When("Board 객체를 BoardUpdate 정보로 업데이트했을 때") {

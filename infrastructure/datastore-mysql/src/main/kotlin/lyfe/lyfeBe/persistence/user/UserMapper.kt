@@ -17,8 +17,7 @@ object UserMapper {
             userStatus = user.userStatus,
             createdAt = user.baseEntity.createdAt,
             updatedAt = user.baseEntity.updatedAt,
-            withdrawnAt = user.withdrawnAt,
-            visibility = user.baseEntity.visibility,
+            withdrawnAt = user.withdrawnAt
         )
 
     fun mapToJpaEntity(user: User): UserJpaEntity =
@@ -34,8 +33,7 @@ object UserMapper {
             userStatus = user.userStatus,
             baseEntity = BaseEntity(
                 createdAt = user.createdAt,
-                updatedAt = user.updatedAt,
-                visibility = user.visibility == true //FIXME: 여긴어떻게처리..?
+                updatedAt = user.updatedAt
             )
         )
 }

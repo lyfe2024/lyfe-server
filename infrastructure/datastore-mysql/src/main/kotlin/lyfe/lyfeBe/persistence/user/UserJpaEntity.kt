@@ -52,8 +52,7 @@ class UserJpaEntity(
             userStatus = userStatus,
             role = role,
             createdAt = baseEntity.createdAt,
-            updatedAt = baseEntity.updatedAt,
-            visibility = baseEntity.visibility
+            updatedAt = baseEntity.updatedAt
         )
 
     }
@@ -71,8 +70,7 @@ class UserJpaEntity(
             role = user.role,
             baseEntity = BaseEntity(
                 createdAt = user.createdAt,
-                updatedAt = user.updatedAt,
-                visibility = user.visibility
+                updatedAt = user.updatedAt
             )
         )
     }

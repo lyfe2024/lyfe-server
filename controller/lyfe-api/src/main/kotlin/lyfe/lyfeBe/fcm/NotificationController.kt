@@ -4,6 +4,7 @@ import FcmMessageDto
 import lyfe.lyfeBe.fcm.req.NotificationRequest
 import lyfe.lyfeBe.notification.NotificationGet
 import lyfe.lyfeBe.notification.NotificationSend
+import lyfe.lyfeBe.utils.ControllerUtils.Companion.getEffectiveCursorId
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -34,10 +35,5 @@ class NotificationController(private val fcmService: FCMService) {
         val notificationId = getEffectiveCursorId(cursorId)
          return fcmService.getNotificationHistories(NotificationGet(notificationId , pageable))
     }
-
-    private fun getEffectiveCursorId(cursorId: Long?): Long {
-        return cursorId?.takeIf { it != 0L } ?: Long.MAX_VALUE
-    }
-
 }
 

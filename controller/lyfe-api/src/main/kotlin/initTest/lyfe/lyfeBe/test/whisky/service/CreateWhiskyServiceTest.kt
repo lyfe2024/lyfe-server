@@ -40,8 +40,7 @@ class CreateWhiskyServiceTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE,
-            visibility = true
+            userStatus = UserStatus.ACTIVE
         )
         fakeUserRepository.create(user)
 
@@ -53,12 +52,10 @@ class CreateWhiskyServiceTest(
             user = user,
             topic = Topic(
                 id = 0,
-                content = "testTopic",
-                visibility = true
+                content = "testTopic"
             ),
             createdAt = null,
-            updatedAt = null,
-            visibility = true
+            updatedAt = null
         )
 
         fakeBoardRepository.create(board)

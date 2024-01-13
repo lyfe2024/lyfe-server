@@ -8,6 +8,7 @@ import lyfe.lyfeBe.board.BoardsGet
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
+import lyfe.lyfeBe.utils.ControllerUtils.Companion.getEffectiveCursorId
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.board.req.BoardUpdateRequest
 import org.springframework.data.domain.Pageable
@@ -24,10 +25,20 @@ class BoardController(
     fun getBoards(
         @RequestParam(required = false) cursorId: Long?,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
-
         ): CommonResponse<List<BoardDto>> {
         val boardId = getEffectiveCursorId(cursorId)
         return CommonResponse(service.getBoards(BoardsGet(boardId, pageable)))
+    }
+
+
+
+    @GetMapping("/popular")
+    fun getPopularBoards(
+        @RequestParam(required = false) cursorId: Long?,
+        @PageableDefault(size = 10, page = 0) pageable: Pageable,
+    ): CommonResponse<List<BoardDto>> {
+        val boardId = getEffectiveCursorId(cursorId)
+        return CommonResponse(service.getPopularBoards(BoardsGet(boardId, pageable)))
     }
 
 
@@ -35,11 +46,6 @@ class BoardController(
     fun get(
         @PathVariable(value = "boardId") boardId: Long,
     ) = CommonResponse(service.get(BoardGet(boardId)))
-
-
-    private fun getEffectiveCursorId(cursorId: Long?): Long {
-        return cursorId?.takeIf { it != 0L } ?: Long.MAX_VALUE
-    }
 
     @PostMapping
     fun create(

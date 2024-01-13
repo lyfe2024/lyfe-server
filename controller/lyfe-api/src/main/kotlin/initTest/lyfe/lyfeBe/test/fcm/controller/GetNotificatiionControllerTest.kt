@@ -29,8 +29,7 @@ class GetNotificatiionControllerTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE,
-            visibility = true
+            userStatus = UserStatus.ACTIVE
         )
         testContainer.userRepository.create(user)
 

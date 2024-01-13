@@ -26,8 +26,7 @@ class WhiskyTest(
             true,
             true,
             Role.USER,
-            UserStatus.ACTIVE,
-            visibility = true
+            UserStatus.ACTIVE
         )
         val board = Board(
             id = 1L,
@@ -37,12 +36,10 @@ class WhiskyTest(
             user = user,
             topic = Topic(
                 id = 1L,
-                content = "testTopic",
-                visibility = true
+                content = "testTopic"
             ),
             createdAt = null,
-            updatedAt = null,
-            visibility = true
+            updatedAt = null
         )
 
 
@@ -56,7 +53,6 @@ class WhiskyTest(
                 whisky.user.nickname shouldBe user.nickname
                 whisky.user.role shouldBe user.role
                 whisky.user.userStatus shouldBe user.userStatus
-                whisky.user.visibility shouldBe user.visibility
 
                 whisky.board.id shouldBe board.id
                 whisky.board.title shouldBe board.title

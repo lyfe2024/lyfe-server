@@ -32,12 +32,11 @@ class GetCommentControllerTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE,
-            visibility = true
+            userStatus = UserStatus.ACTIVE
         )
         testContainer.userRepository.create(user)
 
-        val topic = Topic(1L, "testTopic", visibility = true)
+        val topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
 
 
@@ -49,8 +48,7 @@ class GetCommentControllerTest(
             user = user,
             topic = topic,
             createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-            visibility = true
+            updatedAt = Instant.now()
         )
         testContainer.boardRepository.create(board)
 

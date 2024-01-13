@@ -33,8 +33,7 @@ class CommentTest(
             true,
             true,
             Role.USER,
-            UserStatus.ACTIVE,
-            visibility = true
+            UserStatus.ACTIVE
         )
         val board = Board(
             id = 1L,
@@ -44,12 +43,10 @@ class CommentTest(
             user = user,
             topic = Topic(
                 id = 1L,
-                content = "testTopic",
-                visibility = true
+                content = "testTopic"
             ),
             createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-            visibility = true
+            updatedAt = Instant.now()
         )
 
 
@@ -79,8 +76,7 @@ class CommentTest(
             true,
             true,
             Role.USER,
-            UserStatus.ACTIVE,
-            visibility = true
+            UserStatus.ACTIVE
         )
         val board = Board(
             id = 1L,
@@ -90,12 +86,10 @@ class CommentTest(
             user = user,
             topic = Topic(
                 id = 1L,
-                content = "testTopic",
-                visibility = true
+                content = "testTopic"
             ),
             createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-            visibility = true
+            updatedAt = Instant.now()
         )
         val comment = Comment(
             id = 1L,
@@ -104,8 +98,7 @@ class CommentTest(
             user = user,
             board = board,
             createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-            visibility = true
+            updatedAt = Instant.now()
         )
 
         When("CommentUpdate와 Comment 객체를 사용하여 Comment 객체를 수정했을 때") {
