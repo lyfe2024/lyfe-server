@@ -3,6 +3,7 @@ package initTest.lyfe.lyfeBe.test.board.controller
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.image.ImageType
@@ -29,7 +30,9 @@ class CreateBoardControllerTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE
+            userStatus = UserStatus.ACTIVE,
+            socialId = "testSocialId",
+            socialType = SocialType.GOOGLE,
         )
         testContainer.userRepository.create(user)
 

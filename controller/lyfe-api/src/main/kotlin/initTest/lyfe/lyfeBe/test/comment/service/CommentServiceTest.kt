@@ -41,7 +41,9 @@ class CommentServiceTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE
+            userStatus = UserStatus.ACTIVE,
+            socialId = "testSocialId",
+            socialType = lyfe.lyfeBe.auth.SocialType.GOOGLE,
         )
         fakeUserRepository.create(user)
 
