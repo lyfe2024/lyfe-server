@@ -3,11 +3,11 @@ package lyfe.lyfeBe.auth.service.kakao
 import lyfe.lyfeBe.auth.AuthLogin
 import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.auth.dto.OAuthIdAndRefreshTokenDto
-import lyfe.lyfeBe.auth.dto.kakao.KakaoTokenRequest
 import lyfe.lyfeBe.auth.dto.kakao.KakaoTokenResult
 import lyfe.lyfeBe.auth.service.AuthProviderService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import org.springframework.web.util.UriUtils
 
 @Service
 class KakaoService(
@@ -16,7 +16,6 @@ class KakaoService(
     @Value("\${kakao.kakaoRedirectUri}") private var kakaoRedirectUri: String,
     @Value("\${kakao.kakaoGrantType}") private var kakaoGrantType: String,
 ): AuthProviderService {
-
     fun getAuthorizationCode(): String {
         return kakaoClient.getAuthorizationCode(
             clientId = kakaoClientId, redirectUri = kakaoRedirectUri, responseType = "code"
@@ -37,13 +36,12 @@ class KakaoService(
     }
 
     fun generateAuthToken(authorizationCode: String): KakaoTokenResult {
-        val kakaoTokenRequest = KakaoTokenRequest(
-            grantType = kakaoGrantType,
-            clientId = kakaoClientId,
-            redirectUri = kakaoRedirectUri,
-            code = authorizationCode,
-        )
-        return kakaoClient.getToken(kakaoTokenRequest)
+            return kakaoClient.getToken(
+                grantType = kakaoGrantType,
+                clientId = kakaoClientId,
+                redirectUri = UriUtils.decode(kakaoRedirectUri, "UTF-8"),
+                code = authorizationCode,
+            )
     }
 
     fun getKakaoId(accessToken: String): String {
