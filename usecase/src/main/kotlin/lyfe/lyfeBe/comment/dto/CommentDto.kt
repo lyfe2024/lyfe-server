@@ -16,7 +16,7 @@ data class CommentDto(
                 id = comment.id,
                 content = comment.content,
                 commentGroupId = comment.commentGroupId,
-                user = UserDto.from(comment.user, ""),
+                user = UserDto.from(comment.user),
                 createdAt = comment.createdAt.toString()
             )
         }

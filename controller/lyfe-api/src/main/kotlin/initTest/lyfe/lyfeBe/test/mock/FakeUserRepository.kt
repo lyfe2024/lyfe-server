@@ -23,10 +23,6 @@ class FakeUserRepository : UserPort {
 
     override fun findById(userId: Long) = data.find { it.id == userId }
 
-    override fun getByIdAndValidateActive(id: Long): User {
-        TODO("Not yet implemented")
-    }
-
     override fun getById(userId: Long): User {
         return data.find { it.id == userId }!!
     }
@@ -35,8 +31,16 @@ class FakeUserRepository : UserPort {
         return data.find { it.email == email }
     }
 
-    override fun findByEmail(email: String): User? {
-        return data.find { it.email == email }
+    override fun update(user: User): User {
+        val index = data.indexOfFirst { it.id == user.id }
+        if (index != -1) {
+            data[index] = user
+        }
+        return user
+    }
+
+    override fun existsByNickname(nickname: String): Boolean {
+        return data.any { it.nickname == nickname }
     }
 
     fun clear() {

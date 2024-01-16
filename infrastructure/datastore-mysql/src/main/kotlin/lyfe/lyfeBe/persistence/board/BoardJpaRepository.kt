@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.persistence.board
 
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.persistence.topic.TopicJpaEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -13,4 +14,7 @@ interface BoardJpaRepository: JpaRepository<BoardJpaEntity, Long> {
 
     @Query("SELECT t FROM BoardJpaEntity t WHERE t.id < :cursorId")
     fun findByIdCursorId(cursorId: Long, pageable: Pageable): Page<BoardJpaEntity>
+
+    @Query("SELECT t FROM BoardJpaEntity t WHERE t.user.id = :userId AND t.boardType = :boardType")
+    fun findByUserIdAndBoardType(userId: Long, boardType: BoardType, pageable: Pageable): Page<BoardJpaEntity>
 }

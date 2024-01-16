@@ -1,6 +1,7 @@
 package initTest.lyfe.lyfeBe.test.mock
 
 import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.port.out.BoardPort
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -51,6 +52,20 @@ class FakeBoardRepository : BoardPort {
 
         return PageImpl(pageContent, paging, paging.pageSize.toLong())
 
+    }
+
+    override fun getByUserAndBoardType(userId: Long, boardType: BoardType, paging: Pageable): Page<Board> {
+        // data 리스트에서 필터링 및 정렬을 수행
+        val filteredData = data.filter {
+            it.user!!.id == userId && it.boardType == boardType
+        }.sortedByDescending { it.id }
+
+        // 페이징 처리
+        val pageStart = paging.pageNumber * paging.pageSize
+        val pageEnd = (pageStart + paging.pageSize).coerceAtMost(filteredData.size)
+        val pageContent = filteredData.subList(pageStart, pageEnd)
+
+        return PageImpl(pageContent, paging, paging.pageSize.toLong())
     }
 
     fun clear() {

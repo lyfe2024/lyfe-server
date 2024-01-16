@@ -63,6 +63,16 @@ class ImageJpaEntity(
                 height = image.height
             )
         }
+
+        fun update(image: Image): ImageJpaEntity {
+            return ImageJpaEntity(
+                id = image.id,
+                url = image.url,
+                type = image.type,
+                width = image.width,
+                height = image.height
+            )
+        }
     }
 
 }

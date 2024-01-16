@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.board
 
 import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.error.ResourceNotFoundException
 import org.springframework.data.domain.Page
@@ -29,4 +30,9 @@ class BoardPersistenceAdapter(
 
     override fun findByIdCursorId(boardId: Long, paging: Pageable) =
         boardJpaRepository.findByIdCursorId(boardId, paging).map { it.toDomain() }
+    //FIXME N+1문제는 어떻게 해결할까?
+
+    override fun getByUserAndBoardType(userId: Long, boardType: BoardType, paging: Pageable): Page<Board> {
+        return boardJpaRepository.findByUserIdAndBoardType(userId, boardType, paging).map { it.toDomain() }
+    }
 }

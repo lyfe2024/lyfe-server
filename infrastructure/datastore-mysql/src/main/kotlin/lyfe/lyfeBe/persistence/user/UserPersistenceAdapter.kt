@@ -12,12 +12,6 @@ class UserPersistenceAdapter(
     private val userRepository: UserJpaRepository
 ) : UserPort {
 
-
-    override fun getByIdAndValidateActive(id: Long) =
-        userRepository.findById(id)
-            .orElseThrow { ResourceNotFoundException("user not found") }
-            .toDomain() //FIXME N+1문제는 어떻게 해결할까? 이부분얘기필요
-
     override fun getById(userId: Long): User {
         return userRepository.findById(userId).map(UserJpaEntity::toDomain)
             .orElseThrow { ResourceNotFoundException("user not found") }
@@ -28,6 +22,14 @@ class UserPersistenceAdapter(
         return userRepository.findByEmail(email)?.toDomain()
     }
 
+    override fun update(user: User): User {
+        return userRepository.save(UserJpaEntity.update(user)).toDomain()
+    }
+
+    override fun existsByNickname(nickname: String): Boolean {
+        return userRepository.existsByNickname(nickname)
+    }
+
     override fun create(user: User) =
         userRepository.save(UserJpaEntity.from(user)).toDomain()
 
@@ -35,9 +37,4 @@ class UserPersistenceAdapter(
         userRepository.findById(userId)
             .orElseThrow { ResourceNotFoundException("user not found") }
             .toDomain()
-
-    override fun updateRefreshToken(user: User): User {
-        val update = UserJpaEntity.update(user)
-        return userRepository.save(update).toDomain()
-    }
 }
