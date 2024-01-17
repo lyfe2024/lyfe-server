@@ -54,10 +54,15 @@ class FakeBoardRepository : BoardPort {
 
     }
 
-    override fun getByUserAndBoardType(userId: Long, boardType: BoardType, paging: Pageable): Page<Board> {
+    override fun findByUserAndBoardType(
+        userId: Long,
+        boardType: BoardType,
+        cursorId: Long,
+        paging: Pageable
+    ): Page<Board> {
         // data 리스트에서 필터링 및 정렬을 수행
         val filteredData = data.filter {
-            it.user!!.id == userId && it.boardType == boardType
+            it.user.id == userId && it.boardType == boardType && it.id < cursorId
         }.sortedByDescending { it.id }
 
         // 페이징 처리
@@ -67,6 +72,8 @@ class FakeBoardRepository : BoardPort {
 
         return PageImpl(pageContent, paging, paging.pageSize.toLong())
     }
+
+
 
     fun clear() {
         data.clear()

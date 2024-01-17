@@ -1,10 +1,12 @@
 package lyfe.lyfeBe.web.user
 
+import lyfe.lyfeBe.board.BoardType
+import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.user.UserUpdate
 import lyfe.lyfeBe.user.dto.UpdateUserDto
 import lyfe.lyfeBe.user.service.UserService
-import lyfe.lyfeBe.web.user.req.BoardListRequest
+import lyfe.lyfeBe.utils.ControllerUtils.Companion.getEffectiveCursorId
 import lyfe.lyfeBe.web.user.req.UpdateUserRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -40,14 +42,20 @@ class UserController(
 
     @GetMapping("/me/boards")
     fun getMyBoardList(
-        @RequestBody req: BoardListRequest,
+        @RequestParam boardType: BoardType,
+        @RequestParam(required = false) cursorId: Long?,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
-    ) = CommonResponse(
-        userService.getMyBoardList(
-            boardType = req.boardType,
-            pageable = pageable
+    ): CommonResponse<List<BoardDto>> {
+        val boardId = getEffectiveCursorId(cursorId)
+        return CommonResponse(
+            userService.getMyBoardList(
+                boardType = boardType,
+                cursorId = boardId,
+                pageable = pageable
+            )
         )
-    )
+    }
+
 
     @GetMapping("/check-nickname/{nickname}")
     fun checkNickname(

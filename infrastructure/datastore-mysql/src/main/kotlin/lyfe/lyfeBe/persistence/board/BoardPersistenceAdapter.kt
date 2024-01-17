@@ -32,7 +32,7 @@ class BoardPersistenceAdapter(
         boardJpaRepository.findByIdCursorId(boardId, paging).map { it.toDomain() }
     //FIXME N+1문제는 어떻게 해결할까?
 
-    override fun getByUserAndBoardType(userId: Long, boardType: BoardType, paging: Pageable): Page<Board> {
-        return boardJpaRepository.findByUserIdAndBoardType(userId, boardType, paging).map { it.toDomain() }
+    override fun findByUserAndBoardType(userId: Long, boardType: BoardType, cursorId: Long, paging: Pageable): Page<Board> {
+        return boardJpaRepository.findByUserIdAndBoardTypeAndCursorId(userId, boardType, cursorId, paging).map { it.toDomain() }
     }
 }
