@@ -11,7 +11,6 @@ import java.time.Instant
 @EntityListeners(AuditingEntityListener::class)
 class BaseEntity(
     @CreatedDate
-    @LastModifiedDate
     var createdAt: Instant? = null,
     @LastModifiedDate
     var updatedAt: Instant? = null

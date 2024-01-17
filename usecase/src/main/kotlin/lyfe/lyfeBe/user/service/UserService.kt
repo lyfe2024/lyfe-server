@@ -33,7 +33,7 @@ class UserService(
     @Transactional
     fun update(userUpdate: UserUpdate): UpdateUserDto {
         val loginUserId = getLoginUserId()
-        val user = userPort.getById(loginUserId).updateUserInfo(userUpdate)
+        val user = userPort.getById(loginUserId).updateNickName(userUpdate.nickname)
         val image = imagePort.getByUserId(user.id)?.update(userUpdate)
         image?.let { imagePort.update(it) }
         return UpdateUserDto(userPort.update(user).id)

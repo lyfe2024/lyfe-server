@@ -106,7 +106,7 @@ class AuthService(
                 user = user
             )
         )
-        if (findByUserToken != null) { refreshTokenPort.create(refreshToken) }
+        if (findByUserToken == null) { refreshTokenPort.create(refreshToken) }
         else refreshTokenPort.update(refreshToken)
     }
 

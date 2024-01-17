@@ -31,13 +31,15 @@ class DeleteWhiskyServiceTest(
     beforeContainer {
         // 테스트에 필요한 사용자, 토픽, 게시물을 미리 생성하고 저장
         val user = User(
-            id = 0,
+            id = 1L,
             email = "testUser@example.com",
             hashedPassword = "hashedPassword",
             nickname = "testUser",
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
+            socialId = "testSocialId",
+            socialType = lyfe.lyfeBe.auth.SocialType.GOOGLE,
             userStatus = UserStatus.ACTIVE
         )
         fakeUserRepository.create(user)

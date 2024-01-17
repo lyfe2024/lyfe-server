@@ -63,24 +63,6 @@ data class User(
                 withdrawnAt = null,
             )
 
-        fun update(userJoin: UserJoin, user: User) =
-            User(
-                id = user.id,
-                email = user.email,
-                hashedPassword = user.hashedPassword,
-                nickname = userJoin.nickname,
-                socialId = user.socialId,
-                socialType = user.socialType,
-                socialRefreshToken = user.socialRefreshToken,
-                notificationConsent = user.notificationConsent,
-                fcmRegistration = user.fcmRegistration,
-                role = user.role,
-                userStatus = user.userStatus,
-                createdAt = user.createdAt,
-                updatedAt = Instant.now(),
-                withdrawnAt = user.withdrawnAt,
-            )
-
         fun from(user: User): User {
             return User(
                 id = user.id,

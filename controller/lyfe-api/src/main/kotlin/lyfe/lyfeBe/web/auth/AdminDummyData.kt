@@ -3,6 +3,7 @@ package lyfe.lyfeBe.web.auth
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import lyfe.lyfeBe.auth.SocialType
+import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
 import lyfe.lyfeBe.persistence.user.UserJpaRepository
 import lyfe.lyfeBe.user.Role
@@ -37,6 +38,7 @@ class AdminDummyData(
             fcmRegistration = false,
             userStatus = UserStatus.ACTIVE,
             role = Role.ADMIN,
+            baseEntity = BaseEntity()
         )
         userJpaRepository.save(adminUser)
 
