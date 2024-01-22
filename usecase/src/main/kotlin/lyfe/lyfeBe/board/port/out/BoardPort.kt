@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.board.port.out
 
 import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -9,4 +10,5 @@ interface BoardPort {
     fun create(board: Board): Board
     fun update(board: Board): Board
     fun findByIdCursorId(boardId: Long, paging: Pageable): Page<Board>
+    fun findByUserAndBoardType(userId: Long, boardType: BoardType, cursorId: Long, paging: Pageable): Page<Board>
 }

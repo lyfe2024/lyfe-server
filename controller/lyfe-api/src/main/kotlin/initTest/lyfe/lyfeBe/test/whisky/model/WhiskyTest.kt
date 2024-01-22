@@ -4,13 +4,11 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.board.BoardUpdate
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.whisky.Whisky
-import lyfe.lyfeBe.whisky.WhiskyCreate
 
 
 class WhiskyTest(
@@ -19,14 +17,16 @@ class WhiskyTest(
     Given("User, Topic 객체가 초기화되었을 때") {
 
         val user = User(
-            1L,
-            "testName",
-            "testEmail",
-            "testPassword",
-            true,
-            true,
-            Role.USER,
-            UserStatus.ACTIVE
+            id = 1L,
+            email = "testUser@example.com",
+            hashedPassword = "hashedPassword",
+            nickname = "testUser",
+            notificationConsent = true,
+            fcmRegistration = true,
+            role = Role.USER,
+            socialId = "testSocialId",
+            socialType = lyfe.lyfeBe.auth.SocialType.GOOGLE,
+            userStatus = UserStatus.ACTIVE
         )
         val board = Board(
             id = 1L,

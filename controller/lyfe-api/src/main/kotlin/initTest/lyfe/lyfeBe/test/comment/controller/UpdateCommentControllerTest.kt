@@ -28,6 +28,8 @@ class UpdateCommentControllerTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
+            socialId = "testSocialId",
+            socialType = lyfe.lyfeBe.auth.SocialType.GOOGLE,
             userStatus = UserStatus.ACTIVE
         )
         testContainer.userRepository.create(user)
@@ -69,7 +71,6 @@ class UpdateCommentControllerTest(
 
             val comment = testContainer.commentService.getById(commentId.result.id)
 
-            println(comment.content)
             Then("업데이트된 댓글의 내용이 요청된 값과 일치해야 한다") {
                 comment.content shouldBe updateReq.content
             }

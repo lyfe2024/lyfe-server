@@ -17,7 +17,7 @@ data class BoardDto(
         fun toDto(param : BoardDtoAssembly): BoardDto {
             return BoardDto(
                     id = param.board.id,
-                    user = UserDto.from(param.board.user, param.imageUrl),
+                    user = UserDto.from(param.board.user),
                     title = param.board.title,
                     content = param.board.content,
                     boardType = param.board.boardType,

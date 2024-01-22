@@ -32,7 +32,7 @@ class BoardService(
         val whiskyCount = fetchWhiskyCount(board.id)
         val commentCount = fetchCommentCount(board.id)
 
-        val params = BoardDtoAssembly(board, image.url, whiskyCount, commentCount)
+        val params = BoardDtoAssembly(board, image?.url ?: "", whiskyCount, commentCount)
 
         return BoardDto.toDto(params)
     }
@@ -94,7 +94,7 @@ class BoardService(
     }
 
     private fun fetchImageUrl(userId: Long): String {
-        return imageport.getByUserId(userId).url
+        return imageport.getByUserId(userId)?.url ?: ""
     }
 
     private fun fetchCommentCount(boardId: Long) = commentport.countByBoardId(boardId)

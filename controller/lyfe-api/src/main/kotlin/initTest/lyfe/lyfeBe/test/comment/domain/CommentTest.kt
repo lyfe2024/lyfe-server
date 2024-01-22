@@ -2,6 +2,7 @@ package initTest.lyfe.lyfeBe.test.comment.domain
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.comment.Comment
@@ -30,6 +31,9 @@ class CommentTest(
             "testName",
             "testEmail",
             "testPassword",
+            "",
+            SocialType.GOOGLE,
+            "",
             true,
             true,
             Role.USER,
@@ -73,6 +77,9 @@ class CommentTest(
             "testName",
             "testEmail",
             "testPassword",
+            "",
+            SocialType.GOOGLE,
+            "",
             true,
             true,
             Role.USER,

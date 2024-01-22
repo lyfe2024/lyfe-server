@@ -27,6 +27,8 @@ class CreateCommentControllerTest (
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
+            socialId = "testSocialId",
+            socialType = lyfe.lyfeBe.auth.SocialType.GOOGLE,
             userStatus = UserStatus.ACTIVE
         )
         testContainer.userRepository.create(user)

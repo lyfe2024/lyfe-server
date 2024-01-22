@@ -5,7 +5,6 @@ import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.persistence.board.BoardJpaEntity
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
-import lyfe.lyfeBe.persistence.user.UserMapper
 import org.jetbrains.annotations.NotNull
 
 @Entity
@@ -50,7 +49,7 @@ class CommentJpaEntity(
                 id = comment.id,
                 content = comment.content,
                 commentGroupId = comment.commentGroupId,
-                user = UserMapper.mapToJpaEntity(comment.user),
+                user = UserJpaEntity.from(comment.user),
                 board = BoardJpaEntity.from(comment.board),
                 baseEntity = BaseEntity(
                     createdAt = comment.createdAt,

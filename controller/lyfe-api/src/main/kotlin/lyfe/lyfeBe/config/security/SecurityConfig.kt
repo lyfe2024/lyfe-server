@@ -1,7 +1,11 @@
 package lyfe.lyfeBe.config.security
 
+import lyfe.lyfeBe.auth.service.PrincipalDetailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.ProviderManager
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -15,12 +19,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig(
     private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint,
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler,
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val principalDetailService : PrincipalDetailService,
 ) {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
+    }
+
+    @Bean
+    fun authenticationManager(): AuthenticationManager? {
+        val provider = DaoAuthenticationProvider()
+        provider.setPasswordEncoder(passwordEncoder())
+        provider.setUserDetailsService(principalDetailService)
+        return ProviderManager(provider)
     }
 
     @Bean
@@ -41,7 +54,7 @@ class SecurityConfig(
                     .requestMatchers(
                         "/health", "/",
                         "/v1/images/*",
-                        "/**"
+                        "/v1/auth/**",
                     ).permitAll()
                     .anyRequest().authenticated()
             }

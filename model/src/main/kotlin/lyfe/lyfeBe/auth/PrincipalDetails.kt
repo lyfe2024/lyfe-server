@@ -11,7 +11,7 @@ class PrincipalDetails(
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         val authorities: MutableCollection<GrantedAuthority> = ArrayList()
-        authorities.add(GrantedAuthority { user.role.toString() })
+        authorities.add(GrantedAuthority { user.role.name })
         return authorities
     }
 
@@ -20,7 +20,7 @@ class PrincipalDetails(
     }
 
     override fun getUsername(): String {
-        return user.id.toString()
+        return user.email
     }
 
     override fun isAccountNonExpired(): Boolean {

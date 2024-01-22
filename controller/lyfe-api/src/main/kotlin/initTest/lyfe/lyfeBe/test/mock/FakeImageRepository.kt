@@ -3,7 +3,6 @@ package initTest.lyfe.lyfeBe.test.mock
 import lyfe.lyfeBe.image.Image
 import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.image.port.out.ImagePort
-import lyfe.lyfeBe.topic.Topic
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -21,6 +20,14 @@ class FakeImageRepository : ImagePort {
             data.add(image)
             image
         }
+    }
+
+    override fun update(image: Image): Image {
+        val index = data.indexOfFirst { it.id == image.id }
+        if (index != -1) {
+            data[index] = image
+        }
+        return image
     }
 
     override fun getById(id: Long) = data.find { it.id == id }!!

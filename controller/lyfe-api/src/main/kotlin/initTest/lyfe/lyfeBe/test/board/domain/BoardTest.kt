@@ -2,6 +2,7 @@ package initTest.lyfe.lyfeBe.test.board.domain
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardCreate
 import lyfe.lyfeBe.board.BoardType
@@ -30,6 +31,9 @@ class BoardTest(
             "testName",
             "testEmail",
             "testPassword",
+            "",
+            SocialType.GOOGLE,
+            "",
             true,
             true,
             Role.USER,
@@ -72,6 +76,9 @@ class BoardTest(
                 "testName",
                 "testEmail",
                 "testPassword",
+                "",
+                SocialType.GOOGLE,
+                "",
                 true,
                 true,
                 Role.USER,

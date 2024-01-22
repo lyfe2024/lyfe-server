@@ -14,13 +14,17 @@ class ImagePersistenceAdapter(
         TODO("Not yet implemented")
     }
 
+    override fun update(image: Image): Image {
+        return imageJpaRepository.save(ImageJpaEntity.update(image)).toDomain()
+    }
+
     override fun getById(id: Long) = imageJpaRepository.findById(id)
             .orElseThrow { ResourceNotFoundException("image not found") }
             .toDomain() //
 
-    override fun getByUserId(userId: Long) = imageJpaRepository.findByUserId(userId)
-            .orElseThrow { ResourceNotFoundException("image not found") }
-            .toDomain()
+    override fun getByUserId(userId: Long) : Image? {
+        return imageJpaRepository.findByUserId(userId).map { it.toDomain() }.orElse(null)
+    }
 
     override fun getByIdAndByType(id: Long, type: ImageType) = imageJpaRepository.findByIdAndType(id, type)
             .orElseThrow { ResourceNotFoundException("image not found") }
