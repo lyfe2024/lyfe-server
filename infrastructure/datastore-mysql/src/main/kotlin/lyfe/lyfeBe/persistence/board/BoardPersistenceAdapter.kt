@@ -28,4 +28,7 @@ class BoardPersistenceAdapter(
 
     override fun findByIdCursorId(boardId: Long, paging: Pageable) =
         boardJpaRepository.findByIdCursorId(boardId, paging).map { it.toDomain() }
+
+    override fun findPopularBoards(boardId: Long, paging: Pageable) =
+        boardJpaRepository.findPopularBoards(boardId, paging).map { it.toDomain() }
 }

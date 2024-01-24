@@ -53,6 +53,10 @@ class FakeBoardRepository : BoardPort {
 
     }
 
+    override fun findPopularBoards(boardId: Long, paging: Pageable): Page<Board> {
+        TODO("Not yet implemented")
+    }
+
     fun clear() {
         data.clear()
     }

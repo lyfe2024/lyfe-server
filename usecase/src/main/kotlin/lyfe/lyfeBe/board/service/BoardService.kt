@@ -10,7 +10,6 @@ import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -29,15 +28,15 @@ class BoardService(
         val whiskyCount = fetchWhiskyCount(board.id)
         val commentCount = fetchCommentCount(board.id)
 
-        val params = BoardDtoAssembly(board,  whiskyCount, commentCount)
+        val params = BoardDtoAssembly(board, whiskyCount, commentCount)
 
         return BoardDto.toBoardDto(params)
     }
 
 
     fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
-        
-        val boards = fetchBoards(boardsGet.boardId, boardsGet.pageable)
+
+        val boards = boardport.findByIdCursorId(boardsGet.boardId, boardsGet.pageable).toList()
 
         return boards.map { board ->
             val whiskyCount = fetchWhiskyCount(board.id)
@@ -49,7 +48,8 @@ class BoardService(
 
 
     fun getPopularBoards(boardsGet: BoardsGet): List<BoardDto> {
-        val boards = fetchBoards(boardsGet.boardId, boardsGet.pageable)
+
+        val boards = boardport.findPopularBoards(boardsGet.boardId, boardsGet.pageable)
 
         val boardWithWhiskyCounts = boards.map { board ->
             val whiskyCount = fetchWhiskyCount(board.id)
@@ -81,11 +81,6 @@ class BoardService(
 
     fun getById(id: Long): Board {
         return boardport.getById(id)
-    }
-
-
-    private fun fetchBoards(boardId: Long, pageable: Pageable): List<Board> {
-        return boardport.findByIdCursorId(boardId, pageable).toList()
     }
 
 
