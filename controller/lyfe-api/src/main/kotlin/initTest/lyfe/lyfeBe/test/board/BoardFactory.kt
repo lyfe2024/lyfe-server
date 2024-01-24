@@ -4,6 +4,7 @@ import initTest.lyfe.lyfeBe.test.user.UserFactory
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.User
+import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.topic.TopicFactory
 import org.springframework.data.domain.Pageable
 import java.time.Instant
@@ -73,5 +74,13 @@ class BoardFactory {
                 pageable = pageable
             )
         }
+
+        fun createBoardsSaveRequest() = BoardSaveRequest(
+            title = "테스트 게시판 제목",
+            content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
+            boardType = BoardType.BOARD,
+            userId = 1L,
+            topicId = 1L
+        )
     }
 }

@@ -1,5 +1,7 @@
 package initTest.lyfe.lyfeBe.test.whisky.model
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
@@ -18,31 +20,9 @@ class WhiskyTest(
 
     Given("User, Topic 객체가 초기화되었을 때") {
 
-        val user = User(
-            1L,
-            "testName",
-            "testEmail",
-            "testPassword",
-            true,
-            true,
-            Role.USER,
-            profileUrl = "https://example.com/image.jpg",
+        val user = createTestUser()
 
-            UserStatus.ACTIVE
-        )
-        val board = Board(
-            id = 1L,
-            title = "testTile",
-            content = "testContent",
-            boardType = BoardType.BOARD,
-            user = user,
-            topic = Topic(
-                id = 1L,
-                content = "testTopic"
-            ),
-            createdAt = null,
-            updatedAt = null
-        )
+        val board = createTestBoard()
 
 
         When("user board 객체를 사용하여 새 Whisky 객체를 생성했을 때") {

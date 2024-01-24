@@ -1,22 +1,16 @@
 package initTest.lyfe.lyfeBe.test.fcm.service
 
-import initTest.lyfe.lyfeBe.test.mock.*
+import initTest.lyfe.lyfeBe.test.fcm.NotificationFactory.Companion.createNotificationHistory
+import initTest.lyfe.lyfeBe.test.mock.FakeNotificationRepository
+import initTest.lyfe.lyfeBe.test.mock.FakeUserRepository
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.board.BoardGet
-import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.board.BoardsGet
 import lyfe.lyfeBe.fcm.FCMService
 import lyfe.lyfeBe.notification.NotificationContent
-import lyfe.lyfeBe.notification.NotificationGet
-import lyfe.lyfeBe.notification.NotificationHistory
 import lyfe.lyfeBe.notification.NotificationType
-import lyfe.lyfeBe.user.Role
-import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
-import java.time.Instant
 
 
 class GetBoardNotificationGetTest(
@@ -31,31 +25,15 @@ class GetBoardNotificationGetTest(
 
     beforeContainer {
 
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            profileUrl = "https://example.com/image.jpg",
-
-            userStatus = UserStatus.ACTIVE
-        )
+        val user = createTestUser()
         fakeUserRepository.create(user)
 
         println(" NotificationContent.BOARDCOMMENTED.description")
-        println( NotificationContent.BOARDCOMMENTED.description)
+        println(NotificationContent.BOARDCOMMENTED.description)
 
-        val notificationHistory = NotificationHistory(
-            id = 1L,
-            content = NotificationContent.BOARDCOMMENTED.description,
-            notificationType = NotificationType.BOARD,
-            user = user,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-        )
+        val notificationHistory = createNotificationHistory(user)
+
+
         fakeNotificationRepository.save(notificationHistory)
     }
 
@@ -74,11 +52,9 @@ class GetBoardNotificationGetTest(
                 Sort.by("id").descending()
             )
 
-            val notificationGet = NotificationGet(
-                notificationId = cursorId,
-                pageable = pageable
+            val notificationGet = createNotificationHistory(cursorId, pageable)
 
-            )
+
             val notificationDtos = fCMService.getNotificationHistories(notificationGet)
 
             Then("조회된 알림 목록이 초기 설정과 일치하는지 확인할 때") {

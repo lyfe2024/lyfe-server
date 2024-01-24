@@ -1,6 +1,8 @@
 package initTest.lyfe.lyfeBe.test.fcm.controller
 
+import initTest.lyfe.lyfeBe.test.fcm.NotificationFactory.Companion.createNotificationHistory
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.notification.NotificationContent
@@ -21,28 +23,11 @@ class GetNotificatiionControllerTest(
 
     beforeContainer {
 
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            profileUrl = "https://example.com/image.jpg",
-
-            userStatus = UserStatus.ACTIVE
-        )
+        val user = createTestUser()
         testContainer.userRepository.create(user)
 
-        val notificationHistory = NotificationHistory(
-            id = 1L,
-            content = NotificationContent.BOARDCOMMENTED.description,
-            notificationType = NotificationType.BOARD,
-            user = user,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now(),
-        )
+        val notificationHistory = createNotificationHistory(user)
+
         testContainer.fakeNotificationRepository.save(notificationHistory)
     }
 

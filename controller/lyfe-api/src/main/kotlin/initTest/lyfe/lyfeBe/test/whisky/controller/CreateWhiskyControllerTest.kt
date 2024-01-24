@@ -1,6 +1,10 @@
 package initTest.lyfe.lyfeBe.test.whisky.controller
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardsSaveRequest
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
+import initTest.lyfe.lyfeBe.test.topic.TopicFactory.Companion.createTesteTopic
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
+import initTest.lyfe.lyfeBe.test.whisky.WhiskyFactory.Companion.createWhiskySaveRequest
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.BoardType
@@ -20,31 +24,16 @@ class CreateWhiskyControllerTest(
 
     beforeContainer {
 
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            profileUrl = "https://example.com/image.jpg",
+        val user = createTestUser()
 
-            userStatus = UserStatus.ACTIVE
-        )
         testContainer.userRepository.create(user)
 
-        val topic = Topic(1L, "testTopic")
+        val topic = createTesteTopic()
+
         testContainer.topicRepository.create(topic)
 
 
-        val req = BoardSaveRequest(
-            title = "테스트 게시판 제목",
-            content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
-            boardType = BoardType.BOARD,
-            userId = 1L,
-            topicId = 1L
-        )
+        val req = createBoardsSaveRequest()
 
         testContainer.boardController.create(req)
     }
@@ -53,10 +42,7 @@ class CreateWhiskyControllerTest(
 
     Given("Whisky 요청이 준비되었을 때") {
 
-        val request = WhiskySaveRequest(
-            userId = 1L,
-            boardId = 1L
-        )
+        val request = createWhiskySaveRequest()
 
         When("Whisky 생성 요청을 처리할 때") {
             val newWhisky = testContainer.whiskyController.create(request)

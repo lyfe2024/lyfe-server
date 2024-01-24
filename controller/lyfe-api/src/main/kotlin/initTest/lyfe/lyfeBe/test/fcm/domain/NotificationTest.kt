@@ -1,5 +1,7 @@
 package initTest.lyfe.lyfeBe.test.fcm.domain
 
+import initTest.lyfe.lyfeBe.test.fcm.NotificationFactory.Companion.createNotificationSend
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
@@ -21,27 +23,9 @@ class NotificationTest(
 
     Given("NotificationSend, User 객체가 초기화되었을 때") {
 
-        val notificationSend = NotificationSend(
-            1L,
-            "testToken",
-            NotificationType.BOARD,
-            NotificationContent.BOARDCOMMENTED
-        )
+        val notificationSend = createNotificationSend()
 
-        val user = User(
-            1L,
-            "testName",
-            "testEmail",
-            "testPassword",
-            true,
-            true,
-            Role.USER,
-            profileUrl = "https://example.com/image.jpg",
-
-            UserStatus.ACTIVE
-        )
-
-
+        val user = createTestUser()
 
         When("BoardCreate, User, Topic 객체를 사용하여 새 Board 객체를 생성했을 때") {
            val notificationHistory = NotificationHistory.from(notificationSend, user)
