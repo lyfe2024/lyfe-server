@@ -26,6 +26,8 @@ class WhiskyTest(
             true,
             true,
             Role.USER,
+            profileUrl = "https://example.com/image.jpg",
+
             UserStatus.ACTIVE
         )
         val board = Board(

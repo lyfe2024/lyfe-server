@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.persistence
 
+import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EntityListeners
 import org.springframework.data.annotation.CreatedDate
@@ -10,11 +11,14 @@ import java.time.Instant
 @Embeddable
 @EntityListeners(AuditingEntityListener::class)
 class BaseEntity(
+
+
     @CreatedDate
     @LastModifiedDate
+    @field:Column(nullable = false, updatable = false)
     var createdAt: Instant? = null,
-    @LastModifiedDate
-    var updatedAt: Instant? = null
-) {
 
-}
+    @LastModifiedDate
+    @field:Column(nullable = false)
+    var updatedAt: Instant? = null
+)

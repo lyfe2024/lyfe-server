@@ -9,6 +9,7 @@ data class Board(
     val title: String,
     val content: String,
     val boardType: BoardType,
+    val imageUrl : String? = null,
     val user: User,
     val topic: Topic,
     val createdAt: Instant?,
@@ -20,6 +21,7 @@ data class Board(
             title = boardUpdate.title,
             content = boardUpdate.content,
             boardType = boardType,
+            imageUrl = boardUpdate.imageUrl,
             user = user,
             topic = topic,
             createdAt = createdAt,
@@ -36,6 +38,7 @@ data class Board(
                 boardType = boardCreate.boardType,
                 user = user,
                 topic = topic,
+                imageUrl = boardCreate.imageUrl,
                 createdAt = Instant.now(),
                 updatedAt = Instant.now()
             )
@@ -46,6 +49,7 @@ data class Board(
                 title = boardCreate.title,
                 content = boardCreate.content,
                 boardType = boardCreate.boardType,
+                imageUrl = boardCreate.imageUrl,
                 user = boardCreate.user,
                 topic = boardCreate.topic,
                 createdAt = boardCreate.createdAt,

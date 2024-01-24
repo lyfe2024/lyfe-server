@@ -25,9 +25,12 @@ class UserJpaEntity(
     val nickname: String,
 
     val notificationConsent: Boolean,
+
     val fcmRegistration: Boolean,
 
     val withdrawnAt: Instant? = null,
+
+    val profileUrl : String,
 
     @field:NotNull
     @Enumerated(EnumType.STRING)
@@ -46,6 +49,7 @@ class UserJpaEntity(
             email = email,
             hashedPassword = hashedPassword,
             nickname = nickname,
+            profileUrl = profileUrl,
             notificationConsent = notificationConsent,
             fcmRegistration = fcmRegistration,
             withdrawnAt = withdrawnAt,
@@ -64,6 +68,7 @@ class UserJpaEntity(
             hashedPassword = user.hashedPassword,
             nickname = user.nickname,
             notificationConsent = user.notificationConsent,
+            profileUrl = user.profileUrl,
             fcmRegistration = user.fcmRegistration,
             withdrawnAt = user.withdrawnAt,
             userStatus = user.userStatus,

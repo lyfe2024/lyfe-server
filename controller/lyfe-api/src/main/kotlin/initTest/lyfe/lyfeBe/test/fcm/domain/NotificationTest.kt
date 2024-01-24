@@ -36,6 +36,8 @@ class NotificationTest(
             true,
             true,
             Role.USER,
+            profileUrl = "https://example.com/image.jpg",
+
             UserStatus.ACTIVE
         )
 

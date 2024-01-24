@@ -57,7 +57,8 @@ class BoardController(
                 content = req.content,
                 boardType = req.boardType,
                 userId = req.userId,
-                topicId = req.topicId
+                topicId = req.topicId,
+                imageUrl = req.imageUrl
             )
         )
     )
@@ -72,7 +73,8 @@ class BoardController(
             BoardUpdate(
                 boardId = boardId,
                 title = req.title,
-                content = req.content
+                content = req.content,
+                imageUrl = req.imageUrl
             )
         )
     )

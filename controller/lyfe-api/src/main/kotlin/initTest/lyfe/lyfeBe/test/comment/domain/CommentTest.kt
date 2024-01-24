@@ -33,6 +33,8 @@ class CommentTest(
             true,
             true,
             Role.USER,
+            profileUrl = "https://example.com/image.jpg",
+
             UserStatus.ACTIVE
         )
         val board = Board(
@@ -76,6 +78,8 @@ class CommentTest(
             true,
             true,
             Role.USER,
+            profileUrl = "https://example.com/image.jpg",
+
             UserStatus.ACTIVE
         )
         val board = Board(

@@ -1,15 +1,13 @@
 package initTest.lyfe.lyfeBe.test.board.domain
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardCreate
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardUpdate
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardCreate
-import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.board.BoardUpdate
-import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.user.Role
-import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
+import lyfe.lyfeBe.web.topic.TopicFactory.Companion.createTestTopic
 
 
 class BoardTest(
@@ -17,28 +15,11 @@ class BoardTest(
 
     Given("BoardCreate, User, Topic 객체가 초기화되었을 때") {
 
-        val boardCreate = BoardCreate(
-            "testTile",
-            "testContent",
-            BoardType.BOARD,
-            1L,
-            1L
-        )
+        val boardCreate = createBoardCreate()
 
-        val user = User(
-            1L,
-            "testName",
-            "testEmail",
-            "testPassword",
-            true,
-            true,
-            Role.USER,
-            UserStatus.ACTIVE
-        )
-        val topic = Topic(
-            id = 1L,
-            content = "testTopic"
-        )
+        val user = createTestUser()
+
+        val topic = createTestTopic()
 
 
         When("BoardCreate, User, Topic 객체를 사용하여 새 Board 객체를 생성했을 때") {
@@ -56,36 +37,12 @@ class BoardTest(
 
     Given("BoardUpdate와 Board 객체가 준비되었을 때") {
 
-        val boardUpdate = BoardUpdate(
-            1L,
-            "testTile",
-            "testContent"
-        )
+        val boardUpdate = createBoardUpdate()
 
-        val board = Board(
-            id = 1L,
-            title = "testTile",
-            content = "testContent",
-            boardType = BoardType.BOARD,
-            user = User(
-                1L,
-                "testName",
-                "testEmail",
-                "testPassword",
-                true,
-                true,
-                Role.USER,
-                UserStatus.ACTIVE
-                ),
-            topic = Topic(
-                id = 1L,
-                content = "testTopic"
-            ),
-            createdAt = null,
-            updatedAt = null
-        )
+        val board = createTestBoard()
 
         When("Board 객체를 BoardUpdate 정보로 업데이트했을 때") {
+
             board.update(boardUpdate)
 
             Then("해당 보드 타이틀과 본문이 변경된다 .") {

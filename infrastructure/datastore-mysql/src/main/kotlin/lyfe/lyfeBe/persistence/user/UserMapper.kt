@@ -5,20 +5,6 @@ import lyfe.lyfeBe.user.User
 
 object UserMapper {
 
-    fun mapToDomainEntity(user: UserJpaEntity): User =
-        User(
-            id = user.id,
-            email = user.email,
-            hashedPassword = user.hashedPassword,
-            nickname = user.nickname,
-            notificationConsent = user.notificationConsent,
-            fcmRegistration = user.fcmRegistration,
-            role = user.role,
-            userStatus = user.userStatus,
-            createdAt = user.baseEntity.createdAt,
-            updatedAt = user.baseEntity.updatedAt,
-            withdrawnAt = user.withdrawnAt
-        )
 
     fun mapToJpaEntity(user: User): UserJpaEntity =
         UserJpaEntity(
@@ -30,6 +16,7 @@ object UserMapper {
             fcmRegistration = user.fcmRegistration,
             withdrawnAt = user.withdrawnAt,
             role = user.role,
+            profileUrl = user.profileUrl,
             userStatus = user.userStatus,
             baseEntity = BaseEntity(
                 createdAt = user.createdAt,

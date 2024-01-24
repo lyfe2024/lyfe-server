@@ -3,7 +3,6 @@ package lyfe.lyfeBe.persistence.board
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.error.ResourceNotFoundException
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository

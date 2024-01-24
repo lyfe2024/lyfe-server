@@ -7,7 +7,6 @@ import lyfe.lyfeBe.board.dto.SaveBoardDto
 import lyfe.lyfeBe.board.dto.UpdateBoardDto
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
-import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
@@ -19,7 +18,6 @@ class BoardService(
     private val boardport: BoardPort,
     private val userport: UserPort,
     private val topicport: TopicPort,
-    private val imageport: ImagePort,
     private val whiskyPort: WhiskyPort,
     private val commentport: CommentPort
 ) {
@@ -28,26 +26,24 @@ class BoardService(
     fun get(boardGet: BoardGet): BoardDto {
 
         val board = getById(boardGet.id)
-        val image = imageport.getByUserId(board.user.id)
         val whiskyCount = fetchWhiskyCount(board.id)
         val commentCount = fetchCommentCount(board.id)
 
-        val params = BoardDtoAssembly(board, image.url, whiskyCount, commentCount)
+        val params = BoardDtoAssembly(board,  whiskyCount, commentCount)
 
-        return BoardDto.toDto(params)
+        return BoardDto.toBoardDto(params)
     }
 
 
     fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
+        
         val boards = fetchBoards(boardsGet.boardId, boardsGet.pageable)
 
         return boards.map { board ->
-            val image = fetchImageUrl(board.user.id)
             val whiskyCount = fetchWhiskyCount(board.id)
             val commentCount = fetchCommentCount(board.id)
-            val params = BoardDtoAssembly(board, image, whiskyCount, commentCount)
-
-            BoardDto.toDto(params)
+            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+            BoardDto.toBoardDto(params)
         }.toList()
     }
 
@@ -63,11 +59,10 @@ class BoardService(
         val sortedBoards = boardWithWhiskyCounts.sortedByDescending { it.second }
 
         return sortedBoards.map { (board, whiskyCount) ->
-            val image = fetchImageUrl(board.user.id)
             val commentCount = fetchCommentCount(board.id)
-            val params = BoardDtoAssembly(board, image, whiskyCount, commentCount)
+            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
 
-            BoardDto.toDto(params)
+            BoardDto.toBoardDto(params)
         }
     }
 
@@ -93,9 +88,6 @@ class BoardService(
         return boardport.findByIdCursorId(boardId, pageable).toList()
     }
 
-    private fun fetchImageUrl(userId: Long): String {
-        return imageport.getByUserId(userId).url
-    }
 
     private fun fetchCommentCount(boardId: Long) = commentport.countByBoardId(boardId)
 

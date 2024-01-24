@@ -41,6 +41,8 @@ class CommentServiceTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
+            profileUrl = "https://example.com/image.jpg",
+
             userStatus = UserStatus.ACTIVE
         )
         fakeUserRepository.create(user)

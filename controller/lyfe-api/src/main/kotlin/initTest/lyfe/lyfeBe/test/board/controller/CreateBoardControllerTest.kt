@@ -29,24 +29,13 @@ class CreateBoardControllerTest(
             notificationConsent = true,
             fcmRegistration = true,
             role = Role.USER,
-            userStatus = UserStatus.ACTIVE
+            profileUrl = "https://example.com/image.jpg",
+            userStatus = UserStatus.ACTIVE,
         )
         testContainer.userRepository.create(user)
 
         val topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
-
-
-        val image = Image(
-            id = 1L,
-            url = "https://example.com/image.jpg",
-            board = null,
-            user = user,
-            type = ImageType.PROFILE,
-            width = 100,
-            height = 100
-        )
-        testContainer.imageRepository.create(image)
 
     }
 
