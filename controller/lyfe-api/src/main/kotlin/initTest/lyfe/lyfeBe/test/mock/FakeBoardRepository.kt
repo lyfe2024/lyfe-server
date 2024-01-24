@@ -57,6 +57,10 @@ class FakeBoardRepository : BoardPort {
         TODO("Not yet implemented")
     }
 
+    override fun findRecentBoardPictures(boardId: Long, paging: Pageable): Page<Board> {
+        TODO("Not yet implemented")
+    }
+
     fun clear() {
         data.clear()
     }

@@ -10,4 +10,5 @@ interface BoardPort {
     fun update(board: Board): Board
     fun findByIdCursorId(boardId: Long, paging: Pageable): Page<Board>
     fun findPopularBoards(boardId: Long, paging: Pageable): Page<Board>
+    fun findRecentBoardPictures(boardId: Long, paging: Pageable): Page<Board>
 }

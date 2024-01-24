@@ -30,5 +30,9 @@ class BoardPersistenceAdapter(
         boardJpaRepository.findByIdCursorId(boardId, paging).map { it.toDomain() }
 
     override fun findPopularBoards(boardId: Long, paging: Pageable) =
-        boardJpaRepository.findPopularBoards(boardId, paging).map { it.toDomain() }
+        boardJpaRepository.findRecentPopularBoards(boardId, paging).map { it.toDomain() }
+
+
+    override fun findRecentBoardPictures(boardId: Long, paging: Pageable) =
+        boardJpaRepository.findRecentBoardPictures(boardId, paging).map { it.toDomain() }
 }

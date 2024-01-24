@@ -65,6 +65,24 @@ class BoardService(
             BoardDto.toBoardDto(params)
         }
     }
+    fun getBoardPictures(boardsGet: BoardsGet): List<BoardDto> {
+
+        val boards = boardport.findRecentBoardPictures(boardsGet.boardId, boardsGet.pageable)
+
+        val boardWithWhiskyCounts = boards.map { board ->
+            val whiskyCount = fetchWhiskyCount(board.id)
+            Pair(board, whiskyCount)
+        }
+
+        val sortedBoards = boardWithWhiskyCounts.sortedByDescending { it.second }
+
+        return sortedBoards.map { (board, whiskyCount) ->
+            val commentCount = fetchCommentCount(board.id)
+            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+
+            BoardDto.toBoardDto(params)
+        }
+    }
 
     fun create(boardCreate: BoardCreate): SaveBoardDto {
         val user = userport.getById(boardCreate.userId)
