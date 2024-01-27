@@ -12,6 +12,7 @@ data class Board(
     val imageUrl : String? = null,
     val user: User,
     val topic: Topic,
+    val whiskyCount : Int? = null ,
     val createdAt: Instant?,
     val updatedAt: Instant?
 ) {

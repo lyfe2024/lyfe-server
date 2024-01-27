@@ -15,6 +15,8 @@ class UserJpaEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    val profileUrl : String,
+
     @field:NotNull
     val email: String,
 
@@ -30,7 +32,6 @@ class UserJpaEntity(
 
     val withdrawnAt: Instant? = null,
 
-    val profileUrl : String,
 
     @field:NotNull
     @Enumerated(EnumType.STRING)

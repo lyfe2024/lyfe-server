@@ -7,6 +7,7 @@ import lyfe.lyfeBe.board.dto.SaveBoardDto
 import lyfe.lyfeBe.board.dto.UpdateBoardDto
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
+import lyfe.lyfeBe.fomatter.CursorGenerator.Companion.createCursorValue
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
@@ -47,9 +48,15 @@ class BoardService(
     }
 
 
-    fun getPopularBoards(boardsGet: BoardsGet): List<BoardDto> {
+    fun getPopularBoards(boardsPopularGetGet: BoardsPopularGet): List<BoardDto> {
 
-        val boards = boardport.findPopularBoards(boardsGet.boardId, boardsGet.pageable)
+        val cursorValue = createCursorValue(boardsPopularGetGet.boardId, boardsPopularGetGet.whiskyCount)
+
+
+        val boards = boardport.findPopularBoards(
+            cursorValue,
+            boardsPopularGetGet.pageable
+        )
 
         val boardWithWhiskyCounts = boards.map { board ->
             val whiskyCount = fetchWhiskyCount(board.id)
@@ -65,6 +72,7 @@ class BoardService(
             BoardDto.toBoardDto(params)
         }
     }
+
     fun getBoardPictures(boardsGet: BoardsGet): List<BoardDto> {
 
         val boards = boardport.findRecentBoardPictures(boardsGet.boardId, boardsGet.pageable)

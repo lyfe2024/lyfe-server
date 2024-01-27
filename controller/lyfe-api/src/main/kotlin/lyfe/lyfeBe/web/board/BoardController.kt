@@ -1,10 +1,7 @@
 package lyfe.lyfeBe.web.board
 
 import jakarta.validation.Valid
-import lyfe.lyfeBe.board.BoardCreate
-import lyfe.lyfeBe.board.BoardGet
-import lyfe.lyfeBe.board.BoardUpdate
-import lyfe.lyfeBe.board.BoardsGet
+import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
@@ -32,13 +29,14 @@ class BoardController(
 
 
 
-    @GetMapping("/popular")
+    @GetMapping("/popular/{boardId}/{whiskyCount}")
     fun getPopularBoards(
-        @RequestParam(required = false) cursorId: Long?,
+        @PathVariable boardId: Long,
+        @PathVariable whiskyCount: Long,
         @PageableDefault(size = 10, page = 0) pageable: Pageable,
     ): CommonResponse<List<BoardDto>> {
-        val boardId = getEffectiveCursorId(cursorId)
-        return CommonResponse(service.getPopularBoards(BoardsGet(boardId, pageable)))
+        val boardId = getEffectiveCursorId(boardId)
+        return CommonResponse(service.getPopularBoards(BoardsPopularGet(boardId,whiskyCount, pageable)))
     }
 
 
