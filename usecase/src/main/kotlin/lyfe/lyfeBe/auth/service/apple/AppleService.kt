@@ -22,8 +22,8 @@ class AppleService(
 ): AuthProviderService {
 
     override fun fetchAuthToken(authLoginRequest: AuthLogin): OAuthIdAndRefreshTokenDto {
-        val appleId = getAppleId(authLoginRequest.identityToken.toString())
-        val appleTokenResult = generateAuthToken(authLoginRequest.authorizationCode)
+        val appleId = getAppleId(authLoginRequest.idToken.toString())
+        val appleTokenResult = generateAuthToken(authLoginRequest.authorizationCode?: "")
 
         return OAuthIdAndRefreshTokenDto(
             oAuthId = appleId, refreshToken = appleTokenResult.refreshToken ?: "error"

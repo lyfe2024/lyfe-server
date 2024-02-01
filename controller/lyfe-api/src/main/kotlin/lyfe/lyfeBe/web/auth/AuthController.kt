@@ -28,7 +28,7 @@ class AuthController(
             AuthLogin(
                 socialType = req.socialType,
                 authorizationCode = req.authorizationCode,
-                identityToken = req.identityToken,
+                idToken = req.identityToken,
                 fcmToken = req.fcmToken
             )
         )
