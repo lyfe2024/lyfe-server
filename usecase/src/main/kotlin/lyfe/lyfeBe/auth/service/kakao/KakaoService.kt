@@ -23,11 +23,10 @@ class KakaoService(
     }
 
     override fun fetchAuthToken(authLoginRequest: AuthLogin): OAuthIdAndRefreshTokenDto {
-        val kakaoTokenResult = generateAuthToken(authLoginRequest.authorizationCode)
-        val kakaoId = getKakaoId(kakaoTokenResult.accessToken)
+        val kakaoId = getKakaoId(authLoginRequest.idToken?: "")
 
         return OAuthIdAndRefreshTokenDto(
-            oAuthId = kakaoId, refreshToken = kakaoTokenResult.refreshToken ?: "error"
+            oAuthId = kakaoId, refreshToken = "not supported"
         )
     }
 

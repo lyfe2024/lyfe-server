@@ -4,6 +4,7 @@ import lyfe.lyfeBe.auth.AuthLogin
 import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.auth.dto.OAuthIdAndRefreshTokenDto
 import lyfe.lyfeBe.auth.service.AuthProviderService
+import lyfe.lyfeBe.error.UnauthenticatedException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.net.URLDecoder
@@ -20,8 +21,14 @@ class GoogleService(
 ) : AuthProviderService {
 
     override fun fetchAuthToken(authLoginRequest: AuthLogin): OAuthIdAndRefreshTokenDto {
-        val params = generateTokenParams(authLoginRequest.authorizationCode)
-        val googleTokenDto = googleTokenClient.requestToken(params)
+        val code = URLDecoder.decode(authLoginRequest.authorizationCode, StandardCharsets.UTF_8)
+        val googleTokenDto = googleTokenClient.requestToken(
+            clientId = clientId,
+            redirectUri = redirectUri,
+            clientSecret = clientSecret,
+            code = code,
+            grantType = "authorization_code"
+        )
         val googleId = getGoogleId(googleTokenDto.accessToken)
         val refreshToken = googleTokenDto.refreshToken
 
@@ -34,20 +41,9 @@ class GoogleService(
         return socialType == SocialType.GOOGLE
     }
 
-    private fun generateTokenParams(authorizationCode: String): Map<String, Any> {
-        val code = URLDecoder.decode(authorizationCode, StandardCharsets.UTF_8)
-        return mapOf(
-            "client_id" to clientId,
-            "client_secret" to clientSecret,
-            "code" to code,
-            "grant_type" to "authorization_code",
-            "redirect_uri" to redirectUri
-        )
-    }
-
     private fun getGoogleId(accessToken: String): String {
         googleIdClient.getGoogleId("Bearer $accessToken").let {
-            return it.sub
+            return it["sub"] ?: throw UnauthenticatedException("googleId is null")
         }
     }
 
