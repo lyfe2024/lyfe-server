@@ -37,7 +37,7 @@ class BoardService(
 
     fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
 
-        val boards = boardport.findByIdCursorId(boardsGet.boardId, boardsGet.pageable).toList()
+        val boards = boardport.findByIdCursorId(boardsGet.boardId, boardsGet.date, boardsGet.pageable, boardsGet.type).toList()
 
         return boards.map { board ->
             val whiskyCount = fetchWhiskyCount(board.id)
@@ -48,34 +48,17 @@ class BoardService(
     }
 
 
-    fun getPopularBoards(boardsPopularGetGet: BoardsPopularGet): List<BoardDto> {
+    fun getPopularBoards(boardsPopularGet: BoardsPopularGet): List<BoardDto> {
 
-        val cursorValue = createCursorValue(boardsPopularGetGet.boardId, boardsPopularGetGet.whiskyCount)
+        val cursorValue = createCursorValue(boardsPopularGet.whiskyCount)
 
 
         val boards = boardport.findPopularBoards(
             cursorValue,
-            boardsPopularGetGet.pageable
+            boardsPopularGet.count,
+            boardsPopularGet.date,
+            boardsPopularGet.type
         )
-
-        val boardWithWhiskyCounts = boards.map { board ->
-            val whiskyCount = fetchWhiskyCount(board.id)
-            Pair(board, whiskyCount)
-        }
-
-        val sortedBoards = boardWithWhiskyCounts.sortedByDescending { it.second }
-
-        return sortedBoards.map { (board, whiskyCount) ->
-            val commentCount = fetchCommentCount(board.id)
-            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
-
-            BoardDto.toBoardDto(params)
-        }
-    }
-
-    fun getBoardPictures(boardsGet: BoardsGet): List<BoardDto> {
-
-        val boards = boardport.findRecentBoardPictures(boardsGet.boardId, boardsGet.pageable)
 
         val boardWithWhiskyCounts = boards.map { board ->
             val whiskyCount = fetchWhiskyCount(board.id)
@@ -113,5 +96,6 @@ class BoardService(
     private fun fetchCommentCount(boardId: Long) = commentport.countByBoardId(boardId)
 
     private fun fetchWhiskyCount(boardId: Long) = whiskyPort.countByBoardId(boardId)
+
 
 }

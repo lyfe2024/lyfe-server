@@ -1,18 +1,17 @@
 package lyfe.lyfeBe.fomatter
 
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-
 class CursorGenerator {
 
     companion object {
-        fun createCursorValue(id: Long, whiskyCount: Long): String {
+        fun createCursorValue(whiskyCount: Long): String {
             val pow10 = 10_000_000_000
-            val paddedWhiskyCount = (pow10 - whiskyCount).toString().padStart(10, '0')
-            val paddedId = (pow10 - id).toString().padStart(10, '0')
+            val fixedIdValue = "9999999999"
 
-            return paddedWhiskyCount + paddedId
+            val paddedWhiskyCount = (pow10 - whiskyCount).toString().padStart(10, '0')
+
+            return paddedWhiskyCount + fixedIdValue
         }
     }
+
+
 }
