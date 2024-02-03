@@ -18,39 +18,35 @@ import org.springframework.web.bind.annotation.*
 class BoardController(
     private val service: BoardService
 ) {
-    @GetMapping
+
+    //보드 최신순
+    @GetMapping("/{cursorId}")
     fun getBoards(
-        @RequestParam(required = false) cursorId: Long?,
-        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
-        ): CommonResponse<List<BoardDto>> {
+        @PathVariable(required = false) cursorId: Long?,
+        @RequestParam(required = false) date: String?,
+        @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
+    ): CommonResponse<List<BoardDto>> {
         val boardId = getEffectiveCursorId(cursorId)
-        return CommonResponse(service.getBoards(BoardsGet(boardId, pageable)))
+        return CommonResponse(service.getBoards(BoardsGet(boardId, date, pageable , type)))
     }
 
-
-
-    @GetMapping("/popular/{boardId}/{whiskyCount}")
+    // 사진없는 보드 인기글  + 오늘의 베스트 count 요청 갯수  OPTION , date Option
+    @GetMapping("/popular/{whiskyCount}")
     fun getPopularBoards(
-        @PathVariable boardId: Long,
         @PathVariable whiskyCount: Long,
+        @RequestParam(required = false) date: String?,
+        @RequestParam(required = false, defaultValue = "5") count: Int,
+        @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
         @PageableDefault(size = 10, page = 0) pageable: Pageable,
     ): CommonResponse<List<BoardDto>> {
-        val boardId = getEffectiveCursorId(boardId)
-        return CommonResponse(service.getPopularBoards(BoardsPopularGet(boardId,whiskyCount, pageable)))
+        println("couint:" + count)
+
+        return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, whiskyCount, type, count)))
     }
 
-
-    @GetMapping("/picture")
-    fun getPictureBoards(
-        @RequestParam(required = false) cursorId: Long?,
-        @PageableDefault(size = 10, page = 0) pageable: Pageable,
-    ): CommonResponse<List<BoardDto>> {
-        val boardId = getEffectiveCursorId(cursorId)
-        return CommonResponse(service.getBoardPictures(BoardsGet(boardId, pageable)))
-    }
-
-
-    @GetMapping("/{boardId}")
+    // 사진없는글 단건 조회
+    @GetMapping("/detail/{boardId}")
     fun get(
         @PathVariable(value = "boardId") boardId: Long,
     ) = CommonResponse(service.get(BoardGet(boardId)))
