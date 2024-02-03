@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.board
 
 import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.error.ResourceNotFoundException
 import org.springframework.data.domain.Pageable
@@ -26,13 +27,11 @@ class BoardPersistenceAdapter(
         return boardJpaRepository.save(update).toDomain()
     }
 
-    override fun findByIdCursorId(boardId: Long, paging: Pageable) =
-        boardJpaRepository.findByIdCursorId(boardId, paging).map { it.toDomain() }
-
-    override fun findPopularBoards(cursor: String, paging: Pageable) =
-        boardJpaRepository.findRecentPopularBoards(cursor, paging).map { it.toDomain() }
+    override fun findByIdCursorId(cursorId: Long, date: String?, pageable: Pageable, type: BoardType) =
+        boardJpaRepository.findByIdCursorId(cursorId, date, type, pageable).map { it.toDomain() }
 
 
-    override fun findRecentBoardPictures(boardId: Long, paging: Pageable) =
-        boardJpaRepository.findRecentBoardPictures(boardId, paging).map { it.toDomain() }
+    override fun findPopularBoards(cursor: String, count: Int, date: String?, type: BoardType) =
+        boardJpaRepository.findBoardsWithWhiskyCount(cursor, count, date, type).map { it.toDomain() }
+
 }

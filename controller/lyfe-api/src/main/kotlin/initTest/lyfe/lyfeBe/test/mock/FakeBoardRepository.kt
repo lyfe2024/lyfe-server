@@ -1,6 +1,7 @@
 package initTest.lyfe.lyfeBe.test.mock
 
 import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.port.out.BoardPort
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -35,32 +36,30 @@ class FakeBoardRepository : BoardPort {
         return board
     }
 
-
-
-    override fun findByIdCursorId(boardId: Long, paging: Pageable): Page<Board> {
-
-        // data 리스트에서 필터링 및 정렬을 수행
-        val filteredData = data.filter {
-             it.id < boardId
-        }.sortedByDescending { it.id }
-
-        // 페이징 처리
-        val pageStart = paging.pageNumber * paging.pageSize
-        val pageEnd = (pageStart + paging.pageSize).coerceAtMost(filteredData.size)
-        val pageContent = filteredData.subList(pageStart, pageEnd)
-
-        return PageImpl(pageContent, paging, paging.pageSize.toLong())
-
+    override fun findByIdCursorId(cursorId: Long, date: String?, page: Pageable, type: BoardType): List<Board> {
+        TODO("Not yet implemented")
     }
 
-    override fun findPopularBoards(cursor: String, paging: Pageable): Page<Board> {
+    override fun findPopularBoards(cursor: String, count: Int, date: String?, type: BoardType): List<Board> {
         TODO("Not yet implemented")
     }
 
 
-    override fun findRecentBoardPictures(boardId: Long, paging: Pageable): Page<Board> {
-        TODO("Not yet implemented")
-    }
+//    override fun findByIdCursorId(boardId: Long, date: String, paging: Pageable): Page<Board> {
+//
+//        // data 리스트에서 필터링 및 정렬을 수행
+//        val filteredData = data.filter {
+//            it.id < boardId
+//        }.sortedByDescending { it.id }
+//
+//        // 페이징 처리
+//        val pageStart = paging.pageNumber * paging.pageSize
+//        val pageEnd = (pageStart + paging.pageSize).coerceAtMost(filteredData.size)
+//        val pageContent = filteredData.subList(pageStart, pageEnd)
+//
+//        return PageImpl(pageContent, paging, paging.pageSize.toLong())
+//
+//    }
 
     fun clear() {
         data.clear()
