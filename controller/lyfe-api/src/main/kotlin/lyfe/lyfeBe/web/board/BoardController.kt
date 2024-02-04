@@ -37,11 +37,8 @@ class BoardController(
         @PathVariable whiskyCount: Long,
         @RequestParam(required = false) date: String?,
         @RequestParam(required = false, defaultValue = "5") count: Int,
-        @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
-        @PageableDefault(size = 10, page = 0) pageable: Pageable,
+        @RequestParam(required = false, defaultValue = "BOARD") type: BoardType
     ): CommonResponse<List<BoardDto>> {
-        println("couint:" + count)
-
         return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, whiskyCount, type, count)))
     }
 
