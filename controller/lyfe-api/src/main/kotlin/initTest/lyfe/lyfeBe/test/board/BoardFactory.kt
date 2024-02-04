@@ -68,10 +68,23 @@ class BoardFactory {
             )
         }
 
-        fun createBoardsGet(boardId: Long, pageable: Pageable): BoardsGet {
+
+        //Todo
+        fun createBoardsGet(boardId: Long, pageable: Pageable, type: BoardType, date: String): BoardsGet {
             return BoardsGet(
                 boardId = boardId,
-                pageable = pageable
+                date,
+                pageable,
+                type,
+            )
+        }
+
+        fun createPopularBoard(date: String, whiskyCount: Long, type: BoardType, count: Int): BoardsPopularGet {
+            return BoardsPopularGet(
+                date = date,
+                whiskyCount = whiskyCount,
+                type = type,
+                count = count,
             )
         }
 
