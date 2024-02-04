@@ -58,13 +58,14 @@ class GetBoardServiceGetTest(
         fakeTopicRepository.create(topic)
 
         board1 = createTestBoard(
-            id = 1L,
+            id = 1,
             boardType = BoardType.BOARD_PICTURE,
             createdAt = testDate
         )
         board2 = createTestBoard(
-            id = 2L,
+            id = 2,
             boardType = BoardType.BOARD_PICTURE,
+            title = "2번째보드입니다",
             createdAt = testDate
         )
 
@@ -77,6 +78,7 @@ class GetBoardServiceGetTest(
         whisky = createTestWhisky(user = user, board = board1)
 
         fakeWhiskyRepository.create(whisky)
+        fakeWhiskyRepository.create(whisky)
 
         comment = createTestComment(user = user, board = board1)
 
@@ -84,6 +86,8 @@ class GetBoardServiceGetTest(
     }
 
     afterContainer {
+        fakeBoardRepository.clear()
+        fakeWhiskyRepository.clear()
         fakeCommentRepository.clear()
     }
 
