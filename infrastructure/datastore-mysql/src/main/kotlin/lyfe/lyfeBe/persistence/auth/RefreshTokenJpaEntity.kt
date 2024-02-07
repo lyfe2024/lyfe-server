@@ -15,7 +15,7 @@ class RefreshTokenJpaEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    val refreshToken: String,
+    var refreshToken: String,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_refresh_token_user_id"))
@@ -34,21 +34,16 @@ class RefreshTokenJpaEntity(
             user = user.toDomain(),
         )
     }
+    fun update(refreshToken: String) {
+        this.refreshToken = refreshToken
+    }
 
     companion object {
-        fun from(refreshToken: RefreshToken) =
-            RefreshTokenJpaEntity(
-                id = refreshToken.id,
-                refreshToken = refreshToken.refreshToken,
-                user = UserJpaEntity.from(refreshToken.user),
-            )
-
-        fun update(refreshToken: RefreshToken) =
-            RefreshTokenJpaEntity(
-                id = refreshToken.id,
-                refreshToken = refreshToken.refreshToken,
-                user = UserJpaEntity.from(refreshToken.user),
-            )
+        fun from(refreshToken: RefreshToken) = RefreshTokenJpaEntity(
+            id = refreshToken.id,
+            refreshToken = refreshToken.refreshToken,
+            user = UserJpaEntity.from(refreshToken.user)
+        )
     }
 
 }

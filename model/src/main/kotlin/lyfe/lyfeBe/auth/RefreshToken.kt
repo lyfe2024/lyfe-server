@@ -11,7 +11,7 @@ data class RefreshToken(
     companion object {
         fun from(refreshTokenCreate: RefreshTokenCreate) =
             RefreshToken(
-                id = refreshTokenCreate.userId,
+                id = 0,
                 refreshToken = refreshTokenCreate.refreshToken,
                 user = refreshTokenCreate.user,
             )
