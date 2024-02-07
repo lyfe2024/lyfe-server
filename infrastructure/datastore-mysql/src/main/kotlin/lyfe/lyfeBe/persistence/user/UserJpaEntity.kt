@@ -35,6 +35,7 @@ class UserJpaEntity(
 
     val socialId: String,
     val socialType : SocialType,
+    @Column(length = 5000)
     val socialRefreshToken: String? = null,
 
     @field:NotNull
@@ -57,11 +58,14 @@ class UserJpaEntity(
             profileUrl = profileUrl,
             socialId = socialId,
             socialType = socialType,
+            socialRefreshToken = socialRefreshToken,
             notificationConsent = notificationConsent,
             fcmRegistration = fcmRegistration,
             withdrawnAt = withdrawnAt,
             userStatus = userStatus,
             role = role,
+            createdAt = baseEntity.createdAt,
+            updatedAt = baseEntity.updatedAt
         )
 
     }

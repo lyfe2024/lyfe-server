@@ -9,6 +9,7 @@ import lyfe.lyfeBe.auth.dto.OAuthIdAndRefreshTokenDto
 import lyfe.lyfeBe.auth.dto.TokenDto
 import lyfe.lyfeBe.auth.port.out.RefreshTokenPort
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.EMAIL_CLAIM
+import lyfe.lyfeBe.auth.service.JwtTokenInfo.REFRESH_TOKEN
 import lyfe.lyfeBe.error.ResourceNotFoundException
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
@@ -43,8 +44,9 @@ class AuthService(
     fun join(userJoin: UserJoin): TokenDto {
         val claims = jwtTokenValidator.verifyToken(userJoin.userToken)
         val email = claims[EMAIL_CLAIM] as String
+        val socialRefreshToken = claims[REFRESH_TOKEN] as String
 
-        val user = User.from(userJoin, email, passwordEncoder.encode(email+"lyfe"))
+        val user = User.from(userJoin, email, passwordEncoder.encode(email+"lyfe"), socialRefreshToken)
         userPort.create(user)
 
         return login(LoginDto.fromUser(user))
@@ -82,14 +84,7 @@ class AuthService(
         val generateToken = jwtTokenProvider.generateToken(authentication = authentication)
         val user = getUser(authentication.name)
 
-        val refreshToken = RefreshToken.from(
-            RefreshTokenCreate(
-                userId = user.id,
-                refreshToken = generateToken.refreshToken,
-                user = user
-            )
-        )
-        refreshTokenPort.create(refreshToken)
+        saveOrUpdateRefreshToken(generateToken.refreshToken, user)
 
         return TokenDto(
             accessToken = generateToken.accessToken,
@@ -98,16 +93,13 @@ class AuthService(
     }
 
     fun saveOrUpdateRefreshToken(token: String, user: User) {
-        val findByUserToken = refreshTokenPort.findByUser(user)
         val refreshToken = RefreshToken.from(
             RefreshTokenCreate(
-                userId = user.id,
                 refreshToken = token,
                 user = user
             )
         )
-        if (findByUserToken == null) { refreshTokenPort.create(refreshToken) }
-        else refreshTokenPort.update(refreshToken)
+        refreshTokenPort.saveOrUpdate(refreshToken)
     }
 
     fun fetchSocialEmail(authLogin: AuthLogin): OAuthIdAndRefreshTokenDto {
@@ -120,5 +112,21 @@ class AuthService(
     private fun getUser(email: String): User {
         return userPort.getByEmail(email)
             ?: throw ResourceNotFoundException("회원가입이 필요합니다.")
+    }
+
+    fun revoke(){
+        val loginUserId = getLoginUserId()
+        val revokeUser = userPort.findById(loginUserId)
+            ?: throw ResourceNotFoundException("해당 계정이 존재하지 않습니다.")
+
+        authProviderServices.find { it.isSupport(revokeUser.socialType) }
+            ?.revoke(revokeUser.socialId, revokeUser.socialRefreshToken)
+
+        refreshTokenPort.deleteByUserId(loginUserId)
+        userPort.update(revokeUser.withdraw())
+    }
+
+    fun getLoginUserId(): Long {
+        return SecurityUtils.getLoginUserId(userPort)
     }
 }

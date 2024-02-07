@@ -34,6 +34,10 @@ class AppleService(
         return socialType == SocialType.APPLE
     }
 
+    override fun revoke(socialId: String, socialRefreshToken: String?): Boolean {
+        TODO("Not yet implemented")
+    }
+
     fun getAppleId(identityToken: String): String {
         val headers = appleJwtParser.parseHeaders(identityToken)
         val applePublicKeys = appleClient.getApplePublicKeys()

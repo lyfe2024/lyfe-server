@@ -27,6 +27,24 @@ data class User(
         }
     }
 
+    fun withdraw() =
+        User(
+            id = id,
+            email = "",
+            hashedPassword = "",
+            nickname = "탈퇴한 유저",
+            socialId = "",
+            socialType = socialType,
+            socialRefreshToken = "",
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            role = Role.GUEST,
+            userStatus = UserStatus.WITHDRAWN,
+            createdAt = createdAt,
+            updatedAt = Instant.now(),
+            withdrawnAt = Instant.now(),
+        )
+
     fun updateNickName(nickname: String) =
         User(
             id = id,
@@ -47,7 +65,7 @@ data class User(
         )
 
     companion object {
-        fun from(userJoin: UserJoin, email: String, password: String) =
+        fun from(userJoin: UserJoin, email: String, password: String, socialRefreshToken: String?) =
             User(
                 id = 0,
                 email = email,
@@ -55,7 +73,7 @@ data class User(
                 nickname = userJoin.nickname,
                 socialId = email.split("@")[0],
                 socialType = SocialType.valueOf(email.split("@")[1]),
-                socialRefreshToken = userJoin.userToken,
+                socialRefreshToken = socialRefreshToken,
                 notificationConsent = false,
                 fcmRegistration = false,
                 role = Role.USER,

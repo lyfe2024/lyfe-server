@@ -66,4 +66,10 @@ class AuthController(
             )
         )
     )
+
+    @PostMapping("/revoke")
+    fun revoke(
+    ) = CommonResponse(
+        service.revoke()
+    )
 }

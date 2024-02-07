@@ -41,6 +41,20 @@ class GoogleService(
         return socialType == SocialType.GOOGLE
     }
 
+    override fun revoke(socialId: String, socialRefreshToken: String?): Boolean {
+        val googleRefreshTokenDto = googleTokenClient.refreshToken(
+            clientId = clientId,
+            clientSecret = clientSecret,
+            refreshToken = socialRefreshToken ?: throw UnauthenticatedException("refreshToken is null"),
+            grantType = "refresh_token"
+        )
+        val accessToken = googleRefreshTokenDto.accessToken
+        val response = googleTokenClient.revoke(accessToken)
+
+        require(response.status() == 200)
+        return true
+    }
+
     private fun getGoogleId(accessToken: String): String {
         googleIdClient.getGoogleId("Bearer $accessToken").let {
             return it["sub"] ?: throw UnauthenticatedException("googleId is null")
