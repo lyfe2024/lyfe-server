@@ -5,9 +5,11 @@ import io.jsonwebtoken.Jwts
 import lyfe.lyfeBe.auth.AuthLogin
 import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.auth.dto.OAuthIdAndRefreshTokenDto
+import lyfe.lyfeBe.auth.dto.apple.AppleRevokeRequest
 import lyfe.lyfeBe.auth.dto.apple.AppleTokenRequest
 import lyfe.lyfeBe.auth.dto.apple.AppleTokenResult
 import lyfe.lyfeBe.auth.service.AuthProviderService
+import lyfe.lyfeBe.error.UnauthenticatedException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -35,7 +37,17 @@ class AppleService(
     }
 
     override fun revoke(socialId: String, socialRefreshToken: String?): Boolean {
-        TODO("Not yet implemented")
+        val response = appleClient.revoke(
+            AppleRevokeRequest(
+                clientId = appleBundleId,
+                clientSecret = appleCreateClientSecret.createClientSecret(),
+                token = socialRefreshToken ?: throw UnauthenticatedException("refreshToken is null"),
+                tokenTypeHint = "refresh_token"
+            )
+        )
+
+        require(response.status() == 200)
+        return true
     }
 
     fun getAppleId(identityToken: String): String {
