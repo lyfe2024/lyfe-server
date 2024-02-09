@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.persistence.report
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import lyfe.lyfeBe.report.Report
 import lyfe.lyfeBe.report.port.out.ReportPort
 import org.springframework.data.domain.Pageable
@@ -10,10 +11,17 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class ReportPersistenceAdapter(
     private val reportJpaRepository: ReportJpaRepository
-): ReportPort {
+) : ReportPort {
+
+    val log = KotlinLogging.logger {}
+
     @Transactional
     override fun create(report: Report): Report {
         check(report.id == 0L) { "ID가 0 or null이 아니면 생성할 수 없습니다." }
+        return reportJpaRepository.save(ReportJpaEntity.from(report)).toDomain()
+    }
+
+    override fun update(report: Report): Report {
         return reportJpaRepository.save(ReportJpaEntity.from(report)).toDomain()
     }
 
@@ -31,19 +39,18 @@ class ReportPersistenceAdapter(
     }
 
     override fun getReportsWithCursor(
-        reportId: Long,
         cursorId: Long,
         pageable: Pageable
     ): List<Report> {
-        return reportJpaRepository.findAllByIdAndIdLessThanOrderByIdDesc(reportId, cursorId, pageable)
+        return reportJpaRepository.findReportsWithCursor(cursorId, pageable)
             .map { it.toDomain() }.toList()
     }
 
-    override fun cancel(report: Report) {
-        ReportJpaEntity.from(report).let {
-            it.cancelReport()
-            reportJpaRepository.save(it)
-        }
+    override fun cancel(report: Report): Report {
+        val from = ReportJpaEntity.from(report)
+        from.cancelReport()
+        val save = reportJpaRepository.save(from)
+        return save.toDomain()
     }
 
     override fun getReportedCountsByUserIds(userIds: Set<Long>): Map<Long, Int> {

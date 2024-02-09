@@ -6,6 +6,7 @@ import lyfe.lyfeBe.report.ReportGets
 import lyfe.lyfeBe.report.dto.ReportDto
 import lyfe.lyfeBe.report.dto.SaveReportDto
 import lyfe.lyfeBe.report.service.ReportService
+import lyfe.lyfeBe.utils.ControllerUtils
 import lyfe.lyfeBe.web.report.req.SaveReportRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -23,7 +24,7 @@ class ReportController(
     ): CommonResponse<SaveReportDto> {
         return service.createReport(
             ReportCreate(
-                reportTarget = req.reportType,
+                reportTarget = req.reportTarget,
                 reportTargetId = req.reportTargetId
             )
         ).let { CommonResponse(it) }
@@ -39,24 +40,23 @@ class ReportController(
 
     @GetMapping
     fun getReports(
-        @RequestParam(required = false) reportId: Long,
         @RequestParam(required = false) cursorId: Long,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
     ): CommonResponse<List<ReportDto>> {
-        return service.getReportsByUserId(
+        val reportId = ControllerUtils.getEffectiveCursorId(cursorId)
+        return service.getReports(
             ReportGets(
-                reportId = reportId,
-                cursorId = cursorId,
+                cursorId = reportId,
                 pageable = pageable
             )
         ).let { CommonResponse(it) }
     }
 
-    @PostMapping("/cancel")
+    @PutMapping("/{reportId}/cancel")
     fun cancelReport(
-        @RequestBody req: SaveReportRequest
+        @PathVariable reportId: Long
     ): CommonResponse<SaveReportDto> {
-        return service.cancelReport(req.reportTargetId)
+        return service.cancelReport(reportId)
             .let { CommonResponse(it) }
     }
 

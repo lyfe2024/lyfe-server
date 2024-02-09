@@ -1,9 +1,12 @@
 package lyfe.lyfeBe.report.service
 
 import lyfe.lyfeBe.auth.service.SecurityUtils
+import lyfe.lyfeBe.board.port.out.BoardPort
+import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.report.Report
 import lyfe.lyfeBe.report.ReportCreate
 import lyfe.lyfeBe.report.ReportGets
+import lyfe.lyfeBe.report.ReportTarget
 import lyfe.lyfeBe.report.dto.ReportDto
 import lyfe.lyfeBe.report.dto.SaveReportDto
 import lyfe.lyfeBe.report.port.out.ReportPort
@@ -17,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReportService(
     private val reportPort: ReportPort,
-    private val userPort: UserPort
+    private val userPort: UserPort,
+    private val boardPort: BoardPort,
+    private val commentPort: CommentPort
 ) {
 
     // 신고 생성
@@ -25,23 +30,23 @@ class ReportService(
     fun createReport(reportCreate: ReportCreate): SaveReportDto {
         val user = getLoginUser()
         val reportedUser = userPort.getById(reportCreate.reportTargetId)
+        validateReportTargetExists(reportCreate.reportTarget, reportCreate.reportTargetId)
         val report = Report.from(reportCreate, user, reportedUser)
         checkDuplicatedReport(report)
-        return SaveReportDto.from(report)
+        return SaveReportDto.from(reportPort.create(report))
     }
 
     // 신고 단건 조회
     fun getReportById(reportId: Long): ReportDto {
         val report = reportPort.getById(reportId)
-        val reportedUser = userPort.getById(report.reportTargetId)
+        val reportedUser = userPort.getById(report.reportedUser.id)
         val reportedCount = reportPort.getReportedCount(report.reportTargetId)
         return ReportDto.from(report, reportedUser, reportedCount)
     }
 
     // 신고 리스트 조회
-    fun getReportsByUserId(command: ReportGets): List<ReportDto> {
+    fun getReports(command: ReportGets): List<ReportDto> {
         val reports = reportPort.getReportsWithCursor(
-            reportId = command.reportId,
             cursorId = command.cursorId,
             pageable = command.pageable
         )
@@ -65,8 +70,8 @@ class ReportService(
     fun cancelReport(reportId: Long): SaveReportDto {
         val report = reportPort.getById(reportId)
         checkAdminRole()
-        reportPort.cancel(report)
-        return SaveReportDto.from(report)
+        val cancel = reportPort.cancel(report)
+        return SaveReportDto.from(reportPort.update(cancel))
     }
 
 
@@ -80,8 +85,18 @@ class ReportService(
         require(user.role == Role.ADMIN) { "관리자만 이 작업을 수행할 수 있습니다." }
     }
 
-
     fun getLoginUser(): User {
         return SecurityUtils.getLoginUser(userPort)
+    }
+
+    fun validateReportTargetExists(reportTarget: ReportTarget, reportTargetId: Long) {
+        require(reportTargetId > 0L) { "신고 대상 ID가 유효하지 않습니다." }
+
+        when (reportTarget) {
+            ReportTarget.BOARD, ReportTarget.BOARD_PICTURE -> boardPort.getById(reportTargetId)
+            ReportTarget.USER -> userPort.getById(reportTargetId)
+            ReportTarget.COMMENT -> commentPort.getById(reportTargetId)
+            else -> throw IllegalArgumentException("지원하지 않는 신고 대상 유형입니다.")
+        }
     }
 }

@@ -86,6 +86,9 @@ class Cancellation(
         if (!isCanceled) {
             isCanceled = true
             canceledAt = whenCanceled
+        } else {
+            isCanceled = false
+            canceledAt = null
         }
     }
 }
