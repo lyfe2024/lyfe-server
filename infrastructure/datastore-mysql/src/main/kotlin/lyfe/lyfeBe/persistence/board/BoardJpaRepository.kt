@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
-
+// test
     @Query(
         "SELECT b " +
                 "FROM BoardJpaEntity b " +
