@@ -30,4 +30,6 @@ class TopicPersistenceAdapter(
             cursorId,
             pageable
         ).map { it.toDomain() }
+
+    override fun getToday() = topicRepository.findByDate()
 }

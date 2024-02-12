@@ -26,4 +26,6 @@ class TopicService(
 
     }
 
+    fun getToday() = topicPort.getToday()
+
 }
