@@ -4,6 +4,7 @@ import initTest.lyfe.lyfeBe.test.mock.FakeBoardRepository
 import initTest.lyfe.lyfeBe.test.mock.FakeCommentRepository
 import initTest.lyfe.lyfeBe.test.mock.FakeTopicRepository
 import initTest.lyfe.lyfeBe.test.mock.FakeUserRepository
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
@@ -33,18 +34,7 @@ class CommentServiceTest(
 
     beforeContainer {
 
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            profileUrl = "https://example.com/image.jpg",
-
-            userStatus = UserStatus.ACTIVE
-        )
+        val user = createTestUser()
         fakeUserRepository.create(user)
 
         val topic = Topic(0, "testTopic")

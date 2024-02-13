@@ -41,4 +41,5 @@ interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
         """, nativeQuery = true
     )
     fun findBoardsWithWhiskyCount(cursorId: String, count: Int, date: String?, type: BoardType): List<BoardJpaEntity>
+
 }

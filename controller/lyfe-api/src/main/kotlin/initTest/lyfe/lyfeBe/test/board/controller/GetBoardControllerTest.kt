@@ -7,12 +7,8 @@ import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.dto.BoardDto
-import lyfe.lyfeBe.image.Image
-import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.whisky.req.WhiskySaveRequest
 import org.springframework.data.domain.PageRequest

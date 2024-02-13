@@ -28,7 +28,7 @@ class NotificationTest(
         val user = createTestUser()
 
         When("BoardCreate, User, Topic 객체를 사용하여 새 Board 객체를 생성했을 때") {
-           val notificationHistory = NotificationHistory.from(notificationSend, user)
+            val notificationHistory = NotificationHistory.from(notificationSend, user)
 
             Then("생성된 Board 객체의 속성이 boardCreate와 일치") {
                 notificationHistory.user.id shouldBe 1L

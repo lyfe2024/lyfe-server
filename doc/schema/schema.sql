@@ -16,6 +16,7 @@ create table user
     email                varchar(255)                 null,
     hashed_password      varchar(255)                 null,
     nickname             varchar(255)                 null,
+    profile_url          varchar(1024)                null,
     role                 enum ('ADMIN', 'USER')       null,
     user_status          enum ('ACTIVE', 'WITHDRAWN') null,
     fcm_registration     bit                          not null,

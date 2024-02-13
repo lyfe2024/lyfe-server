@@ -1,5 +1,6 @@
 package initTest.lyfe.lyfeBe.test.user
 
+import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
@@ -11,23 +12,24 @@ class UserFactory {
             name: String = "testName",
             email: String = "testEmail",
             password: String = "testPassword",
-            isAdmin: Boolean = true,
-            isActive: Boolean = true,
             role: Role = Role.USER,
             profileUrl: String = "https://example.com/image.jpg",
             status: UserStatus = UserStatus.ACTIVE
         ): User {
             return User(
-                id,
-                name,
-                email,
-                password,
-                isAdmin,
-                isActive,
-                role,
-                profileUrl,
-                status
-            )
+                id = id,
+                nickname = name,
+                email = email,
+                hashedPassword = password,
+                socialId = "",
+                socialType = SocialType.GOOGLE,
+                socialRefreshToken = "@@@@@",
+                notificationConsent = true,
+                fcmRegistration = true,
+                role = role,
+                profileUrl = profileUrl,
+                userStatus = status,
+                )
         }
     }
 }

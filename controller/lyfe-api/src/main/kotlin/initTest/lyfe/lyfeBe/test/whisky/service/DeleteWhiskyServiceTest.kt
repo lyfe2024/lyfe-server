@@ -3,6 +3,7 @@ package initTest.lyfe.lyfeBe.test.whisky.service
 import initTest.lyfe.lyfeBe.test.mock.FakeBoardRepository
 import initTest.lyfe.lyfeBe.test.mock.FakeUserRepository
 import initTest.lyfe.lyfeBe.test.mock.FakeWhiskyRepository
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import lyfe.lyfeBe.board.Board
@@ -30,17 +31,7 @@ class DeleteWhiskyServiceTest(
 
     beforeContainer {
         // 테스트에 필요한 사용자, 토픽, 게시물을 미리 생성하고 저장
-        val user = User(
-            id = 0,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            profileUrl = "https://example.com/image.jpg",
-            userStatus = UserStatus.ACTIVE
-        )
+        val user = createTestUser()
         fakeUserRepository.create(user)
 
         val board = Board(
@@ -87,7 +78,7 @@ class DeleteWhiskyServiceTest(
                     fakeWhiskyRepository.get(newWhisky.whiskyId)
                 }
             } //FIXME 이게 과연 필요한 테스트일까? 원래 구현체에선 멱등성 때문에 없는 아이디로도 정상동작하게했는데 어렵네
-              // 컨트롤러에선 Create 만 테스트.
+            // 컨트롤러에선 Create 만 테스트.
         }
     }
 })

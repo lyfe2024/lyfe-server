@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.user
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
@@ -28,10 +29,13 @@ class UserJpaEntity(
 
     val notificationConsent: Boolean,
 
-    val fcmRegistration: Boolean,
 
+    val fcmRegistration: Boolean,
     val withdrawnAt: Instant? = null,
 
+    val socialId: String,
+    val socialType : SocialType,
+    val socialRefreshToken: String? = null,
 
     @field:NotNull
     @Enumerated(EnumType.STRING)
@@ -51,13 +55,13 @@ class UserJpaEntity(
             hashedPassword = hashedPassword,
             nickname = nickname,
             profileUrl = profileUrl,
+            socialId = socialId,
+            socialType = socialType,
             notificationConsent = notificationConsent,
             fcmRegistration = fcmRegistration,
             withdrawnAt = withdrawnAt,
             userStatus = userStatus,
             role = role,
-            createdAt = baseEntity.createdAt,
-            updatedAt = baseEntity.updatedAt
         )
 
     }
@@ -68,6 +72,9 @@ class UserJpaEntity(
             email = user.email,
             hashedPassword = user.hashedPassword,
             nickname = user.nickname,
+            socialId = user.socialId,
+            socialType = user.socialType,
+            socialRefreshToken = user.socialRefreshToken,
             notificationConsent = user.notificationConsent,
             profileUrl = user.profileUrl,
             fcmRegistration = user.fcmRegistration,
@@ -77,6 +84,26 @@ class UserJpaEntity(
             baseEntity = BaseEntity(
                 createdAt = user.createdAt,
                 updatedAt = user.updatedAt
+            )
+        )
+
+        fun update(user: User) = UserJpaEntity(
+            id = user.id,
+            email = user.email,
+            hashedPassword = user.hashedPassword,
+            nickname = user.nickname,
+            socialId = user.socialId,
+            socialType = user.socialType,
+            socialRefreshToken = user.socialRefreshToken,
+            notificationConsent = user.notificationConsent,
+            fcmRegistration = user.fcmRegistration,
+            withdrawnAt = user.withdrawnAt,
+            userStatus = user.userStatus,
+            role = user.role,
+            profileUrl = user.profileUrl,
+            baseEntity = BaseEntity(
+                createdAt = user.createdAt,
+                updatedAt = Instant.now()
             )
         )
     }

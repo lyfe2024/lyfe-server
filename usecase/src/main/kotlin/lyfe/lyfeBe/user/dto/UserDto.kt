@@ -5,14 +5,14 @@ import lyfe.lyfeBe.user.User
 data class UserDto(
     val id: Int,
     val username: String,
-    val profile: String
+    val profile: String?
 ) {
     companion object {
-        fun from(user: User , url : String): UserDto {
+        fun from(user: User): UserDto {
             return UserDto(
                 id = user.id.toInt(),
                 username = user.nickname,
-                profile = url
+                profile = user.profileUrl
             )
         }
     }

@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import lyfe.lyfeBe.auth.port.`in`.AuthenticationUseCase
-import lyfe.lyfeBe.auth.JwtTokenValidator
+import lyfe.lyfeBe.auth.service.JwtTokenInfo
 import lyfe.lyfeBe.error.UnauthenticatedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
@@ -24,9 +24,8 @@ class JwtAuthenticationFilter(
         val token = extractToken(request)
         if (token != null && StringUtils.hasText(token)) {
             authenticateUserByToken(token)
-            filterChain.doFilter(request, response)
-        } else
-            filterChain.doFilter(request, response)
+        }
+        filterChain.doFilter(request, response)
     }
 
     private fun authenticateUserByToken(token: String) {
@@ -34,15 +33,14 @@ class JwtAuthenticationFilter(
             val authentication = authenticationUseCase.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
         } catch (e: UnauthenticatedException) {
-            logger.error("Authentication failed: ${e.message}")
             SecurityContextHolder.clearContext()
         }
     }
 
     fun extractToken(request: HttpServletRequest): String? {
-        val bearerToken = request.getHeader(JwtTokenValidator.AUTHORIZATION_HEADER)
-        return if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtTokenValidator.BEARER_TYPE)) {
-            bearerToken.substring(JwtTokenValidator.BEARER_TYPE.length).trim()
+        val bearerToken = request.getHeader(JwtTokenInfo.AUTHORIZATION_HEADER)
+        return if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtTokenInfo.BEARER_TYPE)) {
+            bearerToken.substring(JwtTokenInfo.BEARER_TYPE.length).trim()
         } else null
     }
 }

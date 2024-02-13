@@ -1,6 +1,7 @@
 package initTest.lyfe.lyfeBe.test.comment.controller
 
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
@@ -20,18 +21,7 @@ class UpdateCommentControllerTest(
 
     beforeContainer {
 
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            profileUrl = "https://example.com/image.jpg",
-
-            userStatus = UserStatus.ACTIVE
-        )
+        val user = createTestUser()
         testContainer.userRepository.create(user)
 
         val topic = Topic(1L, "testTopic")
@@ -59,7 +49,7 @@ class UpdateCommentControllerTest(
             commentGroupId = null
         )
 
-       testContainer.commentController.create(req, 1L)
+        testContainer.commentController.create(req, 1L)
 
         When("댓글을 업데이트 했을 때") {
 

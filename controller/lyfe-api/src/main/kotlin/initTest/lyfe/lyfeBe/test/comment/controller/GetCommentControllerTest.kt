@@ -1,57 +1,38 @@
 package initTest.lyfe.lyfeBe.test.comment.controller
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
 import initTest.lyfe.lyfeBe.test.mock.FakeCommentRepository
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import java.time.Instant
 
 class GetCommentControllerTest(
-): BehaviorSpec({
+) : BehaviorSpec({
 
     val testContainer = TestContainer.build()
-
+    lateinit var board: Board
+    lateinit var topic: Topic
+    lateinit var user: User
 
     beforeContainer {
 
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            profileUrl = "https://example.com/image.jpg",
-
-            userStatus = UserStatus.ACTIVE
-        )
+         user = createTestUser()
         testContainer.userRepository.create(user)
 
-        val topic = Topic(1L, "testTopic")
+        topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
 
 
-        val board = Board(
-            id = 1L,
-            title = "testTitle",
-            content = "testContent",
-            boardType = BoardType.BOARD,
-            user = user,
-            topic = topic,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        board = createTestBoard()
         testContainer.boardRepository.create(board)
 
     }
@@ -63,21 +44,20 @@ class GetCommentControllerTest(
             commentGroupId = null
         )
 
-        testContainer.commentController.create(req, 1L)
+        val comment = testContainer.commentController.create(req, board.id)
 
         When("댓글을 조회 했을 때") {
-            val res = testContainer.commentController.getComment(1L).result
+            val res = testContainer.commentController.getComment(comment.result.id).result
 
             Then("저장된 댓글의 필드와 응답값과 일치해야 한다.") {
                 res.commentGroupId shouldBe null
                 res.content shouldBe req.content
-                res.user.username shouldBe "testUser"
+                res.user.username shouldBe user.nickname
             }
         }
     }
 
-    Given("댓글 리스트 조회를 위한 데이터가 준비되엇을 때"){
-
+    Given("댓글 리스트 조회를 위한 데이터가 준비되엇을 때") {
 
 
         val req = SaveCommentRequest(
@@ -85,7 +65,7 @@ class GetCommentControllerTest(
             commentGroupId = 1L
         )
 
-        testContainer.commentController.create(req, 1L)
+        testContainer.commentController.create(req, board.id)
 
 
         val pageable = PageRequest.of(
@@ -94,14 +74,14 @@ class GetCommentControllerTest(
             Sort.by("id").descending()
         )
 
-        When("댓글 리스트를 조회 했을 때"){
-            val res = testContainer.commentController.getLatestCommentList(1L, 1L , pageable).result
+        When("댓글 리스트를 조회 했을 때") {
+            val res = testContainer.commentController.getLatestCommentList(board.id, 1L, pageable).result
 
-            Then("저장된 댓글의 필드와 응답값과 일치해야 한다."){
-                res.forEach{
+            Then("저장된 댓글의 필드와 응답값과 일치해야 한다.") {
+                res.forEach {
 //                    it.commentGroupId shouldBe req.commentGroupId
                     it.content shouldBe req.content
-                    it.user.nickname shouldBe "testUser"
+                    it.user.nickname shouldBe user.nickname
                 }
             }
         }

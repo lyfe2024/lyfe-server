@@ -35,6 +35,7 @@ class BoardService(
     }
 
 
+
     fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
 
         val boards = boardport.findByIdCursorId(boardsGet.boardId, boardsGet.date, boardsGet.pageable, boardsGet.type).toList()
@@ -96,6 +97,5 @@ class BoardService(
     private fun fetchCommentCount(boardId: Long) = commentport.countByBoardId(boardId)
 
     private fun fetchWhiskyCount(boardId: Long) = whiskyPort.countByBoardId(boardId)
-
 
 }
