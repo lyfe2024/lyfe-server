@@ -1,0 +1,29 @@
+name: Create and Push Tag on PR Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+
+    # PR이 병합되고, 그 대상 브랜치가 master인 경우에만 실행
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+
+    steps:
+      - name: Checkout Code with GitHub Token
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Version from build.gradle.kts
+        id: get_version
+        run: |
+          VERSION=$(grep 'version =' build.gradle.kts | sed -n 's/.*version = "\(.*\)"/\1/p')
+          echo "Version: $VERSION"
+          
+          TAG_NAME="$VERSION"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
