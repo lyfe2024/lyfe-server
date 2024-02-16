@@ -28,10 +28,8 @@ class TopicController(
         )
     )
 
-    @GetMapping("/{date}")
-    fun get(
-        @PathVariable date: String
-    ) = CommonResponse(
+    @GetMapping
+    fun get() = CommonResponse(
         topicService.getToday()
     )
 
