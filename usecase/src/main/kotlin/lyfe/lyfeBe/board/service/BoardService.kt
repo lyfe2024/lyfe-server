@@ -11,21 +11,28 @@ import lyfe.lyfeBe.fomatter.CursorGenerator.Companion.createCursorValue
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
 class BoardService(
-    private val boardport: BoardPort,
-    private val userport: UserPort,
-    private val topicport: TopicPort,
+    private val boardPort: BoardPort,
+    private val userPort: UserPort,
+    private val topicPort: TopicPort,
     private val whiskyPort: WhiskyPort,
-    private val commentport: CommentPort
+    private val commentPort: CommentPort
 ) {
 
+
+
+    fun getById(id: Long): Board {
+        return boardPort.getById(id)
+    }
 
     fun get(boardGet: BoardGet): BoardDto {
 
         val board = getById(boardGet.id)
+
         val whiskyCount = fetchWhiskyCount(board.id)
         val commentCount = fetchCommentCount(board.id)
 
@@ -38,7 +45,7 @@ class BoardService(
 
     fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
 
-        val boards = boardport.findByIdCursorId(boardsGet.boardId, boardsGet.date, boardsGet.pageable, boardsGet.type).toList()
+        val boards = boardPort.findByIdCursorId(boardsGet.boardId, boardsGet.date, boardsGet.pageable, boardsGet.type).toList()
 
         return boards.map { board ->
             val whiskyCount = fetchWhiskyCount(board.id)
@@ -54,7 +61,7 @@ class BoardService(
         val cursorValue = createCursorValue(boardsPopularGet.whiskyCount)
 
 
-        val boards = boardport.findPopularBoards(
+        val boards = boardPort.findPopularBoards(
             cursorValue,
             boardsPopularGet.count,
             boardsPopularGet.date,
@@ -76,25 +83,38 @@ class BoardService(
         }
     }
 
+    fun getUserBoards(boardUserGet: BoardsUserGet): List<BoardDto> {
+
+        val boards = boardPort.findByUserAndBoardType(
+            boardUserGet.userId,
+            boardUserGet.cursorId,
+            boardUserGet.type,
+            boardUserGet.pageable
+        )
+
+        return boards.map { board ->
+            val whiskyCount = fetchWhiskyCount(board.id)
+            val commentCount = fetchCommentCount(board.id)
+            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+            BoardDto.toBoardDto(params)
+        }.toList()
+    }
+
+
     fun create(boardCreate: BoardCreate): SaveBoardDto {
-        val user = userport.getById(boardCreate.userId)
-        val topic = topicport.getById(boardCreate.topicId)
+        val user = userPort.getById(boardCreate.userId)
+        val topic = topicPort.getById(boardCreate.topicId)
         val board = Board.from(boardCreate, user, topic)
-        return SaveBoardDto(boardport.create(board).id)
+        return SaveBoardDto(boardPort.create(board).id)
     }
 
 
     fun update(boardUpdate: BoardUpdate): UpdateBoardDto {
         val board = getById(boardUpdate.boardId).update(boardUpdate)
-        return UpdateBoardDto(boardport.update(board).id)
+        return UpdateBoardDto(boardPort.update(board).id)
     }
 
-    fun getById(id: Long): Board {
-        return boardport.getById(id)
-    }
-
-
-    private fun fetchCommentCount(boardId: Long) = commentport.countByBoardId(boardId)
+    private fun fetchCommentCount(boardId: Long) = commentPort.countByBoardId(boardId)
 
     private fun fetchWhiskyCount(boardId: Long) = whiskyPort.countByBoardId(boardId)
 

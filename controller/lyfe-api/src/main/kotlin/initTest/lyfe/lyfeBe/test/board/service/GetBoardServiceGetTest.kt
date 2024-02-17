@@ -3,6 +3,7 @@ package initTest.lyfe.lyfeBe.test.board.service
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardsGet
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createPopularBoard
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createUserBoard
 import initTest.lyfe.lyfeBe.test.comment.CommentFactory.Companion.createTestComment
 import initTest.lyfe.lyfeBe.test.mock.*
 import initTest.lyfe.lyfeBe.test.user.UserFactory
@@ -13,7 +14,6 @@ import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.comment.Comment
-import lyfe.lyfeBe.fomatter.CursorGenerator.Companion.createCursorValue
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.whisky.Whisky
@@ -59,11 +59,13 @@ class GetBoardServiceGetTest(
 
         board1 = createTestBoard(
             id = 1,
+            user = user,
             boardType = BoardType.BOARD_PICTURE,
             createdAt = testDate
         )
         board2 = createTestBoard(
             id = 2,
+            user = user,
             boardType = BoardType.BOARD_PICTURE,
             title = "2번째보드입니다",
             createdAt = testDate
@@ -109,25 +111,6 @@ class GetBoardServiceGetTest(
                 boardDto.commentCount shouldBe "1"
             }
         }
-    }
-
-    Given("게시판 생성 복수요청이 준비되고 실행되었을 때") {
-        val cursorId = Long.MAX_VALUE
-
-        val pageable = PageRequest.of(
-            0, // 페이지 번호 (0부터 시작)
-            5, // 페이지 크기
-            Sort.by("id").descending()
-        )
-
-        val boardsGet = createBoardsGet(
-            boardId = cursorId,
-            pageable = pageable,
-            type = BoardType.BOARD_PICTURE,
-            testDate.toString()
-
-        )
-
     }
 
     Given("게시판 생성 복수요청이 준비되고 실행되었을 때(최신글)") {
@@ -187,6 +170,36 @@ class GetBoardServiceGetTest(
                         current.whiskyCount shouldBeGreaterThan next.whiskyCount
                     }
                 }
+            }
+        }
+    }
+
+    Given("게시판 생성 복수요청이 준비되고 실행되었을 때(유저 보드 리스트)") {
+
+
+        val pageable = PageRequest.of(
+            0, // 페이지 번호 (0부터 시작)
+            5, // 페이지 크기
+            Sort.by("id").descending()
+        )
+
+        val boardUserGet = createUserBoard(
+            userId = user.id,
+            cursorId = Long.MAX_VALUE,
+            type = BoardType.BOARD_PICTURE,
+            pageable = pageable
+
+        )
+
+        When("위스키 카운트를 기준으로 게시판 정보를 조회할 때") {
+            val boardDtos = boardService.getUserBoards(boardUserGet)
+
+            Then("조회된 게시판이 위스키 카운트 기반으로 내림차순 정렬되어야 한다") {
+                boardDtos.forEach{
+                    it.boardType shouldBe  boardUserGet.type
+                    it.user.id  shouldBe  boardUserGet.userId
+                }
+
             }
         }
     }

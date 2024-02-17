@@ -87,13 +87,31 @@ class BoardFactory {
                 count = count,
             )
         }
+        fun createUserBoard(userId: Long, cursorId: Long, type: BoardType, pageable: Pageable): BoardsUserGet {
+            return BoardsUserGet(
+                userId = userId,
+                cursorId = cursorId,
+                type = type,
+                pageable = pageable,
+            )
+        }
 
-        fun createBoardsSaveRequest() = BoardSaveRequest(
-            title = "테스트 게시판 제목",
-            content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
-            boardType = BoardType.BOARD,
-            userId = 1L,
-            topicId = 1L
-        )
+
+        fun createBoardsSaveRequest(
+            title: String = "테스트 게시판 제목",
+            content: String = "테스트 내용입니다.",
+            boardType: BoardType = BoardType.BOARD,
+            userId: Long = 1L,
+            topicId: Long = 1L
+        ): BoardSaveRequest {
+            return BoardSaveRequest(
+                title = title,
+                content = content,
+                boardType = boardType,
+                userId = userId,
+                topicId = topicId
+            )
+        }
+
     }
 }
