@@ -42,4 +42,12 @@ interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
     )
     fun findBoardsWithWhiskyCount(cursorId: String, count: Int, date: String?, type: BoardType): List<BoardJpaEntity>
 
+
+    @Query("SELECT t FROM BoardJpaEntity t WHERE t.user.id = :userId AND t.boardType = :type AND t.id < :cursorId")
+    fun findByUserIdAndBoardTypeAndCursorId(
+        userId: Long,
+        cursorId: Long,
+        type: BoardType,
+        pageable: Pageable
+    ): List<BoardJpaEntity>
 }
