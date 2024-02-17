@@ -26,4 +26,5 @@ class TopicService(
 
     }
 
+    fun getToday() = GetTopicDto.toDto(topicPort.getToday())
 }

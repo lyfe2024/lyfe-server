@@ -6,6 +6,7 @@ import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.port.TopicPort
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component
 class TopicPersistenceAdapter(
@@ -30,4 +31,9 @@ class TopicPersistenceAdapter(
             cursorId,
             pageable
         ).map { it.toDomain() }
+
+    override fun getToday() : Topic{
+        val tomorrow = LocalDate.now()
+        return topicRepository.findByDate(tomorrow).toDomain()
+    }
 }

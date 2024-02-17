@@ -10,6 +10,7 @@ interface TopicPort{
     fun getById(topicId: Long) : Topic
     fun update(from: Topic)
     fun getPast(date: String, cursorId: Long, pageable: Pageable): Page<Topic>
+    fun getToday(): Topic
 
 
 }
