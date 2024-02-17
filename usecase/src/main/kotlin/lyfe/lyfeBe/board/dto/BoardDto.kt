@@ -8,13 +8,14 @@ data class BoardDto(
     val user: UserDto,
     val title: String,
     val content: String,
+    val imageUrl: String? = null,
     val boardType: BoardType,
     val whiskyCount: String,
     val commentCount: String,
     val updatedAt: String
 ) {
     companion object {
-        fun toDto(param : BoardDtoAssembly): BoardDto {
+        fun toBoardDto(param : BoardDtoAssembly): BoardDto {
             return BoardDto(
                     id = param.board.id,
                     user = UserDto.from(param.board.user),

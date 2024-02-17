@@ -7,7 +7,6 @@ import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.fcm.FCMService
 import lyfe.lyfeBe.fcm.NotificationController
 import lyfe.lyfeBe.fcm.port.FcmPort
-import lyfe.lyfeBe.image.port.out.ImagePort
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.topic.port.TopicService
 import lyfe.lyfeBe.user.port.out.UserPort
@@ -33,7 +32,6 @@ class TestContainer(
     var userRepository: UserPort,
     var topicService: TopicService,
     var topicRepository: TopicPort,
-    var imageRepository: ImagePort,
     var fakeNotificationRepository: FcmPort,
     var whiskyRepository: WhiskyPort
 
@@ -44,7 +42,6 @@ class TestContainer(
             val boardRepository = FakeBoardRepository()
             val userRepository = FakeUserRepository()
             val topicRepository = FakeTopicRepository()
-            val imageRepository = FakeImageRepository()
             val fakeWhiskyRepository = FakeWhiskyRepository()
             val commentRepository = FakeCommentRepository()
             val fakeNotificationRepository = FakeNotificationRepository()
@@ -53,7 +50,6 @@ class TestContainer(
                 boardRepository,
                 userRepository,
                 topicRepository,
-                imageRepository,
                 fakeWhiskyRepository,
                 commentRepository
             )
@@ -102,7 +98,6 @@ class TestContainer(
                 userRepository = userRepository,
                 topicService = topicService,
                 topicRepository = topicRepository,
-                imageRepository = imageRepository,
                 fakeNotificationRepository = fakeNotificationRepository,
                 whiskyRepository = fakeWhiskyRepository
             )

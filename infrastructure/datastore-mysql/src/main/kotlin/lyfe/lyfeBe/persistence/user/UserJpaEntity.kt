@@ -16,6 +16,8 @@ class UserJpaEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    val profileUrl : String,
+
     @field:NotNull
     val email: String,
 
@@ -26,6 +28,7 @@ class UserJpaEntity(
     val nickname: String,
 
     val notificationConsent: Boolean,
+
 
     val fcmRegistration: Boolean,
     val withdrawnAt: Instant? = null,
@@ -51,6 +54,7 @@ class UserJpaEntity(
             email = email,
             hashedPassword = hashedPassword,
             nickname = nickname,
+            profileUrl = profileUrl,
             socialId = socialId,
             socialType = socialType,
             notificationConsent = notificationConsent,
@@ -72,6 +76,7 @@ class UserJpaEntity(
             socialType = user.socialType,
             socialRefreshToken = user.socialRefreshToken,
             notificationConsent = user.notificationConsent,
+            profileUrl = user.profileUrl,
             fcmRegistration = user.fcmRegistration,
             withdrawnAt = user.withdrawnAt,
             userStatus = user.userStatus,
@@ -95,6 +100,7 @@ class UserJpaEntity(
             withdrawnAt = user.withdrawnAt,
             userStatus = user.userStatus,
             role = user.role,
+            profileUrl = user.profileUrl,
             baseEntity = BaseEntity(
                 createdAt = user.createdAt,
                 updatedAt = Instant.now()

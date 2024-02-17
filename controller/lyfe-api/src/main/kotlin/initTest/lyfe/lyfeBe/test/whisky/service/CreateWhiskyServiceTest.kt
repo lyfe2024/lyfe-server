@@ -1,8 +1,11 @@
 package initTest.lyfe.lyfeBe.test.whisky.service
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
 import initTest.lyfe.lyfeBe.test.mock.FakeBoardRepository
 import initTest.lyfe.lyfeBe.test.mock.FakeUserRepository
 import initTest.lyfe.lyfeBe.test.mock.FakeWhiskyRepository
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
+import initTest.lyfe.lyfeBe.test.whisky.WhiskyFactory.Companion.createWhiskyCreate
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -32,37 +35,13 @@ class CreateWhiskyServiceTest(
 
     beforeContainer {
         // 테스트에 필요한 사용자, 토픽, 게시물을 미리 생성하고 저장
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            socialId = "testSocialId",
-            socialType = lyfe.lyfeBe.auth.SocialType.GOOGLE,
-            userStatus = UserStatus.ACTIVE
-        )
+        val user = createTestUser()
+
         fakeUserRepository.create(user)
 
-        val board = Board(
-            id = 0,
-            title = "testTile",
-            content = "testContent",
-            boardType = BoardType.BOARD,
-            user = user,
-            topic = Topic(
-                id = 0,
-                content = "testTopic"
-            ),
-            createdAt = null,
-            updatedAt = null
-        )
+        val board = createTestBoard()
 
         fakeBoardRepository.create(board)
-
-
     }
 
     afterContainer {
@@ -72,10 +51,7 @@ class CreateWhiskyServiceTest(
 
     Given("새로운 Whisky 생성을 위한 초기 데이터 준비") {
 
-        val whisky = WhiskyCreate(
-            boardId = 1L,
-            userId = 1L
-        )
+        val whisky = createWhiskyCreate()
 
         When("Whisky 서비스를 통해 새 Whisky 객체 생성 및 조회") {
 
@@ -91,10 +67,7 @@ class CreateWhiskyServiceTest(
     }
 
     Given("새로운 Whisky 생성을 위한 초기 데이터 준비") {
-        val whisky = WhiskyCreate(
-            boardId = 1L,
-            userId = 1L
-        )
+        val whisky = createWhiskyCreate()
 
         When("Whisky 서비스를 통해 새 Whisky 객체를 두 번 생성 시도") {
             whiskyService.create(whisky)

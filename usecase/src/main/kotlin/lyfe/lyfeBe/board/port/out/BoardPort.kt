@@ -9,6 +9,7 @@ interface BoardPort {
     fun getById(id: Long): Board
     fun create(board: Board): Board
     fun update(board: Board): Board
-    fun findByIdCursorId(boardId: Long, paging: Pageable): Page<Board>
-    fun findByUserAndBoardType(userId: Long, boardType: BoardType, cursorId: Long, paging: Pageable): Page<Board>
+
+    fun findByIdCursorId(cursorId: Long, date: String?, pageable: Pageable, type: BoardType): List<Board>
+    fun findPopularBoards(cursor: String, count: Int, date: String?, type: BoardType): List<Board>
 }
