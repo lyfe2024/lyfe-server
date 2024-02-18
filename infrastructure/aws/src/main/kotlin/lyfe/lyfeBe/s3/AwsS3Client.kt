@@ -2,6 +2,8 @@ package lyfe.lyfeBe.s3
 
 import com.amazonaws.HttpMethod
 import com.amazonaws.services.s3.AmazonS3
+import com.amazonaws.services.s3.Headers
+import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest
 import io.github.oshai.kotlinlogging.KotlinLogging
 import lyfe.lyfeBe.image.GetImageUploadUrlResult
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.security.SecureRandom
 import java.time.Duration
-import java.time.ZonedDateTime
 import java.util.*
 
 @Component
@@ -27,28 +28,29 @@ class AwsS3Client(
     private val random: SecureRandom = SecureRandom()
 
     fun generateImageUploadUrl(format: String, path: String): GetImageUploadUrlResult {
-        log.info { "Generating pre-signed URL" }
-
-        val expiresAt = ZonedDateTime.now() + expiresAfter
         val objectKey = generateObjectKey(format, path)
-        val preSignedUrl = generatePreSignedUrl(objectKey, expiresAt, format)
-
-        log.info { "Generated pre-signed URL: $preSignedUrl" }
-
+        val generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(objectKey)
+        val preSignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest)
         return GetImageUploadUrlResult(
             url = preSignedUrl,
-            key = objectKey,
-            expiresAt = expiresAt
+            key = objectKey
         )
     }
 
-    private fun generatePreSignedUrl(objectKey: String, expiresAt: ZonedDateTime, format: String): String {
-        val generatePreSignedUrlRequest = GeneratePresignedUrlRequest(s3Bucket, objectKey)
+    private fun getGeneratePreSignedUrlRequest(fileName: String): GeneratePresignedUrlRequest {
+        val expiration = getPreSignedUrlExpiration()
+        return GeneratePresignedUrlRequest(s3Bucket, fileName)
             .withMethod(HttpMethod.PUT)
-            .withExpiration(Date.from(expiresAt.toInstant()))
-            .withContentType("image/$format")
+            .withExpiration(expiration).apply {
+                addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString())
+            }
+    }
 
-        return amazonS3.generatePresignedUrl(generatePreSignedUrlRequest).toString()
+    private fun getPreSignedUrlExpiration(): Date {
+        val expiration = Date()
+        val expTimeMillis = expiration.time + 1000 * 60 * 2 // 2 minutes
+        expiration.time = expTimeMillis
+        return expiration
     }
 
     private fun generateObjectKey(format: String, path: String): String {
