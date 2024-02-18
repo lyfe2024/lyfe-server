@@ -44,12 +44,11 @@ class BoardController(
     // 사용자 보드 리스트
     @GetMapping("/{userId}/{type}")
     fun getUserBoards(
-        @PathVariable() userId: Long,
+        @PathVariable userId: Long,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         ): CommonResponse<List<BoardDto>> {
-        println("@@@@")
          val cursorValue = getEffectiveCursorId(cursorId)
         return CommonResponse(service.getUserBoards(BoardsUserGet(userId, cursorValue, type, pageable)))
     }
