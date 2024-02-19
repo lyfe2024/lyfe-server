@@ -53,7 +53,7 @@ class SecurityConfig(
                 authorizeHttpRequests
                     .requestMatchers(
                         "/health", "/",
-                        "/v1/images/*",
+                        "/v1/images/**",
                         "/v1/auth/**",
                     ).permitAll()
                     .anyRequest().authenticated()
