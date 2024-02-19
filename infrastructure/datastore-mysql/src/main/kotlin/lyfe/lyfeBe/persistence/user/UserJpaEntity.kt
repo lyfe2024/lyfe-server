@@ -34,7 +34,10 @@ class UserJpaEntity(
     val withdrawnAt: Instant? = null,
 
     val socialId: String,
+
+    @Enumerated(EnumType.STRING)
     val socialType : SocialType,
+
     @Column(length = 5000)
     val socialRefreshToken: String? = null,
 

@@ -2,10 +2,6 @@ package lyfe.lyfeBe.user.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import lyfe.lyfeBe.auth.service.SecurityUtils
-import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.board.dto.BoardDto
-import lyfe.lyfeBe.board.dto.BoardDtoAssembly
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.user.UserUpdate
@@ -13,7 +9,6 @@ import lyfe.lyfeBe.user.dto.UpdateUserDto
 import lyfe.lyfeBe.user.dto.UserDto
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

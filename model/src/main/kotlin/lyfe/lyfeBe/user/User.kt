@@ -36,6 +36,7 @@ data class User(
             socialId = "",
             socialType = socialType,
             socialRefreshToken = "",
+            profileUrl = "",
             notificationConsent = notificationConsent,
             fcmRegistration = fcmRegistration,
             role = Role.GUEST,
@@ -65,11 +66,17 @@ data class User(
         )
 
     companion object {
-        fun from(userJoin: UserJoin, email: String, password: String, socialRefreshToken: String?) =
-            User(
+        fun from(
+            userJoin: UserJoin,
+            userCredentials: Pair<String, String>,
+            socialRefreshToken: String?
+        ): User{
+            val email = userCredentials.first
+            val hashedPassword = userCredentials.second
+            return User(
                 id = 0,
                 email = email,
-                hashedPassword = password,
+                hashedPassword = hashedPassword,
                 nickname = userJoin.nickname,
                 socialId = email.split("@")[0],
                 socialType = SocialType.valueOf(email.split("@")[1]),
@@ -83,6 +90,7 @@ data class User(
                 profileUrl = "", //Todo 이부분처리 필요
                 withdrawnAt = null,
             )
+        }
 
         fun from(user: User): User {
             return User(
