@@ -7,5 +7,6 @@ interface RefreshTokenPort {
 
     fun create(refreshToken: RefreshToken): RefreshToken
     fun findByUser(user: User): RefreshToken?
-    fun update(refreshToken: RefreshToken): RefreshToken
+    fun saveOrUpdate(refreshToken: RefreshToken): RefreshToken
+    fun deleteByUserId(userId: Long)
 }

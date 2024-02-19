@@ -15,6 +15,7 @@ class KakaoService(
     @Value("\${kakao.kakaoClientId}") private var kakaoClientId: String,
     @Value("\${kakao.kakaoRedirectUri}") private var kakaoRedirectUri: String,
     @Value("\${kakao.kakaoGrantType}") private var kakaoGrantType: String,
+    @Value("\${kakao.adminKey}") private var adminKey: String
 ): AuthProviderService {
     fun getAuthorizationCode(): String {
         return kakaoClient.getAuthorizationCode(
@@ -23,16 +24,26 @@ class KakaoService(
     }
 
     override fun fetchAuthToken(authLoginRequest: AuthLogin): OAuthIdAndRefreshTokenDto {
-        val kakaoTokenResult = generateAuthToken(authLoginRequest.authorizationCode)
-        val kakaoId = getKakaoId(kakaoTokenResult.accessToken)
+        val kakaoId = getKakaoId(authLoginRequest.idToken?: "")
 
         return OAuthIdAndRefreshTokenDto(
-            oAuthId = kakaoId, refreshToken = kakaoTokenResult.refreshToken ?: "error"
+            oAuthId = kakaoId, refreshToken = "not supported"
         )
     }
 
     override fun isSupport(socialType: SocialType): Boolean {
         return socialType == SocialType.KAKAO
+    }
+
+    override fun revoke(socialId: String, socialRefreshToken: String?): Boolean {
+        val unlinkResponse = kakaoClient.unlink(
+            adminKey = "KakaoAK $adminKey",
+            targetIdType = "user_id",
+            targetId = socialId
+        )
+
+        require(unlinkResponse.id.toString() != socialId)
+        return true
     }
 
     fun generateAuthToken(authorizationCode: String): KakaoTokenResult {

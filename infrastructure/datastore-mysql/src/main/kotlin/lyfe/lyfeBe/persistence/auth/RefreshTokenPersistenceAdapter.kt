@@ -3,7 +3,6 @@ package lyfe.lyfeBe.persistence.auth
 import lyfe.lyfeBe.auth.RefreshToken
 import lyfe.lyfeBe.auth.port.out.RefreshTokenPort
 import lyfe.lyfeBe.user.User
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,12 +16,21 @@ class RefreshTokenPersistenceAdapter(
     }
 
     override fun findByUser(user: User): RefreshToken? {
-        return refreshTokenRepository.findByIdOrNull(user.id)?.toDomain()
+        return refreshTokenRepository.findByUserId(user.id)?.toDomain()
     }
 
-    override fun update(refreshToken: RefreshToken): RefreshToken {
-        val update = RefreshTokenJpaEntity.update(refreshToken)
-        return refreshTokenRepository.save(update).toDomain()
+    override fun saveOrUpdate(refreshToken: RefreshToken): RefreshToken {
+        val refreshTokenJpaEntity = refreshTokenRepository.findByUserId(refreshToken.user.id)
+        return if (refreshTokenJpaEntity != null) {
+            refreshTokenJpaEntity.update(refreshToken.refreshToken)
+            refreshTokenRepository.save(refreshTokenJpaEntity).toDomain()
+        } else {
+            create(refreshToken)
+        }
+    }
+
+    override fun deleteByUserId(userId: Long) {
+        refreshTokenRepository.deleteByUserId(userId)
     }
 
 }
