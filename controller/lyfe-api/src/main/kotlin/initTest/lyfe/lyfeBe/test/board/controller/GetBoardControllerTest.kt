@@ -1,5 +1,6 @@
 package initTest.lyfe.lyfeBe.test.board.controller
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardsSaveRequest
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
 import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
@@ -41,13 +42,7 @@ class GetBoardControllerTest(
 
     Given("게시판 생성을 위한 요청 데이터가 준비되었을 때") {
 
-        val req = BoardSaveRequest(
-            title = "테스트 게시판 제목",
-            content = "테스트 내용입니다.",
-            boardType = BoardType.BOARD,
-            userId = 1L,
-            topicId = 1L
-        )
+        val req = createBoardsSaveRequest()
 
         testContainer.boardController.create(req)
 
@@ -67,13 +62,8 @@ class GetBoardControllerTest(
 
         val testCursorId = Long.MAX_VALUE
 
-        val req = BoardSaveRequest(
-            title = "테스트 게시판 제목",
-            content = "테스트 내용입니다.",
-            boardType = BoardType.BOARD,
-            userId = 1L,
-            topicId = 1L
-        )
+        val req = createBoardsSaveRequest()
+
 
         testContainer.boardController.create(req)
         testContainer.boardController.create(req)
@@ -114,13 +104,8 @@ class GetBoardControllerTest(
         val testWhiskyCount = 5L
         val testPageCount = 5
 
-        val req = BoardSaveRequest(
-            title = "테스트 게시판 제목",
-            content = "테스트 내용입니다.",
-            boardType = BoardType.BOARD,
-            userId = 1L,
-            topicId = 1L
-        )
+        val req = createBoardsSaveRequest()
+
 
         val boardId1 = testContainer.boardController.create(req).result.id
         val boardId2 = testContainer.boardController.create(req).result.id
@@ -160,6 +145,47 @@ class GetBoardControllerTest(
                 }
             }
 
+        }
+    }
+
+    Given("게시판 리스트 조회를 위한 데이터가 준비되었을 때(User Boards)") {
+
+        val testCursorId = Long.MAX_VALUE
+
+        val req = createBoardsSaveRequest()
+
+
+        testContainer.boardController.create(req)
+        testContainer.boardController.create(req)
+
+        When("게시판 리스트를 조회 했을 때") {
+
+            val of = PageRequest.of(
+                0, // 페이지 번호 (0부터 시작)
+                5, // 페이지 크기
+                Sort.by("id").descending()
+            )
+
+            val res: List<BoardDto> = testContainer.boardController.getUserBoards(
+                userId =user1.id,
+                cursorId = testCursorId,
+                type = req.boardType,
+                pageable = of
+            ).result
+
+            Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
+                res.forEach { board ->
+                    board.title shouldBe req.title
+                    board.content shouldBe req.content
+                    board.boardType shouldBe req.boardType
+                    board.user.id shouldBe req.userId
+                }
+            }
+            And("조회된 게시판이 ID 기반으로 내림차순 정렬되어야 한다") {
+                res.zipWithNext().forEach { (current, next) ->
+                    current.id shouldBeGreaterThan next.id
+                }
+            }
         }
     }
 })

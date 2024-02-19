@@ -57,6 +57,28 @@ class FakeBoardRepository : BoardPort {
         }.sortedWith(compareByDescending<Board> { it.whiskyCount }.thenByDescending { it.id })
             .take(count) // 요청된 개수만큼의 결과 반환
     }
+
+    override fun findByUserAndBoardType(
+        userId: Long,
+        cursorId: Long,
+        type: BoardType,
+        pageable: Pageable
+    ): List<Board> {
+        // 필터링: userId, boardType, cursorId 조건을 만족하는 Board 객체들을 선택
+        val boards = table.filter {
+            it.user.id == userId &&
+                    it.boardType == type &&
+                    it.id < cursorId
+        }.sortedByDescending { it.id } // 내림차순 정렬
+
+        // 페이징 처리
+        val pageSize = pageable.pageSize
+        val offset = pageable.offset.toInt()
+        val toIndex = (offset + pageSize).coerceAtMost(boards.size)
+
+        return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
+    }
+
     fun clear() {
         table.clear()
     }

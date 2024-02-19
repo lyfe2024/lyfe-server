@@ -34,4 +34,11 @@ class BoardPersistenceAdapter(
     override fun findPopularBoards(cursor: String, count: Int, date: String?, type: BoardType) =
         boardJpaRepository.findBoardsWithWhiskyCount(cursor, count, date, type).map { it.toDomain() }
 
+    override fun findByUserAndBoardType(
+        userId: Long,
+        cursorId: Long,
+        type: BoardType,
+        pageable: Pageable
+    ) = boardJpaRepository.findByUserIdAndBoardTypeAndCursorId(userId, cursorId , type , pageable ).map { it.toDomain() }
+
 }

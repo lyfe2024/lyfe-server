@@ -41,6 +41,17 @@ class BoardController(
     ): CommonResponse<List<BoardDto>> {
         return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, whiskyCount, type, count)))
     }
+    // 사용자 보드 리스트
+    @GetMapping("/{userId}/{type}")
+    fun getUserBoards(
+        @PathVariable userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
+        @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+        ): CommonResponse<List<BoardDto>> {
+         val cursorValue = getEffectiveCursorId(cursorId)
+        return CommonResponse(service.getUserBoards(BoardsUserGet(userId, cursorValue, type, pageable)))
+    }
 
     // 사진없는글 단건 조회
     @GetMapping("/detail/{boardId}")
