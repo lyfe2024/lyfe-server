@@ -8,4 +8,6 @@ data class BoardUpdateRequest(
     val title: String,
     @NotBlank
     val content: String,
+
+    val imageUrl: String? = null
 )

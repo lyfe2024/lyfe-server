@@ -1,15 +1,11 @@
 package initTest.lyfe.lyfeBe.test.board.controller
 
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
+import initTest.lyfe.lyfeBe.test.user.UserFactory
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.image.Image
-import lyfe.lyfeBe.image.ImageType
 import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.user.Role
-import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.board.req.BoardUpdateRequest
 
@@ -22,34 +18,11 @@ class UpdateBoardControllerTest(
 
     beforeContainer {
 
-        val user = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            socialId = "testSocialId",
-            socialType = lyfe.lyfeBe.auth.SocialType.GOOGLE,
-            userStatus = UserStatus.ACTIVE
-        )
+        val user = UserFactory.createTestUser()
         testContainer.userRepository.create(user)
 
         val topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
-
-
-        val image = Image(
-            id = 1L,
-            url = "https://example.com/image.jpg",
-            board = null,
-            user = user,
-            type = ImageType.PROFILE,
-            width = 100,
-            height = 100
-        )
-        testContainer.imageRepository.create(image)
 
     }
 

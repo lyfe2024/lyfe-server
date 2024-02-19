@@ -103,7 +103,6 @@ jobs:
         run: |
             echo "::set-output name=sha_short::$(echo ${{ github.sha }} | head -c 7)"
             echo "Short SHA: ${{ steps.short_sha.outputs.sha_short }}"
-
       - name: Deploy to EC2 (Develop)
         uses: appleboy/ssh-action@master
         with:

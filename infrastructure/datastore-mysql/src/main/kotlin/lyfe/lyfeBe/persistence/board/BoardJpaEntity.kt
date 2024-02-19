@@ -25,6 +25,8 @@ class BoardJpaEntity(
     @Enumerated(EnumType.STRING)
     val boardType: BoardType,
 
+    @Column(name = "image_url")
+    val imageUrl: String? = null,
 
     @field:NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,6 +48,7 @@ class BoardJpaEntity(
             title = title,
             content = content,
             boardType = boardType,
+            imageUrl = imageUrl,
             user = user.toDomain(),
             topic = topic.toDomain(),
             createdAt = baseEntity.createdAt,
@@ -61,6 +64,7 @@ class BoardJpaEntity(
                 title = board.title,
                 content = board.content,
                 boardType = board.boardType,
+                imageUrl = board.imageUrl,
                 user = UserJpaEntity.from(board.user),
                 topic = TopicJpaEntity.from(board.topic),
                 baseEntity = BaseEntity(
@@ -74,9 +78,14 @@ class BoardJpaEntity(
                 id = board.id,
                 title = board.title,
                 content = board.content,
+                imageUrl = board.imageUrl,
                 boardType = board.boardType,
                 user = UserJpaEntity.from(board.user),
                 topic = TopicJpaEntity.from(board.topic),
+                baseEntity = BaseEntity(
+                    createdAt = board.createdAt,
+                    updatedAt = board.updatedAt
+                )
             )
     }
 }

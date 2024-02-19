@@ -1,11 +1,11 @@
 package initTest.lyfe.lyfeBe.test.topic.service
 
-import initTest.lyfe.lyfeBe.test.mock.*
+import initTest.lyfe.lyfeBe.test.mock.FakeTopicRepository
+import initTest.lyfe.lyfeBe.test.topic.TopicFactory.Companion.createTopicCreate
+import initTest.lyfe.lyfeBe.test.topic.TopicFactory.Companion.createTopicUpdate
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.topic.TopicCreate
 import lyfe.lyfeBe.topic.TopicGet
-import lyfe.lyfeBe.topic.TopicUpdate
 import lyfe.lyfeBe.topic.port.TopicService
 
 
@@ -19,9 +19,7 @@ class CreateTopicServiceTest(
 
     Given("TopicCreate가  준비되었을 때") {
 
-        val topicCreate = TopicCreate(
-            content = "testTopic",
-        )
+        val topicCreate = createTopicCreate("testTopic")
 
 
         When("토픽 업데이트를 처리 할고 조회 했을때 ") {
@@ -38,16 +36,15 @@ class CreateTopicServiceTest(
     Given("Topic data가 준비되어있고 ") {
 
 
-        val topicCreate = TopicCreate(
-            content = "testTopic",
-        )
+        val topicCreate = createTopicCreate("testTopic")
+
         topicService.create(topicCreate)
 
         When("토픽 업데이트 요청을 처리할 때") {
 
-            val topicUpdate = TopicUpdate(
+            val topicUpdate = createTopicUpdate(
                 1L,
-                "testTopic",
+                "testTopic"
             )
             topicService.update(topicUpdate)
             val updateTopic = topicService.get(TopicGet(1L))

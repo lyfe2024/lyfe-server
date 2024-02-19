@@ -15,6 +15,7 @@ data class User(
     val notificationConsent: Boolean,
     val fcmRegistration: Boolean,
     val role: Role,
+    val profileUrl : String,
     val userStatus: UserStatus,
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
@@ -41,6 +42,7 @@ data class User(
             userStatus = userStatus,
             createdAt = createdAt,
             updatedAt = Instant.now(),
+            profileUrl = profileUrl,
             withdrawnAt = withdrawnAt,
         )
 
@@ -60,6 +62,7 @@ data class User(
                 userStatus = UserStatus.ACTIVE,
                 createdAt = Instant.now(),
                 updatedAt = Instant.now(),
+                profileUrl = "", //Todo 이부분처리 필요
                 withdrawnAt = null,
             )
 
@@ -74,6 +77,7 @@ data class User(
                 socialRefreshToken = user.socialRefreshToken,
                 notificationConsent = user.notificationConsent,
                 fcmRegistration = user.fcmRegistration,
+                profileUrl = user.profileUrl,
                 role = user.role,
                 userStatus = user.userStatus,
                 createdAt = user.createdAt,

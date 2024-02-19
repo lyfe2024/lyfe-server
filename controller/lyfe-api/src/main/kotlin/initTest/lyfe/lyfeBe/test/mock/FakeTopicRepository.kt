@@ -50,6 +50,10 @@ class FakeTopicRepository : TopicPort {
         return PageImpl(pageContent, pageable, pageable.pageSize.toLong())
     }
 
+    override fun getToday(): Topic {
+        TODO("Not yet implemented")
+    }
+
     fun clear() {
         data.clear()
     }

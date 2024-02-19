@@ -40,22 +40,6 @@ class UserController(
         )
     }
 
-    @GetMapping("/me/boards")
-    fun getMyBoardList(
-        @RequestParam boardType: BoardType,
-        @RequestParam(required = false) cursorId: Long?,
-        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
-    ): CommonResponse<List<BoardDto>> {
-        val boardId = getEffectiveCursorId(cursorId)
-        return CommonResponse(
-            userService.getMyBoardList(
-                boardType = boardType,
-                cursorId = boardId,
-                pageable = pageable
-            )
-        )
-    }
-
 
     @GetMapping("/check-nickname/{nickname}")
     fun checkNickname(
