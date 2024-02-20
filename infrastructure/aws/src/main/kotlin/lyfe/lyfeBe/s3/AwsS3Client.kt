@@ -9,6 +9,8 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import lyfe.lyfeBe.image.GetImageUploadUrlResult
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
 import java.time.Duration
 import java.util.*
@@ -31,8 +33,9 @@ class AwsS3Client(
         val objectKey = generateObjectKey(format, path)
         val generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(objectKey)
         val preSignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest)
+        val decodedUrl = URLDecoder.decode(preSignedUrl.toString(), StandardCharsets.UTF_8.toString())
         return GetImageUploadUrlResult(
-            url = preSignedUrl,
+            url = decodedUrl,
             key = objectKey
         )
     }
