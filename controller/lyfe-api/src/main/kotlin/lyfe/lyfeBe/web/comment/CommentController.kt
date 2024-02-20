@@ -1,7 +1,9 @@
 package lyfe.lyfeBe.web.comment
 
 import jakarta.validation.Valid
-import lyfe.lyfeBe.comment.*
+import lyfe.lyfeBe.comment.CommentCreate
+import lyfe.lyfeBe.comment.CommentGetsByBoard
+import lyfe.lyfeBe.comment.CommentUpdate
 import lyfe.lyfeBe.comment.dto.CommentDto
 import lyfe.lyfeBe.comment.dto.SaveCommentDto
 import lyfe.lyfeBe.comment.service.CommentService
@@ -25,7 +27,9 @@ class CommentController(
     @GetMapping("/v1/comments/{commentId}")
     fun getComment(
         @PathVariable commentId: Long
+
     ): CommonResponse<CommentDto> {
+
         return service.getById(commentId)
             .run { CommonResponse(this) }
     }
@@ -38,7 +42,8 @@ class CommentController(
         @RequestParam(name = "comment_board_id") boardId: Long,
         @RequestParam(required = false) cursorId: Long,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
-        ): CommonResponse<List<Comment>> {
+
+        ): CommonResponse<List<CommentDto>> {
 
         val commentId = getEffectiveCursorId(cursorId)
         return service.getCommentsWithCursorAndBoard(
@@ -55,17 +60,12 @@ class CommentController(
      */
     @GetMapping("/v1/comments")
     fun getMyCommentList(
-        @RequestParam(name = "comment_user_id") userId: Long,
         @RequestParam(required = false) cursorId: Long,
-    ): CommonResponse<List<Comment>> {
+
+    ): CommonResponse<List<CommentDto>> {
 
         val commentId = getEffectiveCursorId(cursorId)
-        return service.getCommentsWithCursorAndUser(
-            CommentGetsByUserId(
-                userId = userId,
-                cursorId = commentId
-            )
-        ).let { CommonResponse(it) }
+        return service.getCommentsWithCursorAndUser(cursorId = commentId).let { CommonResponse(it) }
     }
 
     @PostMapping("/v1/comments")
@@ -79,7 +79,6 @@ class CommentController(
             CommentCreate(
                 content = req.content,
                 commentGroupId = req.commentGroupId,
-                userId = 1L,
                 boardId = boardId
             )
         ).let { CommonResponse(it) }
@@ -97,7 +96,6 @@ class CommentController(
             CommentUpdate(
                 commentId = commentId,
                 content = request.content,
-                userId = 1L
             )
         ).let { CommonResponse(it) }
     }

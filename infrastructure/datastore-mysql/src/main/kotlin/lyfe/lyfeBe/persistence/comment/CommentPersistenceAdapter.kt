@@ -36,7 +36,7 @@ class CommentPersistenceAdapter(
         boardId: Long,
         pageable: Pageable
     ): List<Comment> {
-        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(cursorId, boardId, pageable)
+        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(boardId, cursorId,  pageable)
             .map { it.toDomain() }.toList()
     }
 
@@ -44,7 +44,7 @@ class CommentPersistenceAdapter(
         cursorId: Long,
         userId: Long
     ): List<Comment> {
-        return commentRepository.findAllByUserIdAndIdLessThanOrderByIdDesc(cursorId, userId)
+        return commentRepository.findAllByUserIdAndIdLessThanOrderByIdDesc(userId, cursorId)
             .map { it.toDomain() }
     }
 
