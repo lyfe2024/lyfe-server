@@ -87,7 +87,7 @@ data class User(
                 userStatus = UserStatus.ACTIVE,
                 createdAt = Instant.now(),
                 updatedAt = Instant.now(),
-                profileUrl = "", //Todo 이부분처리 필요
+                profileUrl = "",
                 withdrawnAt = null,
             )
         }

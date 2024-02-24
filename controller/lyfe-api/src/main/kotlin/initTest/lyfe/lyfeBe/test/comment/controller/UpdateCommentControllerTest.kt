@@ -1,45 +1,44 @@
 package initTest.lyfe.lyfeBe.test.comment.controller
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
 import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.setSecurityContextUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
 import lyfe.lyfeBe.web.comment.req.UpdateCommentRequest
-import java.time.Instant
+import org.springframework.security.core.context.SecurityContextHolder
 
 class UpdateCommentControllerTest(
 ): BehaviorSpec({
 
     val testContainer = TestContainer.build()
+    lateinit var board: Board
+    lateinit var topic: Topic
+    lateinit var user: User
 
     beforeContainer {
 
-        val user = createTestUser()
+        user = createTestUser()
         testContainer.userRepository.create(user)
 
-        val topic = Topic(1L, "testTopic")
+        topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
 
 
-        val board = Board(
-            id = 1L,
-            title = "testTitle",
-            content = "testContent",
-            boardType = BoardType.BOARD,
-            user = user,
-            topic = topic,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        board = createTestBoard()
         testContainer.boardRepository.create(board)
 
+        setSecurityContextUser(user)
+
+    }
+
+    afterContainer {
+        SecurityContextHolder.clearContext()
     }
 
     Given("댓글 수정 요청이 준비되었을 때") {

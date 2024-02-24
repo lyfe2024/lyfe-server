@@ -1,7 +1,11 @@
 package lyfe.lyfeBe.comment.service
 
+import lyfe.lyfeBe.auth.service.SecurityUtils.getLoginUserId
 import lyfe.lyfeBe.board.port.out.BoardPort
-import lyfe.lyfeBe.comment.*
+import lyfe.lyfeBe.comment.Comment
+import lyfe.lyfeBe.comment.CommentCreate
+import lyfe.lyfeBe.comment.CommentGetsByBoard
+import lyfe.lyfeBe.comment.CommentUpdate
 import lyfe.lyfeBe.comment.dto.CommentDto
 import lyfe.lyfeBe.comment.dto.SaveCommentDto
 import lyfe.lyfeBe.comment.port.out.CommentPort
@@ -21,7 +25,7 @@ class CommentService(
     @Transactional
     fun create(commentCreate: CommentCreate): SaveCommentDto {
 
-        val user = userPort.getById(userId = commentCreate.userId)
+        val user = userPort.getById(userId = getLoginUserId(userPort))
         val board = boardPort.getById(id = commentCreate.boardId)
 
         commentCreate.commentGroupId?.let {
@@ -42,22 +46,24 @@ class CommentService(
     /**
      * 해당 게시글의 댓글 전체 조회
      */
-    fun getCommentsWithCursorAndBoard(command: CommentGetsByBoard): List<Comment> {
+    fun getCommentsWithCursorAndBoard(command: CommentGetsByBoard): List<CommentDto> {
         return commentPort.getCommentsWithCursorAndBoard(command.cursorId, command.boardId, command.pageable)
+            .let { return it.map { CommentDto.from(it) } }
     }
 
     /**
      * 자신의 댓글 전체 조회
      */
-    fun getCommentsWithCursorAndUser(command: CommentGetsByUserId): List<Comment> {
-        return commentPort.getCommentsWithCursorAndUser(command.cursorId, command.userId)
+    fun getCommentsWithCursorAndUser(cursorId : Long): List<CommentDto> {
+        return commentPort.getCommentsWithCursorAndUser(cursorId, getLoginUserId(userPort))
+            .let { return it.map { CommentDto.from(it) } }
     }
 
     @Transactional
     fun update(commentUpdate: CommentUpdate): SaveCommentDto {
         val comment = commentPort.getById(id = commentUpdate.commentId).update(commentUpdate)
 
-        if (comment.user.id != commentUpdate.userId) {
+        if (comment.user.id != getLoginUserId(userPort)) {
             throw ForbiddenException("자신의 댓글만 수정할 수 있습니다.")
         }
 

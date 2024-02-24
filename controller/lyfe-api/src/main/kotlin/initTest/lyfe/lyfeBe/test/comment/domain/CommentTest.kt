@@ -23,7 +23,6 @@ class CommentTest(
             "testContent",
             1L,
             1L,
-            1L
         )
 
         val user = User(
@@ -61,7 +60,6 @@ class CommentTest(
 
             Then("생성된 Comment 객체의 속성이 commentCreate와 일치") {
                 comment.content shouldBe commentCreate.content
-                comment.user.id shouldBe commentCreate.userId
                 comment.board.id shouldBe commentCreate.boardId
             }
         }
@@ -72,7 +70,6 @@ class CommentTest(
         val commentUpdate = CommentUpdate(
             1L,
             "testContent",
-            1L,
         )
         val user = User(
             1L,

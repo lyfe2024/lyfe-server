@@ -1,19 +1,18 @@
 package initTest.lyfe.lyfeBe.test.comment.controller
 
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
-import initTest.lyfe.lyfeBe.test.mock.FakeCommentRepository
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
 import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
+import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.setSecurityContextUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
-import java.time.Instant
+import org.springframework.security.core.context.SecurityContextHolder
 
 class GetCommentControllerTest(
 ) : BehaviorSpec({
@@ -25,7 +24,7 @@ class GetCommentControllerTest(
 
     beforeContainer {
 
-         user = createTestUser()
+        user = createTestUser()
         testContainer.userRepository.create(user)
 
         topic = Topic(1L, "testTopic")
@@ -35,7 +34,14 @@ class GetCommentControllerTest(
         board = createTestBoard()
         testContainer.boardRepository.create(board)
 
+        setSecurityContextUser(user)
+
     }
+
+    afterContainer {
+        SecurityContextHolder.clearContext()
+    }
+
 
     Given("댓글 조회 요청이 준비되었을 때") {
 
@@ -79,9 +85,8 @@ class GetCommentControllerTest(
 
             Then("저장된 댓글의 필드와 응답값과 일치해야 한다.") {
                 res.forEach {
-//                    it.commentGroupId shouldBe req.commentGroupId
                     it.content shouldBe req.content
-                    it.user.nickname shouldBe user.nickname
+                    it.user.username shouldBe user.nickname
                 }
             }
         }
