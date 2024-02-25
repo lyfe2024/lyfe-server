@@ -27,7 +27,9 @@ class ReportTest :BehaviorSpec({
             true,
             true,
             Role.USER,
+            "",
             UserStatus.ACTIVE
+
         )
         val reportedUser = User(
             1L,
@@ -40,6 +42,7 @@ class ReportTest :BehaviorSpec({
             true,
             true,
             Role.USER,
+            "",
             UserStatus.ACTIVE
         )
         When("ReportCreate, User, ReportTarget 객체를 사용하여 새 Report 객체를 생성했을 때") {

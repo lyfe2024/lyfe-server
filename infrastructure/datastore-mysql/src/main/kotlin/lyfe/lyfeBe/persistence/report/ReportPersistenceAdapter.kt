@@ -1,7 +1,7 @@
 package lyfe.lyfeBe.persistence.report
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import lyfe.lyfeBe.report.Report
+import lyfe.lyfeBe.report.ReportTarget
 import lyfe.lyfeBe.report.port.out.ReportPort
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional
 class ReportPersistenceAdapter(
     private val reportJpaRepository: ReportJpaRepository
 ) : ReportPort {
-
-    val log = KotlinLogging.logger {}
 
     @Transactional
     override fun create(report: Report): Report {
@@ -30,12 +28,15 @@ class ReportPersistenceAdapter(
             .orElseThrow { throw IllegalArgumentException("해당하는 신고가 존재하지 않습니다.") }.toDomain()
     }
 
-    override fun getByUserIdAndReportTargetId(userId: Long, reportTargetId: Long): Report? {
-        return reportJpaRepository.findByReporterIdAndReportTargetId(userId, reportTargetId)?.toDomain()
+    override fun getByUserIdAndReportTargetIdAndReportTarget(userId: Long, reportTargetId: Long, reportTarget: ReportTarget): Report? {
+        return reportJpaRepository.findByReporterIdAndReportTargetIdAndReportTarget(
+            reporterId = userId,
+            reportTargetId = reportTargetId,
+            reportTarget = reportTarget)?.toDomain()
     }
 
-    override fun getReportedCount(reportTargetId: Long): Int {
-        return reportJpaRepository.findByReportTargetId(reportTargetId).size
+    override fun getReportedCount(reportedUserId: Long): Int {
+        return reportJpaRepository.findByReportedUserId(reportedUserId).size
     }
 
     override fun getReportsWithCursor(
@@ -52,9 +53,4 @@ class ReportPersistenceAdapter(
         val save = reportJpaRepository.save(from)
         return save.toDomain()
     }
-
-    override fun getReportedCountsByUserIds(userIds: Set<Long>): Map<Long, Int> {
-        return reportJpaRepository.countReportsByTargetIds(userIds).map { it[0] as Long to it[1] as Int }.toMap()
-    }
-
 }

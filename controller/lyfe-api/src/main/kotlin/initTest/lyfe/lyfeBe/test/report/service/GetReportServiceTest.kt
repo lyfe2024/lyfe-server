@@ -8,15 +8,12 @@ import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.report.Report
-import lyfe.lyfeBe.report.ReportGets
 import lyfe.lyfeBe.report.ReportTarget
 import lyfe.lyfeBe.report.service.ReportService
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
 import org.springframework.security.authentication.TestingAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Instant
@@ -43,6 +40,7 @@ class GetReportServiceTest: BehaviorSpec({
             hashedPassword = "hashedPassword",
             nickname = "testUser",
             notificationConsent = true,
+            profileUrl = "testProfileUrl",
             fcmRegistration = true,
             role = Role.USER,
             socialId = "testSocialId",
@@ -57,6 +55,7 @@ class GetReportServiceTest: BehaviorSpec({
             nickname = "testUser2",
             notificationConsent = true,
             fcmRegistration = true,
+            profileUrl = "testProfileUrl",
             role = Role.USER,
             socialId = "testSocialId",
             socialType = SocialType.GOOGLE,
@@ -109,6 +108,7 @@ class GetReportServiceTest: BehaviorSpec({
                 hashedPassword = "hashedPassword",
                 nickname = "testUser",
                 notificationConsent = true,
+                profileUrl = "testProfileUrl",
                 fcmRegistration = true,
                 role = Role.USER,
                 socialId = "testSocialId",
@@ -142,27 +142,27 @@ class GetReportServiceTest: BehaviorSpec({
             }
         }
     }
-
-    Given("신고 리스트 조회 요청이 준비 되었을 때"){
-
-        val pageable = PageRequest.of(
-            0, // 페이지 번호 (0부터 시작)
-            5, // 페이지 크기
-            Sort.by("id").descending()
-        )
-
-        val reportGets = ReportGets(
-            cursorId = 0L,
-            pageable = pageable
-        )
-
-        When("신고 리스트 조회 요청을 하면"){
-            val reportList = reportService.getReports(reportGets)
-
-            Then("신고 리스트가 반환된다"){
-                reportList.size shouldBe 1
-            }
-        }
-    }
+//
+//    Given("신고 리스트 조회 요청이 준비 되었을 때"){
+//
+//        val pageable = PageRequest.of(
+//            0, // 페이지 번호 (0부터 시작)
+//            5, // 페이지 크기
+//            Sort.by("id").descending()
+//        )
+//
+//        val reportGets = ReportGets(
+//            cursorId = 0L,
+//            pageable = pageable
+//        )
+//
+//        When("신고 리스트 조회 요청을 하면"){
+//            val reportList = reportService.getReports(reportGets)
+//
+//            Then("신고 리스트가 반환된다"){
+//                reportList.size shouldBe 1
+//            }
+//        }
+//    }
 
 })

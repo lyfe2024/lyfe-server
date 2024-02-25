@@ -55,6 +55,7 @@ class SecurityConfig(
                         "/health", "/",
                         "/v1/images/**",
                         "/v1/auth/**",
+                        "/v1/users/check-nickname/",
                     ).permitAll()
                     .anyRequest().authenticated()
             }

@@ -1,14 +1,15 @@
 package initTest.lyfe.lyfeBe.test.report.controller
 
+import initTest.lyfe.lyfeBe.test.board.BoardFactory
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
+import initTest.lyfe.lyfeBe.test.report.ReportFactory
+import initTest.lyfe.lyfeBe.test.user.UserFactory
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.auth.PrincipalDetails
 import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.report.Report
-import lyfe.lyfeBe.report.ReportTarget
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
@@ -20,86 +21,25 @@ import java.time.Instant
 class UpdateReportControllerTest : BehaviorSpec({
 
     val testContainer = TestContainer.build()
+    lateinit var board: Board
+    lateinit var topic: Topic
+    lateinit var report: Report
 
     beforeContainer {
 
-        val reporter = User(
-            id = 1L,
-            email = "testUser@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            socialId = "testSocialId",
-            socialType = SocialType.GOOGLE,
-            userStatus = UserStatus.ACTIVE
-        )
-
-        val reportedUser = User(
-            id = 2L,
-            email = "testUser2@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "testUser2",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.USER,
-            socialId = "testSocialId",
-            socialType = SocialType.GOOGLE,
-            userStatus = UserStatus.ACTIVE
-        )
-
-
-        val admin = User(
-            id = 3L,
-            email = "admin@example.com",
-            hashedPassword = "hashedPassword",
-            nickname = "admin",
-            notificationConsent = true,
-            fcmRegistration = true,
-            role = Role.ADMIN,
-            socialId = "testSocialId",
-            socialType = SocialType.GOOGLE,
-            userStatus = UserStatus.ACTIVE
-        )
-
-
+        val reporter = UserFactory.createTestUser()
+        val reportedUser = UserFactory.createTestUser(2)
         testContainer.userRepository.create(reporter)
         testContainer.userRepository.create(reportedUser)
-        testContainer.userRepository.create(admin)
 
-        val board = testContainer.boardRepository.create(
-            Board(
-                id = 2L,
-                title = "testTitle2",
-                content = "testContent2",
-                boardType = BoardType.BOARD,
-                user = reporter,
-                topic = testContainer.topicRepository.create(Topic(1L, "testTopic")),
-                createdAt = Instant.now(),
-                updatedAt = Instant.now()
-            )
-        )
 
+        board = BoardFactory.createTestBoard()
         testContainer.boardRepository.create(board)
 
-        val topic = testContainer.topicRepository.create(Topic(1L, "testTopic"))
-
+        topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
 
-
-        val report = Report(
-            id = 1L,
-            reportTarget = ReportTarget.BOARD,
-            reportTargetId = 1L,
-            reporter = reporter,
-            reportedUser = reportedUser,
-            isCanceled = false,
-            canceledAt = null,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
-
+        report = ReportFactory.createTestReport()
         testContainer.reportRepository.create(report)
 
     }
@@ -120,9 +60,12 @@ class UpdateReportControllerTest : BehaviorSpec({
                 notificationConsent = true,
                 fcmRegistration = true,
                 role = Role.USER,
+                profileUrl = "testProfileUrl",
                 socialId = "testSocialId",
                 socialType = SocialType.GOOGLE,
-                userStatus = UserStatus.ACTIVE
+                userStatus = UserStatus.ACTIVE,
+                createdAt = Instant.now(),
+                updatedAt = Instant.now()
             )
         )
 
@@ -134,24 +77,23 @@ class UpdateReportControllerTest : BehaviorSpec({
 
     Given("신고 수정 요청이 준비되었을 때") {
 
-        val fakeAdminDetails = PrincipalDetails(
-            User(
-                id = 3L,
-                email = "admin@example.com",
-                hashedPassword = "hashedPassword",
-                nickname = "admin",
-                notificationConsent = true,
-                fcmRegistration = true,
-                role = Role.ADMIN,
-                socialId = "testSocialId",
-                socialType = SocialType.GOOGLE,
-                userStatus = UserStatus.ACTIVE
-            )
+        val admin = User(
+            id = 3L,
+            email = "admin@example.com",
+            hashedPassword = "hashedPassword",
+            nickname = "admin",
+            notificationConsent = true,
+            fcmRegistration = true,
+            role = Role.ADMIN,
+            profileUrl = "testProfileUrl",
+            socialId = "testSocialId",
+            socialType = SocialType.GOOGLE,
+            userStatus = UserStatus.ACTIVE,
+            createdAt = Instant.now(),
+            updatedAt = Instant.now()
         )
-
-        // TestingAuthenticationToken에 fakeUserDetails 설정
-        val authentication = TestingAuthenticationToken(fakeAdminDetails, null)
-        SecurityContextHolder.getContext().authentication = authentication
+        testContainer.userRepository.create(admin)
+        UserFactory.setSecurityContextUser(admin)
 
         When("신고 취소 요청을 보내면") {
             testContainer.reportController.cancelReport(1L).result

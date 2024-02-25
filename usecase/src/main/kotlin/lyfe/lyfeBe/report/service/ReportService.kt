@@ -40,7 +40,7 @@ class ReportService(
     fun getReportById(reportId: Long): ReportDto {
         val report = reportPort.getById(reportId)
         val reportedUser = userPort.getById(report.reportedUser.id)
-        val reportedCount = reportPort.getReportedCount(report.reportTargetId)
+        val reportedCount = reportPort.getReportedCount(reportedUser.id)
         return ReportDto.from(report, reportedUser, reportedCount)
     }
 
@@ -50,19 +50,11 @@ class ReportService(
             cursorId = command.cursorId,
             pageable = command.pageable
         )
-
-        // 신고된 사용자 ID 목록 생성
-        val reportedUserIds = reports.map { it.reportedUser.id }.toSet()
-
-        // 신고된 사용자별 신고 횟수 조회
-        val reportedCounts = reportPort.getReportedCountsByUserIds(reportedUserIds)
-
-        return reports.map { report ->
-            // 각 신고된 사용자의 신고 횟수를 가져옴
-            val reportedCount = reportedCounts[report.reportedUser.id] ?: 0
-            ReportDto.from(report, report.reportedUser, reportedCount)
+        return reports.map {
+            val reportedUser = userPort.getById(it.reportedUser.id)
+            val reportedCount = reportPort.getReportedCount(it.reportTargetId)
+            ReportDto.from(it, reportedUser, reportedCount)
         }
-
     }
 
     // 신고 취소
@@ -76,7 +68,9 @@ class ReportService(
 
 
     fun checkDuplicatedReport(report: Report) {
-        val duplicatedReport = reportPort.getByUserIdAndReportTargetId(report.reporter.id, report.reportTargetId)
+        val duplicatedReport = reportPort.getByUserIdAndReportTargetIdAndReportTarget(
+            report.reporter.id,
+            report.reportTargetId, report.reportTarget)
         require(duplicatedReport == null) { "이미 신고한 게시글입니다." }
     }
 

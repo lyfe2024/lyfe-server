@@ -12,8 +12,7 @@ import lyfe.lyfeBe.report.service.ReportService
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.topic.port.TopicService
 import lyfe.lyfeBe.user.port.out.UserPort
-import lyfe.lyfeBe.web.board.*
-
+import lyfe.lyfeBe.web.board.BoardController
 import lyfe.lyfeBe.web.comment.CommentController
 import lyfe.lyfeBe.web.report.ReportController
 import lyfe.lyfeBe.web.topic.TopicController
@@ -118,7 +117,8 @@ class TestContainer(
                 userRepository = userRepository,
                 topicRepository = topicRepository,
                 fakeNotificationRepository = fakeNotificationRepository,
-                whiskyRepository = fakeWhiskyRepository
+                whiskyRepository = fakeWhiskyRepository,
+                reportRepository = reportRepository
             )
         }
     }
