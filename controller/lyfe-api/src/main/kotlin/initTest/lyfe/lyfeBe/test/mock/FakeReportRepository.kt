@@ -45,13 +45,9 @@ class FakeReportRepository: ReportPort {
     }
 
     override fun getReportsWithCursor(cursorId: Long, pageable: Pageable): List<Report> {
-        val report = data.filter { it.id < cursorId }.sortedByDescending { it.id }
-
-        val pageSize = pageable.pageSize
-        val offset = pageable.offset.toInt()
-        val toIndex = (offset + pageSize).coerceAtMost(report.size)
-
-        return if (offset < report.size) report.subList(offset, toIndex) else emptyList()
+        return data.filter { it.id > cursorId }
+            .sortedByDescending { it.id }
+            .take(pageable.pageSize)
     }
 
     override fun cancel(report: Report): Report {
