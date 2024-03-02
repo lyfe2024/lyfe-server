@@ -98,8 +98,8 @@ jobs:
       - name: Get Short SHA
         id: short_sha
         run: |
-            echo "::set-output name=sha_short::$(echo ${{ github.sha }} | head -c 7)"
-            echo "Short SHA: ${{ steps.short_sha.outputs.sha_short }}"
+          echo "::set-output name=sha_short::$(echo ${{ github.sha }} | head -c 7)"
+          echo "Short SHA: ${{ steps.short_sha.outputs.sha_short }}"
       - name: Deploy to EC2 (Develop)
         uses: appleboy/ssh-action@master
         with:
@@ -110,14 +110,13 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}
             docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }} lyfe-server-develop
             docker rm -f lyfe-server-develop || true
-            docker run -d --name lyfe-server-develop -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev,secret -p 80:8081 ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server-develop:latest
-
+            docker run -d --name lyfe-server-develop -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev,secret -p 80:8081 lyfe-server-develop:latest
   deploy-to-master:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2 (Master)
+      - name: Deploy to EC2 (Master)d
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_MASTER_IP }}
@@ -127,4 +126,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}
             docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }} lyfe-server-master
             docker rm -f lyfe-server-master || true
-            docker run -d --name lyfe-server-master -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-prod,secret -p 80:8082 ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server-master:latest
+            docker run -d --name lyfe-server-master -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-prod,secret -p 80:8082 lyfe-server-master:latest
