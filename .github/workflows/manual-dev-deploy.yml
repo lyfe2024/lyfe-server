@@ -90,4 +90,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }}
             docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:${{ steps.short_sha.outputs.sha_short }} lyfe-server-develop
             docker rm -f lyfe-server-develop || true
-            docker run -d --name lyfe-server-develop -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev,secret -p 80:8081 ${{ secrets.DOCKER_HUB_USERNAME }}/lyfe-server:latest
+            docker run -d --name lyfe-server-develop -e TZ=Asia/Seoul -e SPRING_PROFILES_ACTIVE=ec2-dev,secret -p 80:8081 lyfe-server-develop:latest
