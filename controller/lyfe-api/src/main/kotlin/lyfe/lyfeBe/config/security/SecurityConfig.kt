@@ -3,6 +3,7 @@ package lyfe.lyfeBe.config.security
 import lyfe.lyfeBe.auth.service.PrincipalDetailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -51,6 +52,7 @@ class SecurityConfig(
             }
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
+                    .requestMatchers(HttpMethod.GET, "/v1/boards/**").permitAll()
                     .requestMatchers(
                         "/health", "/",
                         "/v1/images/**",
