@@ -1,8 +1,10 @@
 package lyfe.lyfeBe.config.security
 
 import lyfe.lyfeBe.auth.service.PrincipalDetailService
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -13,6 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 @EnableWebSecurity
 @Configuration
@@ -51,6 +57,7 @@ class SecurityConfig(
             }
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
+                    .requestMatchers(HttpMethod.GET, "/v1/boards/**").permitAll()
                     .requestMatchers(
                         "/health", "/",
                         "/v1/images/**",
@@ -65,6 +72,31 @@ class SecurityConfig(
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowCredentials = true
+        configuration.allowedOrigins = listOf(
+            "https://api.lyfeteam.info",
+            "http://localhost:3000",
+            "http://localhost:8080",
+        )
+        configuration.allowedMethods = listOf(
+            HttpMethod.POST.name(),
+            HttpMethod.GET.name(),
+            HttpMethod.PUT.name(),
+            HttpMethod.DELETE.name(),
+            HttpMethod.OPTIONS.name()
+        )
+        configuration.allowedHeaders = listOf("*")
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        val bean = FilterRegistrationBean(CorsFilter(source))
+        bean.order = 0
+        return source
     }
 }
 
