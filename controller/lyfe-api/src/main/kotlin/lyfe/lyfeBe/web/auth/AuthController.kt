@@ -72,4 +72,10 @@ class AuthController(
     ) = CommonResponse(
         service.revoke()
     )
+
+    @PostMapping("/admin/token")
+    fun createAdminToken(
+    ) = CommonResponse(
+        service.createPermanentToken()
+    )
 }
