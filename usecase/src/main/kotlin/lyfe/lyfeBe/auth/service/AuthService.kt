@@ -1,11 +1,14 @@
 package lyfe.lyfeBe.auth.service
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import lyfe.lyfeBe.auth.AuthLogin
+import org.springframework.beans.factory.annotation.Value
 import lyfe.lyfeBe.auth.RefreshToken
 import lyfe.lyfeBe.auth.RefreshTokenCreate
 import lyfe.lyfeBe.auth.TokenStatus
-import lyfe.lyfeBe.auth.dto.*
+import lyfe.lyfeBe.auth.dto.JoinDto
+import lyfe.lyfeBe.auth.dto.LoginDto
+import lyfe.lyfeBe.auth.dto.OAuthIdAndRefreshTokenDto
+import lyfe.lyfeBe.auth.dto.TokenDto
 import lyfe.lyfeBe.auth.port.out.RefreshTokenPort
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.EMAIL_CLAIM
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.REFRESH_TOKEN
@@ -14,7 +17,6 @@ import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserJoin
 import lyfe.lyfeBe.user.port.out.UserPort
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -36,8 +38,6 @@ class AuthService(
     @Value("\${jwt.system.username}")
     private val systemUsername: String
 ) {
-
-    private val log = KotlinLogging.logger { }
 
     fun loginAccess(authLogin: AuthLogin): Any {
         val socialIdAndRefreshToken = fetchSocialEmail(authLogin)
