@@ -45,7 +45,25 @@ class AdminDummyData(
                 updatedAt = Instant.now()
             )
         )
+
+        val systemUser = UserJpaEntity(
+            email = "systemManager@GOOGLE",
+            hashedPassword = passwordEncoder.encode("systemManager12!"),
+            nickname = "systemManager",
+            socialType = SocialType.GOOGLE,
+            socialId = "1394-0122k3",
+            notificationConsent = false,
+            profileUrl = "",
+            fcmRegistration = false,
+            userStatus = UserStatus.ACTIVE,
+            role = Role.SYSTEM,
+            baseEntity = BaseEntity(
+                createdAt = Instant.now(),
+                updatedAt = Instant.now()
+            )
+        )
         userJpaRepository.save(adminUser)
+        userJpaRepository.save(systemUser)
 
     }
 }
