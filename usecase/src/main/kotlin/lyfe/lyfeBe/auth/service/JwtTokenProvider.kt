@@ -6,6 +6,8 @@ import io.jsonwebtoken.security.Keys
 import lyfe.lyfeBe.auth.dto.TokenDto
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.ACCESS_TOKEN
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.EMAIL_CLAIM
+import lyfe.lyfeBe.auth.service.JwtTokenInfo.PERMANENT_TOKEN
+import lyfe.lyfeBe.auth.service.JwtTokenInfo.PERMANENT_TOKEN_EXPIRE_TIME
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.REFRESH_TOKEN
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.SIGN_UP_SUBJECT
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.TEN_MINUTE
@@ -59,6 +61,24 @@ class JwtTokenProvider(
             .setExpiration(Date(now.time + TEN_MINUTE))
             .claim(EMAIL_CLAIM, email)
             .claim(REFRESH_TOKEN, refreshToken)
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact()
+    }
+
+    fun getRefreshTokenExpireTime(): Long {
+        return refreshTokenExpireTime
+    }
+
+    fun getPermanentExpireTime(): Long  {
+        return PERMANENT_TOKEN_EXPIRE_TIME
+    }
+
+    fun createPermanentToken(): String {
+        val now = Date()
+        return Jwts.builder()
+            .setSubject(PERMANENT_TOKEN)
+            .setExpiration(Date(now.time + PERMANENT_TOKEN_EXPIRE_TIME))
+            .claim(PERMANENT_TOKEN, "")
             .signWith(key, SignatureAlgorithm.HS512)
             .compact()
     }
