@@ -34,6 +34,8 @@ class TopicPersistenceAdapter(
 
     override fun getToday() : Topic{
         val tomorrow = LocalDate.now()
-        return topicRepository.findByDate(tomorrow).toDomain()
+        return topicRepository.findByDate(tomorrow)
+            .map { it.toDomain() }
+            .orElseThrow { IllegalStateException("Topic not found for the given date") }
     }
 }

@@ -4,14 +4,17 @@ import lyfe.lyfeBe.topic.Topic
 
 class GetTopicDto(
     val id: Long,
-    val content: String
+    val content: String,
+    val appliedAt: String?
+
 ) {
 
     companion object {
         fun toDto(topic: Topic) =
             GetTopicDto(
                 id = topic.id,
-                content = topic.content
+                content = topic.content,
+                appliedAt = topic.appliedAt
             )
 
         fun toDtoList(topics: List<Topic>): List<GetTopicDto> =

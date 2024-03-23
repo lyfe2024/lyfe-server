@@ -4,13 +4,15 @@ import lyfe.lyfeBe.topic.*
 import lyfe.lyfeBe.topic.dto.GetTopicDto
 import lyfe.lyfeBe.topic.dto.SaveTopicDto
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Service
 class TopicService(
     private val topicPort: TopicPort,
 ) {
-
     fun create(topicCreate: TopicCreate) = SaveTopicDto.toDto(topicPort.create(Topic.from(topicCreate)))
+
 
     fun update(topicUpdate: TopicUpdate) {
         topicPort.update(Topic.from(topicUpdate))

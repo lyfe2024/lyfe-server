@@ -1,6 +1,7 @@
 package initTest.lyfe.lyfeBe.test.topic.service
 
 import initTest.lyfe.lyfeBe.test.mock.FakeTopicRepository
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
@@ -10,6 +11,8 @@ import lyfe.lyfeBe.topic.TopicPastGet
 import lyfe.lyfeBe.topic.port.TopicService
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.security.core.context.SecurityContextHolder
+import java.time.LocalDate
 
 
 class GetTopicServiceTest(
@@ -21,30 +24,38 @@ class GetTopicServiceTest(
     )
 
 
+    afterContainer {
+        fakeTopicRepository.clear()
+    }
+
     Given("Topic data가 준비되어있고 ") {
 
 
         val topicCreate = TopicCreate(
-            content = "testTopic",
+            content = "testTopic333",
         )
-        topicService.create(topicCreate)
+
+        val savedTopic = topicService.create(topicCreate)
 
         When("토픽 아이디로 조회 요청을 처리할 때") {
 
             val topicGet = TopicGet(
-                1L
+                savedTopic.id
             )
+            println("@@")
+
+            println(fakeTopicRepository.get())
 
             val topicDto = topicService.get(topicGet)
 
             Then("생성된 게시판의 속성이 요청과 일치하는지 확인할 때") {
-                topicDto.id shouldBe 1L
-                topicDto.content shouldBe "testTopic"
+                topicDto.id shouldBe savedTopic.id
+                topicDto.content shouldBe topicCreate.content
             }
         }
     }
 
-    Given("Topic data가 준비되어있고 ") {
+    Given("Topic data(여러개)가 준비되있고 ") {
 
 
         val topicCreate = TopicCreate(
@@ -76,6 +87,34 @@ class GetTopicServiceTest(
                 past.size shouldBeLessThan 6
                 past.forEach {
                     it.content shouldBe topicCreate.content
+                }
+            }
+        }
+    }
+
+    Given("오늘의 Topic이 존재할 때") {
+        val today = LocalDate.now()
+        val topicCreate = TopicCreate(
+            content = "Today's Topic",
+        )
+        topicService.create(topicCreate)
+
+        When("오늘의 Topic을 조회하면") {
+            val todayTopic = topicService.getToday()
+
+            Then("오늘 날짜의 Topic이 반환되어야 함") {
+                todayTopic.content shouldBe "Today's Topic"
+//                todayTopic.
+//                todayTopic..toLocalDate() shouldBe today
+            }
+        }
+    }
+
+    Given("오늘의 Topic이 존재하지 않을 때") {
+        When("오늘의 Topic을 조회하면") {
+            Then("IllegalStateException이 발생해야 함") {
+                shouldThrow<IllegalStateException> {
+                    topicService.getToday()
                 }
             }
         }

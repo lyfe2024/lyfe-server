@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.Optional
 
 
 interface TopicJpaRepository: JpaRepository<TopicJpaEntity, Long> {
@@ -16,7 +17,6 @@ interface TopicJpaRepository: JpaRepository<TopicJpaEntity, Long> {
     @Query("SELECT t FROM TopicJpaEntity t WHERE t.appliedAt < :date AND t.id < :cursorId")
     fun findPastTopics(date: Instant, @Param("cursorId") cursorId: Long?, pageable: Pageable): Page<TopicJpaEntity>
 
-//    @Query("SELECT t FROM TopicJpaEntity t WHERE DATE_FORMAT(t.baseEntity.createdAt, '%Y-%m-%d') = DATE_FORMAT(CURRENT_DATE, '%Y-%m-%d')")
     @Query("SELECT t FROM TopicJpaEntity t WHERE FUNCTION('DATE', t.baseEntity.createdAt) = :date")
-    fun findByDate(@Param("date") date : LocalDate): TopicJpaEntity
+    fun findByDate(@Param("date") date : LocalDate): Optional<TopicJpaEntity>
 }
