@@ -58,13 +58,16 @@ class BoardFactory {
             boardId: Long = 1L,
             title: String = "testTitle",
             content: String = "testContent",
-            imageUrl: String = "https://example.com/image.jpg"
+            imageUrl: String = "https://example.com/image.jpg",
+            userId: Long = 1L,
+
         ): BoardUpdate {
             return BoardUpdate(
                 boardId = boardId,
                 title = title,
                 content = content,
-                imageUrl = imageUrl
+                imageUrl = imageUrl,
+                userId = userId
             )
         }
 

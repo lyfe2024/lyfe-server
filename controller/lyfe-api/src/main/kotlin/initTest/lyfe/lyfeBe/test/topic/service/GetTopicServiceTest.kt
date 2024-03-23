@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class GetTopicServiceTest(
@@ -93,7 +94,7 @@ class GetTopicServiceTest(
     }
 
     Given("오늘의 Topic이 존재할 때") {
-        val today = LocalDate.now()
+        val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"))
         val topicCreate = TopicCreate(
             content = "Today's Topic",
         )
@@ -104,8 +105,7 @@ class GetTopicServiceTest(
 
             Then("오늘 날짜의 Topic이 반환되어야 함") {
                 todayTopic.content shouldBe "Today's Topic"
-//                todayTopic.
-//                todayTopic..toLocalDate() shouldBe today
+                todayTopic.appliedAt shouldBe today
             }
         }
     }

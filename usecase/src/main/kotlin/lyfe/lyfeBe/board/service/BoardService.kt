@@ -110,7 +110,7 @@ class BoardService(
 
 
     fun update(boardUpdate: BoardUpdate): UpdateBoardDto {
-        val board = getById(boardUpdate.boardId).update(boardUpdate)
+        val board = getById(boardUpdate.boardId).update(boardUpdate,boardUpdate.userId)
         return UpdateBoardDto(boardPort.update(board).id)
     }
 

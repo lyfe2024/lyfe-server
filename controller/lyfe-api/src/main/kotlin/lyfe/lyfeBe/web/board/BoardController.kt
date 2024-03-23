@@ -5,12 +5,14 @@ import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
+import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.utils.ControllerUtils.Companion.getEffectiveCursorId
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.board.req.BoardUpdateRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -42,15 +44,15 @@ class BoardController(
         return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, whiskyCount, type, count)))
     }
     // 사용자 보드 리스트
-    @GetMapping("/{userId}/{type}")
+    @GetMapping("/user/{type}")
     fun getUserBoards(
-        @PathVariable userId: Long,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @AuthenticationPrincipal  user : User
         ): CommonResponse<List<BoardDto>> {
          val cursorValue = getEffectiveCursorId(cursorId)
-        return CommonResponse(service.getUserBoards(BoardsUserGet(userId, cursorValue, type, pageable)))
+        return CommonResponse(service.getUserBoards(BoardsUserGet(user.id, cursorValue, type, pageable)))
     }
 
     // 사진없는글 단건 조회
@@ -79,14 +81,16 @@ class BoardController(
     @PutMapping("/{boardId}")
     fun update(
         @PathVariable(value = "boardId") boardId: Long,
-        @Valid @RequestBody req: BoardUpdateRequest
+        @Valid @RequestBody req: BoardUpdateRequest,
+        @AuthenticationPrincipal  user : User
     ) = CommonResponse(
         service.update(
             BoardUpdate(
                 boardId = boardId,
                 title = req.title,
                 content = req.content,
-                imageUrl = req.imageUrl
+                imageUrl = req.imageUrl,
+                userId = user.id
             )
         )
     )
