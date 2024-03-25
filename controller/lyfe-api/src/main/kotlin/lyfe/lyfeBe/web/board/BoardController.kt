@@ -36,12 +36,11 @@ class BoardController(
     // 사진없는 보드 인기글  + 오늘의 베스트 count 요청 갯수  OPTION , date Option
     @GetMapping("/popular/{whiskyCount}")
     fun getPopularBoards(
-        @PathVariable whiskyCount: Long,
         @RequestParam(required = false) date: String?,
         @RequestParam(required = false, defaultValue = "5") count: Int,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType
     ): CommonResponse<List<BoardDto>> {
-        return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, whiskyCount, type, count)))
+        return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, type, count)))
     }
     // 사용자 보드 리스트
     @GetMapping("/user/{type}")

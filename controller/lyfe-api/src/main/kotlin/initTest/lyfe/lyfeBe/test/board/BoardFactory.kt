@@ -82,10 +82,9 @@ class BoardFactory {
             )
         }
 
-        fun createPopularBoard(date: String, whiskyCount: Long, type: BoardType, count: Int): BoardsPopularGet {
+        fun createPopularBoard(date: String,  type: BoardType, count: Int): BoardsPopularGet {
             return BoardsPopularGet(
                 date = date,
-                whiskyCount = whiskyCount,
                 type = type,
                 count = count,
             )
