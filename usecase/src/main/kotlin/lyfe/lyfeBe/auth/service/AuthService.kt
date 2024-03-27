@@ -114,7 +114,7 @@ class AuthService(
                     refreshToken = token,
                     user = systemUser,
                     expiredAt = Instant.now().plusMillis(jwtTokenProvider.getPermanentExpireTime()),
-                    tokenStatus = TokenStatus.NORMAL
+                    tokenStatus = TokenStatus.PERMANENT
                 )
             )
             refreshTokenPort.create(refreshToken)

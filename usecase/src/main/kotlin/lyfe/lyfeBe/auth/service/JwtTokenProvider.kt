@@ -27,6 +27,9 @@ class JwtTokenProvider(
 
     @Value("\${jwt.refreshTokenExpireTime}")
     private val refreshTokenExpireTime: Long,
+
+    @Value("\${jwt.system.username}")
+    private val systemUsername: String
 ) {
     private val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray())
 
@@ -78,7 +81,7 @@ class JwtTokenProvider(
         return Jwts.builder()
             .setSubject(PERMANENT_TOKEN)
             .setExpiration(Date(now.time + PERMANENT_TOKEN_EXPIRE_TIME))
-            .claim(PERMANENT_TOKEN, "")
+            .claim(PERMANENT_TOKEN, systemUsername)
             .signWith(key, SignatureAlgorithm.HS512)
             .compact()
     }
