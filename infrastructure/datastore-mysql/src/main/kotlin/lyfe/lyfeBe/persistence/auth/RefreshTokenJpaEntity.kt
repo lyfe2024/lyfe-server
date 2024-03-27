@@ -33,7 +33,7 @@ class RefreshTokenJpaEntity(
     val expiredAt: Instant? = null,
 
     @Enumerated(EnumType.STRING)
-    val tokenStatus: TokenStatus = TokenStatus.PERMANENT
+    val tokenStatus: TokenStatus
 ) {
     fun toDomain(): RefreshToken {
         return RefreshToken(
@@ -52,7 +52,8 @@ class RefreshTokenJpaEntity(
         fun from(refreshToken: RefreshToken) = RefreshTokenJpaEntity(
             id = refreshToken.id,
             refreshToken = refreshToken.refreshToken,
-            user = UserJpaEntity.from(refreshToken.user)
+            user = UserJpaEntity.from(refreshToken.user),
+            tokenStatus = refreshToken.tokenStatus
         )
     }
 
