@@ -1,6 +1,7 @@
 package initTest.lyfe.lyfeBe.test.board
 
 import initTest.lyfe.lyfeBe.test.user.UserFactory
+import lyfe.lyfeBe.Constants.Companion.CURSOR_VALUE
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.User
@@ -84,6 +85,7 @@ class BoardFactory {
 
         fun createPopularBoard(date: String,  type: BoardType, count: Int): BoardsPopularGet {
             return BoardsPopularGet(
+                whiskyCount = CURSOR_VALUE,
                 date = date,
                 type = type,
                 count = count,

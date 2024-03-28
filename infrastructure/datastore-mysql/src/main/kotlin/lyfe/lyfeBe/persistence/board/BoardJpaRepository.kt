@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
+import java.time.LocalDate
 
 interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
 
@@ -26,7 +28,7 @@ interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
             FROM whisky
             GROUP BY board_id
         ) w ON b.id = w.board_id
-        WHERE b.board_type = :type
+        WHERE b.board_type =  :#{#type.name()}
         AND (:date IS NULL OR DATE(b.created_at) = STR_TO_DATE(:date, '%Y-%m-%d'))
         AND 
             (
@@ -37,10 +39,14 @@ interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
             OR    COALESCE(w.w_count, 0) = 0
         )
         ORDER BY COALESCE(w.w_count, 0) DESC, b.id DESC
-        LIMIT :count
+        LIMIT :pageCount
         """, nativeQuery = true
     )
-    fun findBoardsWithWhiskyCount(cursorId: String, count: Int, date: String?, type: BoardType): List<BoardJpaEntity>
+    fun findBoardsWithWhiskyCount(  @Param("cursorId") cursorId: Long,
+                                    @Param("pageCount") pageCount: Int,
+                                    @Param("date") date: String?,
+                                    @Param("type") type: BoardType
+    ): List<BoardJpaEntity>
 
 
     @Query("SELECT t FROM BoardJpaEntity t WHERE t.user.id = :userId AND t.boardType = :type AND t.id < :cursorId")
