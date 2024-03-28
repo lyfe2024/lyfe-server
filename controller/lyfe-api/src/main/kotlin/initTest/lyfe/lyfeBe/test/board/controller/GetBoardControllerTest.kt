@@ -6,6 +6,7 @@ import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import lyfe.lyfeBe.Constants.Companion.CURSOR_VALUE
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.topic.Topic
@@ -117,7 +118,8 @@ class GetBoardControllerTest(
 
 
             val res: List<BoardDto> = testContainer.boardController.getPopularBoards(
-                date = null,
+                whiskyCount = CURSOR_VALUE,
+                date = "9999-12-31",
                 count = testPageCount,
                 type = BoardType.BOARD
             ).result

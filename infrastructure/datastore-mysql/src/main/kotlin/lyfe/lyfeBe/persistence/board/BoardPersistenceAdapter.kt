@@ -31,14 +31,21 @@ class BoardPersistenceAdapter(
         boardJpaRepository.findByIdCursorId(cursorId, date, type, pageable).map { it.toDomain() }
 
 
-    override fun findPopularBoards(cursor: String, count: Int, date: String?, type: BoardType) =
-        boardJpaRepository.findBoardsWithWhiskyCount(cursor, count, date, type).map { it.toDomain() }
+    override fun findPopularBoards(whiskyCount: Long, count: Int, date: String?, type: BoardType): List<Board> {
+        println("@@@@@@")
+        println(whiskyCount)
+        println(count)
+        println(date)
+        println(type)
+        return boardJpaRepository.findBoardsWithWhiskyCount(whiskyCount, count, date, type).map { it.toDomain() }
+
+    }
 
     override fun findByUserAndBoardType(
         userId: Long,
         cursorId: Long,
         type: BoardType,
         pageable: Pageable
-    ) = boardJpaRepository.findByUserIdAndBoardTypeAndCursorId(userId, cursorId , type , pageable ).map { it.toDomain() }
+    ) = boardJpaRepository.findByUserIdAndBoardTypeAndCursorId(userId, cursorId, type, pageable).map { it.toDomain() }
 
 }

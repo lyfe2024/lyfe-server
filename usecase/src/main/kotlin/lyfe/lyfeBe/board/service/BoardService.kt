@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.board.service
 
+import lyfe.lyfeBe.Constants.Companion.CURSOR_VALUE
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.dto.BoardDtoAssembly
@@ -7,11 +8,9 @@ import lyfe.lyfeBe.board.dto.SaveBoardDto
 import lyfe.lyfeBe.board.dto.UpdateBoardDto
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
-import lyfe.lyfeBe.fomatter.CursorGenerator.Companion.createCursorValue
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,7 +24,6 @@ class BoardService(
 ) {
 
 
-    private  val MAX_CURSOR_VALUE = "99999999999999999999"
 
     fun getById(id: Long): Board {
         return boardPort.getById(id)
@@ -61,7 +59,7 @@ class BoardService(
     fun getPopularBoards(boardsPopularGet: BoardsPopularGet): List<BoardDto> {
 
         val boards = boardPort.findPopularBoards(
-            MAX_CURSOR_VALUE,
+            boardsPopularGet.whiskyCount,
             boardsPopularGet.count,
             boardsPopularGet.date,
             boardsPopularGet.type
