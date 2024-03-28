@@ -10,7 +10,6 @@ import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.whisky.req.WhiskySaveRequest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -80,7 +79,7 @@ class GetBoardControllerTest(
                 date = null,
                 type = BoardType.BOARD,
                 pageable = of
-            ).result
+            ).result.list
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
                 res.forEach { board ->
@@ -120,7 +119,7 @@ class GetBoardControllerTest(
                 date = null,
                 count = testPageCount,
                 type = BoardType.BOARD
-            ).result
+            ).result.list
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
                 res.forEach { board ->
@@ -169,7 +168,7 @@ class GetBoardControllerTest(
                 type = req.boardType,
                 pageable = of,
                 user1
-            ).result
+            ).result.list
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {
                 res.forEach { board ->

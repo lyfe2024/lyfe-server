@@ -11,7 +11,9 @@ import initTest.lyfe.lyfeBe.test.whisky.WhiskyFactory.Companion.createTestWhisky
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.Board
+import lyfe.lyfeBe.board.BoardGet
+import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.topic.Topic
@@ -130,7 +132,7 @@ class GetBoardServiceGetTest(
         )
 
         When("생성된 여러 게시판의 정보를 조회할 때(id내림차순으로) ") {
-            val boardDtos = boardService.getBoards(boardsGet)
+            val boardDtos = boardService.getBoards(boardsGet).list
 
             Then("조회된 게시판이 ID 기반으로 내림차순 정렬되어야 한다") {
                 boardDtos.zipWithNext().forEach { (current, next) ->
@@ -158,7 +160,7 @@ class GetBoardServiceGetTest(
         )
 
         When("위스키 카운트를 기준으로 게시판 정보를 조회할 때") {
-            val boardDtos = boardService.getPopularBoards(boardsPopularGet)
+            val boardDtos = boardService.getPopularBoards(boardsPopularGet).list
 
             Then("조회된 게시판이 위스키 카운트 기반으로 내림차순 정렬되어야 한다") {
                 boardDtos.zipWithNext().forEach { (current, next) ->
@@ -190,7 +192,7 @@ class GetBoardServiceGetTest(
         )
 
         When("위스키 카운트를 기준으로 게시판 정보를 조회할 때") {
-            val boardDtos = boardService.getUserBoards(boardUserGet)
+            val boardDtos = boardService.getUserBoards(boardUserGet).list
 
             Then("조회된 게시판이 위스키 카운트 기반으로 내림차순 정렬되어야 한다") {
                 boardDtos.forEach{

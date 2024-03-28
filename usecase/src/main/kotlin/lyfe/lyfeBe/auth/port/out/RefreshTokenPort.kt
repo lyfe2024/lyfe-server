@@ -9,4 +9,5 @@ interface RefreshTokenPort {
     fun findByUser(user: User): RefreshToken?
     fun saveOrUpdate(refreshToken: RefreshToken): RefreshToken
     fun deleteByUserId(userId: Long)
+    fun findByRefreshToken(refreshToken: String): RefreshToken?
 }

@@ -33,4 +33,8 @@ class RefreshTokenPersistenceAdapter(
         refreshTokenRepository.deleteByUserId(userId)
     }
 
+    override fun findByRefreshToken(refreshToken: String): RefreshToken? {
+        return refreshTokenRepository.findByRefreshToken(refreshToken)?.toDomain()
+    }
+
 }

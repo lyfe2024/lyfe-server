@@ -4,18 +4,8 @@ import initTest.lyfe.lyfeBe.test.fcm.NotificationFactory.Companion.createNotific
 import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardCreate
-import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.board.BoardUpdate
-import lyfe.lyfeBe.notification.NotificationContent
 import lyfe.lyfeBe.notification.NotificationHistory
-import lyfe.lyfeBe.notification.NotificationSend
-import lyfe.lyfeBe.notification.NotificationType
-import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.user.Role
-import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
+
 
 
 class NotificationTest(

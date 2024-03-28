@@ -87,7 +87,7 @@ class GetReportServiceTest: BehaviorSpec({
             val reportList = reportService.getReports(reportGets)
 
             Then("신고 리스트가 반환된다"){
-                reportList.size shouldBe 1
+                reportList.list.size shouldBe 1
             }
         }
     }
