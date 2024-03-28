@@ -15,7 +15,7 @@ interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
                 "FROM BoardJpaEntity b " +
                 "WHERE b.id < :cursorId " +
                 "AND b.boardType = :type " +
-                "AND (:date IS NULL OR b.baseEntity.createdAt = STR_TO_DATE(:date, '%Y-%m-%d'))" +
+                "AND (:date IS NULL OR FUNCTION('DATE', b.baseEntity.createdAt) =  STR_TO_DATE(:date, '%Y-%m-%d'))" +
                 "ORDER BY b.id DESC"
     )
     fun findByIdCursorId(cursorId: Long, date: String?, type: BoardType, page: Pageable): List<BoardJpaEntity>
