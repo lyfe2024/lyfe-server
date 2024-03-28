@@ -1,17 +1,12 @@
 package lyfe.lyfeBe.board.service
 
 import lyfe.lyfeBe.board.*
-import lyfe.lyfeBe.board.dto.BoardDto
-import lyfe.lyfeBe.board.dto.BoardDtoAssembly
-import lyfe.lyfeBe.board.dto.SaveBoardDto
-import lyfe.lyfeBe.board.dto.UpdateBoardDto
+import lyfe.lyfeBe.board.dto.*
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
-import lyfe.lyfeBe.fomatter.CursorGenerator.Companion.createCursorValue
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -45,20 +40,22 @@ class BoardService(
 
 
 
-    fun getBoards(boardsGet: BoardsGet): List<BoardDto> {
+    fun getBoards(boardsGet: BoardsGet): BoardListDto {
 
         val boards = boardPort.findByIdCursorId(boardsGet.boardId, boardsGet.date, boardsGet.pageable, boardsGet.type).toList()
 
-        return boards.map { board ->
-            val whiskyCount = fetchWhiskyCount(board.id)
-            val commentCount = fetchCommentCount(board.id)
-            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
-            BoardDto.toBoardDto(params)
-        }.toList()
+        return BoardListDto.toListDto(
+            boards.map { board ->
+                val whiskyCount = fetchWhiskyCount(board.id)
+                val commentCount = fetchCommentCount(board.id)
+                val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+                BoardDto.toBoardDto(params)
+            }.toList()
+        )
     }
 
 
-    fun getPopularBoards(boardsPopularGet: BoardsPopularGet): List<BoardDto> {
+    fun getPopularBoards(boardsPopularGet: BoardsPopularGet): BoardListDto {
 
         val boards = boardPort.findPopularBoards(
             MAX_CURSOR_VALUE,
@@ -74,15 +71,17 @@ class BoardService(
 
         val sortedBoards = boardWithWhiskyCounts.sortedByDescending { it.second }
 
-        return sortedBoards.map { (board, whiskyCount) ->
-            val commentCount = fetchCommentCount(board.id)
-            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+        return BoardListDto.toListDto(
+            sortedBoards.map { (board, whiskyCount) ->
+                val commentCount = fetchCommentCount(board.id)
+                val params = BoardDtoAssembly(board, whiskyCount, commentCount)
 
-            BoardDto.toBoardDto(params)
-        }
+                BoardDto.toBoardDto(params)
+            }
+        )
     }
 
-    fun getUserBoards(boardUserGet: BoardsUserGet): List<BoardDto> {
+    fun getUserBoards(boardUserGet: BoardsUserGet): BoardListDto {
 
         val boards = boardPort.findByUserAndBoardType(
             boardUserGet.userId,
@@ -91,12 +90,14 @@ class BoardService(
             boardUserGet.pageable
         )
 
-        return boards.map { board ->
-            val whiskyCount = fetchWhiskyCount(board.id)
-            val commentCount = fetchCommentCount(board.id)
-            val params = BoardDtoAssembly(board, whiskyCount, commentCount)
-            BoardDto.toBoardDto(params)
-        }.toList()
+        return BoardListDto.toListDto(
+            boards.map { board ->
+                val whiskyCount = fetchWhiskyCount(board.id)
+                val commentCount = fetchCommentCount(board.id)
+                val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+                BoardDto.toBoardDto(params)
+            }.toList()
+        )
     }
 
 

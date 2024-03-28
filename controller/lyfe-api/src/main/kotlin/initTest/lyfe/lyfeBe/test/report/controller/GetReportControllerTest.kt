@@ -65,7 +65,7 @@ class GetReportControllerTest: BehaviorSpec({
         )
 
         When("신고 리스트를 조회 했을 때") {
-            val res = testContainer.reportController.getReports(0, pageable).result
+            val res = testContainer.reportController.getReports(0, pageable).result.list
 
             Then("저장된 신고의 필드와 응답값과 일치해야 한다.") {
                 res.size shouldBe 1

@@ -7,6 +7,7 @@ import lyfe.lyfeBe.comment.CommentCreate
 import lyfe.lyfeBe.comment.CommentGetsByBoard
 import lyfe.lyfeBe.comment.CommentUpdate
 import lyfe.lyfeBe.comment.dto.CommentDto
+import lyfe.lyfeBe.comment.dto.CommentListDto
 import lyfe.lyfeBe.comment.dto.SaveCommentDto
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ForbiddenException
@@ -46,17 +47,25 @@ class CommentService(
     /**
      * 해당 게시글의 댓글 전체 조회
      */
-    fun getCommentsWithCursorAndBoard(command: CommentGetsByBoard): List<CommentDto> {
-        return commentPort.getCommentsWithCursorAndBoard(command.cursorId, command.boardId, command.pageable)
-            .let { return it.map { CommentDto.from(it) } }
+    fun getCommentsWithCursorAndBoard(command: CommentGetsByBoard): CommentListDto {
+        commentPort.getCommentsWithCursorAndBoard(command.cursorId, command.boardId, command.pageable)
+            .let {
+                return CommentListDto.toListDto(
+                    it.map { CommentDto.from(it) }
+                )
+            }
     }
 
     /**
      * 자신의 댓글 전체 조회
      */
-    fun getCommentsWithCursorAndUser(cursorId : Long): List<CommentDto> {
-        return commentPort.getCommentsWithCursorAndUser(cursorId, getLoginUserId(userPort))
-            .let { return it.map { CommentDto.from(it) } }
+    fun getCommentsWithCursorAndUser(cursorId : Long): CommentListDto {
+         commentPort.getCommentsWithCursorAndUser(cursorId, getLoginUserId(userPort))
+            .let {
+                return CommentListDto.toListDto(
+                    it.map { CommentDto.from(it) }
+                )
+            }
     }
 
     @Transactional

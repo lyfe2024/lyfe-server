@@ -3,6 +3,7 @@ package lyfe.lyfeBe.web.board
 import jakarta.validation.Valid
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
+import lyfe.lyfeBe.board.dto.BoardListDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.user.User
@@ -28,7 +29,7 @@ class BoardController(
         @RequestParam(required = false) date: String?,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
-    ): CommonResponse<List<BoardDto>> {
+    ): CommonResponse<BoardListDto> {
         val boardId = getEffectiveCursorId(cursorId)
         return CommonResponse(service.getBoards(BoardsGet(boardId, date, pageable , type)))
     }
@@ -39,7 +40,7 @@ class BoardController(
         @RequestParam(required = false) date: String?,
         @RequestParam(required = false, defaultValue = "5") count: Int,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType
-    ): CommonResponse<List<BoardDto>> {
+    ): CommonResponse<BoardListDto> {
         return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, type, count)))
     }
     // 사용자 보드 리스트
@@ -49,7 +50,7 @@ class BoardController(
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @AuthenticationPrincipal  user : User
-        ): CommonResponse<List<BoardDto>> {
+        ): CommonResponse<BoardListDto> {
          val cursorValue = getEffectiveCursorId(cursorId)
         return CommonResponse(service.getUserBoards(BoardsUserGet(user.id, cursorValue, type, pageable)))
     }

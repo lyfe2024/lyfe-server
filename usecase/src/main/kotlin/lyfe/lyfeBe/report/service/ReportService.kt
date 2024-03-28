@@ -8,6 +8,7 @@ import lyfe.lyfeBe.report.ReportCreate
 import lyfe.lyfeBe.report.ReportGets
 import lyfe.lyfeBe.report.ReportTarget
 import lyfe.lyfeBe.report.dto.ReportDto
+import lyfe.lyfeBe.report.dto.ReportListDto
 import lyfe.lyfeBe.report.dto.SaveReportDto
 import lyfe.lyfeBe.report.port.out.ReportPort
 import lyfe.lyfeBe.user.Role
@@ -45,16 +46,18 @@ class ReportService(
     }
 
     // 신고 리스트 조회
-    fun getReports(command: ReportGets): List<ReportDto> {
+    fun getReports(command: ReportGets): ReportListDto {
         val reports = reportPort.getReportsWithCursor(
             cursorId = command.cursorId,
             pageable = command.pageable
         )
-        return reports.map {
-            val reportedUser = userPort.getById(it.reportedUser.id)
-            val reportedCount = reportPort.getReportedCount(it.reportTargetId)
-            ReportDto.from(it, reportedUser, reportedCount)
-        }
+        return ReportListDto.toListDto(
+            reports.map {
+                val reportedUser = userPort.getById(it.reportedUser.id)
+                val reportedCount = reportPort.getReportedCount(it.reportTargetId)
+                ReportDto.from(it, reportedUser, reportedCount)
+            }
+        )
     }
 
     // 신고 취소

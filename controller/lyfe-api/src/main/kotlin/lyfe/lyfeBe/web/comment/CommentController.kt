@@ -5,6 +5,7 @@ import lyfe.lyfeBe.comment.CommentCreate
 import lyfe.lyfeBe.comment.CommentGetsByBoard
 import lyfe.lyfeBe.comment.CommentUpdate
 import lyfe.lyfeBe.comment.dto.CommentDto
+import lyfe.lyfeBe.comment.dto.CommentListDto
 import lyfe.lyfeBe.comment.dto.SaveCommentDto
 import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.dto.CommonResponse
@@ -43,7 +44,7 @@ class CommentController(
         @RequestParam(required = false) cursorId: Long,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
 
-        ): CommonResponse<List<CommentDto>> {
+        ): CommonResponse<CommentListDto> {
 
         val commentId = getEffectiveCursorId(cursorId)
         return service.getCommentsWithCursorAndBoard(
@@ -62,7 +63,7 @@ class CommentController(
     fun getMyCommentList(
         @RequestParam(required = false) cursorId: Long,
 
-    ): CommonResponse<List<CommentDto>> {
+    ): CommonResponse<CommentListDto> {
 
         val commentId = getEffectiveCursorId(cursorId)
         return service.getCommentsWithCursorAndUser(cursorId = commentId).let { CommonResponse(it) }
