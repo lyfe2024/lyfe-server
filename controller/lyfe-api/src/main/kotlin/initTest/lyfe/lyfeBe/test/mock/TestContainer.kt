@@ -37,7 +37,7 @@ class TestContainer(
     var commentRepository: CommentPort,
     var userRepository: UserPort,
     var topicService: TopicService,
-    var topicRepository: TopicPort,
+    var topicRepository: FakeTopicRepository,
     var fakeNotificationRepository: FcmPort,
     var whiskyRepository: WhiskyPort,
     var reportRepository: ReportPort,

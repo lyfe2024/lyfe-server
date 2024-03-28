@@ -7,6 +7,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.topic.TopicGet
 import lyfe.lyfeBe.topic.port.TopicService
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class CreateTopicServiceTest(
@@ -28,7 +30,11 @@ class CreateTopicServiceTest(
             val createTopic = topicService.get(TopicGet(newTopic.id))
 
             Then("생성된 게시판의 속성이 요청과 일치하는지 확인할 때") {
+                val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"))
+
                 createTopic.content shouldBe topicCreate.content
+                createTopic.appliedAt shouldBe today
+
             }
         }
     }

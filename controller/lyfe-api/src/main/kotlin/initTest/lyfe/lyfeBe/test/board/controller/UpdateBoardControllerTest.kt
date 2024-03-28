@@ -14,14 +14,14 @@ class UpdateBoardControllerTest(
 ) : BehaviorSpec({
 
     val testContainer = TestContainer.build()
+    val user = UserFactory.createTestUser()
+    val topic = Topic(1L, "testTopic")
 
 
     beforeContainer {
 
-        val user = UserFactory.createTestUser()
         testContainer.userRepository.create(user)
 
-        val topic = Topic(1L, "testTopic")
         testContainer.topicRepository.create(topic)
 
     }
@@ -45,7 +45,7 @@ class UpdateBoardControllerTest(
                 content = "바뀐 테스트 내용입니다. 여기에 게시판 내용이 들어갑니다."
             )
 
-            val boardId = testContainer.boardController.update(1L, updateReq)
+            val boardId = testContainer.boardController.update(1L, updateReq,user)
 
             val board = testContainer.boardService.getById(boardId.result.id)
 

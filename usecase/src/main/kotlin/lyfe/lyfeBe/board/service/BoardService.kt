@@ -21,9 +21,11 @@ class BoardService(
     private val topicPort: TopicPort,
     private val whiskyPort: WhiskyPort,
     private val commentPort: CommentPort
+
 ) {
 
 
+    private  val MAX_CURSOR_VALUE = "99999999999999999999"
 
     fun getById(id: Long): Board {
         return boardPort.getById(id)
@@ -58,11 +60,8 @@ class BoardService(
 
     fun getPopularBoards(boardsPopularGet: BoardsPopularGet): List<BoardDto> {
 
-        val cursorValue = createCursorValue(boardsPopularGet.whiskyCount)
-
-
         val boards = boardPort.findPopularBoards(
-            cursorValue,
+            MAX_CURSOR_VALUE,
             boardsPopularGet.count,
             boardsPopularGet.date,
             boardsPopularGet.type
@@ -110,7 +109,7 @@ class BoardService(
 
 
     fun update(boardUpdate: BoardUpdate): UpdateBoardDto {
-        val board = getById(boardUpdate.boardId).update(boardUpdate)
+        val board = getById(boardUpdate.boardId).update(boardUpdate,boardUpdate.userId)
         return UpdateBoardDto(boardPort.update(board).id)
     }
 

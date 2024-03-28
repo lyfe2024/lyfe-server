@@ -101,7 +101,6 @@ class GetBoardControllerTest(
 
     Given("게시판 리스트 조회를 위한 데이터가 준비되었을 때(WhiskyCount 내림차순)") {
 
-        val testWhiskyCount = 5L
         val testPageCount = 5
 
         val req = createBoardsSaveRequest()
@@ -118,7 +117,6 @@ class GetBoardControllerTest(
 
 
             val res: List<BoardDto> = testContainer.boardController.getPopularBoards(
-                whiskyCount = testWhiskyCount,
                 date = null,
                 count = testPageCount,
                 type = BoardType.BOARD
@@ -167,10 +165,10 @@ class GetBoardControllerTest(
             )
 
             val res: List<BoardDto> = testContainer.boardController.getUserBoards(
-                userId =user1.id,
                 cursorId = testCursorId,
                 type = req.boardType,
-                pageable = of
+                pageable = of,
+                user1
             ).result
 
             Then("저장된 게시판의 필드와 응답값 과 일치해야 한다") {

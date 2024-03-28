@@ -142,7 +142,6 @@ class GetBoardServiceGetTest(
 
 
     Given("게시판 생성 복수요청이 준비되고 실행되었을 때(인기게시글)") {
-        val whiskyCount = 5L
         val pageCount = 2
 
         val pageable = PageRequest.of(
@@ -153,7 +152,6 @@ class GetBoardServiceGetTest(
 
         val boardsPopularGet = createPopularBoard(
             testDate.toString(),
-            whiskyCount = whiskyCount,
             type = BoardType.BOARD_PICTURE,
             count = pageCount
 
