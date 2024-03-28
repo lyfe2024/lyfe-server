@@ -4,6 +4,7 @@ import jakarta.validation.Valid
 import lyfe.lyfeBe.Constants.Companion.CURSOR_VALUE
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
+import lyfe.lyfeBe.board.dto.BoardListDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.user.User
@@ -29,7 +30,7 @@ class BoardController(
         @RequestParam(required = false) date: String?,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
-    ): CommonResponse<List<BoardDto>> {
+    ): CommonResponse<BoardListDto> {
         val boardId = getEffectiveCursorId(cursorId)
         return CommonResponse(service.getBoards(BoardsGet(boardId, date, pageable , type)))
     }
@@ -41,7 +42,7 @@ class BoardController(
         @RequestParam(required = false) date: String?,
         @RequestParam(required = false, defaultValue = "5") count: Int,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType
-    ): CommonResponse<List<BoardDto>> {
+    ): CommonResponse<BoardListDto> {
         val validWhiskyCount = whiskyCount ?: CURSOR_VALUE
         return CommonResponse(service.getPopularBoards(BoardsPopularGet(validWhiskyCount, date, type, count)))
     }

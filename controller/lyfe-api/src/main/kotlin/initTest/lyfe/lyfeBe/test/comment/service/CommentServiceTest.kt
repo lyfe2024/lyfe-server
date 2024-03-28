@@ -137,7 +137,7 @@ class CommentServiceTest(
 
         When("한 게시물에 생성된 여러 댓글의 정보를 조회할 때(id 내림차순)") {
 
-            val commentsDto = commentService.getCommentsWithCursorAndBoard(commentGetsByBoard)
+            val commentsDto = commentService.getCommentsWithCursorAndBoard(commentGetsByBoard).list
 
             Then("조회된 댓글의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
                 commentsDto[0].content shouldBe "이것은 테스트 코멘트입니다."
@@ -150,7 +150,7 @@ class CommentServiceTest(
 
             val commentsDto = commentService.getCommentsWithCursorAndUser(
                 cursorId = cursorId,
-            )
+            ).list
 
             Then("조회된 댓글의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
                 commentsDto[0].content shouldBe "이것은 테스트 코멘트입니다."

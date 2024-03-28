@@ -4,6 +4,7 @@ import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.report.ReportCreate
 import lyfe.lyfeBe.report.ReportGets
 import lyfe.lyfeBe.report.dto.ReportDto
+import lyfe.lyfeBe.report.dto.ReportListDto
 import lyfe.lyfeBe.report.dto.SaveReportDto
 import lyfe.lyfeBe.report.service.ReportService
 import lyfe.lyfeBe.utils.ControllerUtils
@@ -42,7 +43,7 @@ class ReportController(
     fun getReports(
         @RequestParam(required = false) cursorId: Long,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
-    ): CommonResponse<List<ReportDto>> {
+    ): CommonResponse<ReportListDto> {
         val reportId = ControllerUtils.getEffectiveCursorId(cursorId)
         return service.getReports(
             ReportGets(
