@@ -23,6 +23,7 @@ class BoardJpaEntity(
 
     @field:NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "board_type")
     val boardType: BoardType,
 
     @Column(name = "image_url")

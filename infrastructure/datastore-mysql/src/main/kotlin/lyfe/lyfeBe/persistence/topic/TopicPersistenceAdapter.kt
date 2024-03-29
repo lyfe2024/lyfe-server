@@ -27,7 +27,7 @@ class TopicPersistenceAdapter(
 
     override fun getPast(date: String, cursorId: Long, pageable: Pageable) =
         topicRepository.findPastTopics(
-            DateConverter.toInstant(date),
+            date,
             cursorId,
             pageable
         ).map { it.toDomain() }

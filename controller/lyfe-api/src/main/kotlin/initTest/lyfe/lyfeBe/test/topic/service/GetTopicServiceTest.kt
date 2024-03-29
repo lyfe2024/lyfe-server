@@ -78,7 +78,6 @@ class GetTopicServiceTest(
 
             val topicpastGet = TopicPastGet(
                 "9999-12-31",
-                Long.MAX_VALUE,
                 pageable
             )
             val past = topicService.getPast(topicpastGet)

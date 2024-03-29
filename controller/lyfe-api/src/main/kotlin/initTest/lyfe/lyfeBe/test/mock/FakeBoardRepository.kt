@@ -48,7 +48,9 @@ class FakeBoardRepository : BoardPort {
 
         return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
     }
-    override fun findPopularBoards( cursor: String,count: Int, date: String?, type: BoardType): List<Board> {
+
+
+    override fun findPopularBoards( cursor: Long,count: Int, date: String?, type: BoardType): List<Board> {
         // 단순히 필터링 및 정렬된 게시판 리스트를 반환
         return table.filter { board ->
             board.boardType == type &&

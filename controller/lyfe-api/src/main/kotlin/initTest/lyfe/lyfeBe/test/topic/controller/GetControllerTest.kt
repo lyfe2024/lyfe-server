@@ -62,7 +62,7 @@ class GetControllerTest(
                 Sort.by("id").descending()
             )
 
-            val result = testContainer.topicController.getPastTopic("9999-12-31", Long.MAX_VALUE, of).result
+            val result = testContainer.topicController.getPastTopic("9999-12-31",  of).result
 
 
 

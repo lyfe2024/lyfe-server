@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.web.board
 
 import jakarta.validation.Valid
+import lyfe.lyfeBe.Constants.Companion.CURSOR_VALUE
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.service.BoardService
@@ -36,11 +37,13 @@ class BoardController(
     // 사진없는 보드 인기글  + 오늘의 베스트 count 요청 갯수  OPTION , date Option
     @GetMapping("/popular/{whiskyCount}")
     fun getPopularBoards(
+        @PathVariable whiskyCount: Long,
         @RequestParam(required = false) date: String?,
         @RequestParam(required = false, defaultValue = "5") count: Int,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType
     ): CommonResponse<List<BoardDto>> {
-        return CommonResponse(service.getPopularBoards(BoardsPopularGet(date, type, count)))
+        val validWhiskyCount = whiskyCount ?: CURSOR_VALUE
+        return CommonResponse(service.getPopularBoards(BoardsPopularGet(validWhiskyCount, date, type, count)))
     }
     // 사용자 보드 리스트
     @GetMapping("/user/{type}")

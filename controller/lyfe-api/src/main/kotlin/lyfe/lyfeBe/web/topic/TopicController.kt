@@ -33,16 +33,15 @@ class TopicController(
         topicService.getToday()
     )
 
-    @GetMapping("/{date}/{cursorId}")
+    @GetMapping("/past/{date}")
     fun getPastTopic(
         @PathVariable date: String,
-        @PathVariable cursorId: Long,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
 
         ) = CommonResponse(
         topicService.getPast(
             TopicPastGet(
-                date, cursorId, pageable
+                date, pageable
             )
         )
     )

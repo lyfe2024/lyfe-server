@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.topic.port
 
+import lyfe.lyfeBe.Constants.Companion.CURSOR_VALUE
 import lyfe.lyfeBe.topic.*
 import lyfe.lyfeBe.topic.dto.GetTopicDto
 import lyfe.lyfeBe.topic.dto.SaveTopicDto
@@ -23,7 +24,11 @@ class TopicService(
         GetTopicDto.toDto(topicPort.getById(topicGet.topicId))
 
     fun getPast(topicPastGet: TopicPastGet): List<GetTopicDto> {
-        val topics = topicPort.getPast(topicPastGet.date, topicPastGet.cursorId, topicPastGet.pageable).toList()
+        val topics = topicPort.getPast(
+            topicPastGet.date,
+            CURSOR_VALUE,
+            topicPastGet.pageable
+        ).toList()
         return GetTopicDto.toDtoList(topics)
 
     }

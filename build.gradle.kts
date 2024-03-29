@@ -57,12 +57,14 @@ subprojects {
 
 		implementation ("com.google.firebase:firebase-admin:9.2.0")
 
+		implementation("mysql:mysql-connector-java:8.0.32")
 
 		implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
 
 
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.springframework.security:spring-security-test")
+
 	}
 
 
