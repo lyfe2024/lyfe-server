@@ -2,9 +2,10 @@ package lyfe.lyfeBe.persistence.auth
 
 import jakarta.persistence.*
 import lyfe.lyfeBe.auth.RefreshToken
+import lyfe.lyfeBe.auth.TokenStatus
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
-import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 import java.time.Instant
 
 
@@ -22,16 +23,25 @@ class RefreshTokenJpaEntity(
     val user: UserJpaEntity,
 
     @CreatedDate
+    @LastModifiedDate
     val createdAt: Instant? = null,
 
-    @UpdateTimestamp
+    @LastModifiedDate
     val updatedAt: Instant? = null,
+
+    @Column(name = "expired_at", columnDefinition = "Datetime", scale = 6)
+    val expiredAt: Instant? = null,
+
+    @Enumerated(EnumType.STRING)
+    val tokenStatus: TokenStatus
 ) {
     fun toDomain(): RefreshToken {
         return RefreshToken(
             id = id,
             refreshToken = refreshToken,
             user = user.toDomain(),
+            expiredAt = expiredAt?: Instant.now().plusSeconds(86400000),
+            tokenStatus = tokenStatus
         )
     }
     fun update(refreshToken: String) {
@@ -42,7 +52,8 @@ class RefreshTokenJpaEntity(
         fun from(refreshToken: RefreshToken) = RefreshTokenJpaEntity(
             id = refreshToken.id,
             refreshToken = refreshToken.refreshToken,
-            user = UserJpaEntity.from(refreshToken.user)
+            user = UserJpaEntity.from(refreshToken.user),
+            tokenStatus = refreshToken.tokenStatus
         )
     }
 

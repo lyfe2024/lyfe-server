@@ -64,6 +64,24 @@ data class User(
             profileUrl = profileUrl,
             withdrawnAt = withdrawnAt,
         )
+    fun updateProfileUrl(profileUrl: String) =
+        User(
+            id = id,
+            email = email,
+            hashedPassword = hashedPassword,
+            nickname = nickname,
+            socialId = socialId,
+            socialType = socialType,
+            socialRefreshToken = socialRefreshToken,
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            role = role,
+            userStatus = userStatus,
+            createdAt = createdAt,
+            updatedAt = Instant.now(),
+            profileUrl = profileUrl,
+            withdrawnAt = withdrawnAt,
+        )
 
     companion object {
         fun from(
