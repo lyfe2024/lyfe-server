@@ -3,7 +3,6 @@ package lyfe.lyfeBe.web.board
 import jakarta.validation.Valid
 import lyfe.lyfeBe.Constants.Companion.CURSOR_VALUE
 import lyfe.lyfeBe.board.*
-import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.dto.BoardListDto
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.dto.CommonResponse
@@ -53,7 +52,7 @@ class BoardController(
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @AuthenticationPrincipal  user : User
-        ): CommonResponse<List<BoardDto>> {
+        ): CommonResponse<BoardListDto> {
          val cursorValue = getEffectiveCursorId(cursorId)
         return CommonResponse(service.getUserBoards(BoardsUserGet(user.id, cursorValue, type, pageable)))
     }
