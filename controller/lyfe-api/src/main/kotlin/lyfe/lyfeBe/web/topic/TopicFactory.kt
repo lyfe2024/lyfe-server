@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.web.topic
 
 import lyfe.lyfeBe.topic.Topic
+import java.time.Instant
 
 class TopicFactory {
     companion object {
@@ -8,7 +9,9 @@ class TopicFactory {
                             content: String = "testTopic"): Topic {
             return Topic(
                 id,
-                content
+                content,
+                Instant.now(),
+                Instant.now()
             )
         }
     }

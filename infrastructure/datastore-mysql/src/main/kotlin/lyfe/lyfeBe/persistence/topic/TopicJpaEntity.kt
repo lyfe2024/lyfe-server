@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import lyfe.lyfeBe.persistence.BaseEntity
 import lyfe.lyfeBe.topic.Topic
 import org.jetbrains.annotations.NotNull
+import java.time.LocalDate
 
 @Entity
 @Table(name = "topic")
@@ -16,8 +17,7 @@ class TopicJpaEntity(
     val content: String,
 
     @field:NotNull
-    val appliedAt: String? = null,
-
+    val appliedAt: LocalDate? = null,
 
     @Embedded
     val baseEntity: BaseEntity = BaseEntity()

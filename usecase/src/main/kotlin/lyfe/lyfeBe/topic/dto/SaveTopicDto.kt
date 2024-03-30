@@ -7,6 +7,10 @@ class SaveTopicDto(
 ) {
 
     companion object {
-        fun toDto(topic: Topic)  = SaveTopicDto(id = topic.id)
+        fun from(topic: Topic): SaveTopicDto {
+            return SaveTopicDto(
+                id = topic.id,
+            )
+        }
     }
 }
