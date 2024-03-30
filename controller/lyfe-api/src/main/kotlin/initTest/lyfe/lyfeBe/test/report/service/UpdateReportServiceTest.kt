@@ -89,7 +89,7 @@ class UpdateReportServiceTest: BehaviorSpec({
                 content = "testContent2",
                 boardType = BoardType.BOARD,
                 user = reporter,
-                topic = fakeTopicRepository.create(Topic(1L, "testTopic")),
+                topic = fakeTopicRepository.create(Topic(1L, "testTopic", Instant.now(), Instant.now())),
                 createdAt = Instant.now(),
                 updatedAt = Instant.now()
             )
@@ -97,7 +97,7 @@ class UpdateReportServiceTest: BehaviorSpec({
 
         fakeBoardRepository.create(board)
 
-        val topic = fakeTopicRepository.create(Topic(1L, "testTopic"))
+        val topic = fakeTopicRepository.create(Topic(1L, "testTopic", Instant.now(), Instant.now()))
 
         fakeTopicRepository.create(topic)
 

@@ -13,6 +13,7 @@ import lyfe.lyfeBe.web.comment.req.SaveCommentRequest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.security.core.context.SecurityContextHolder
+import java.time.Instant
 
 class GetCommentControllerTest(
 ) : BehaviorSpec({
@@ -27,7 +28,7 @@ class GetCommentControllerTest(
         user = createTestUser()
         testContainer.userRepository.create(user)
 
-        topic = Topic(1L, "testTopic")
+        topic = Topic(1L, "testTopic", Instant.now(), Instant.now())
         testContainer.topicRepository.create(topic)
 
 

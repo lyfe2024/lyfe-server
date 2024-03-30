@@ -62,7 +62,6 @@ class CreateBoardServiceTest(
                 newBoard.title shouldBe boardCreate.title
                 newBoard.content shouldBe boardCreate.content
                 newBoard.boardType shouldBe boardCreate.boardType
-                newBoard.user.id shouldBe boardCreate.userId
                 newBoard.topic.id shouldBe boardCreate.topicId
             }
         }

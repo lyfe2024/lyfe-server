@@ -9,7 +9,6 @@ import lyfe.lyfeBe.fcm.NotificationController
 import lyfe.lyfeBe.fcm.port.FcmPort
 import lyfe.lyfeBe.report.port.out.ReportPort
 import lyfe.lyfeBe.report.service.ReportService
-import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.topic.port.TopicService
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.web.board.BoardController
@@ -69,7 +68,8 @@ class TestContainer(
             )
 
             val topicService = TopicService(
-                topicRepository
+                topicRepository,
+                userRepository
             )
 
             val fcmService = FCMService(

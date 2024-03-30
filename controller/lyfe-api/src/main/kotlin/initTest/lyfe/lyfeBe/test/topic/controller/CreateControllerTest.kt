@@ -15,6 +15,7 @@ class CreateControllerTest(
 
         val req = SaveTopicRequest(
             content = "testTopic",
+            appliedAt = null
         )
 
         When("토픽 생성 요청을 처리할 하고 조회 했을때") {

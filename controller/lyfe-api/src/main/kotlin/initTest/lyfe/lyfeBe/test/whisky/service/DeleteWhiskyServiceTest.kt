@@ -9,12 +9,10 @@ import io.kotest.core.spec.style.BehaviorSpec
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.topic.Topic
-import lyfe.lyfeBe.user.Role
-import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.whisky.WhiskyCreate
 import lyfe.lyfeBe.whisky.WhiskyDelete
 import lyfe.lyfeBe.whisky.WhiskyService
+import java.time.Instant
 
 
 class DeleteWhiskyServiceTest(
@@ -41,7 +39,7 @@ class DeleteWhiskyServiceTest(
             boardType = BoardType.BOARD,
             user = user,
             topic = Topic(
-                id = 0, content = "testTopic"
+                id = 0, content = "testTopic", Instant.now(), Instant.now()
             ),
             createdAt = null,
             updatedAt = null

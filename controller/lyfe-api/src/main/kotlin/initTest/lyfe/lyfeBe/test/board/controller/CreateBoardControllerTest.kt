@@ -7,6 +7,7 @@ import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
+import java.time.Instant
 
 
 class CreateBoardControllerTest(
@@ -20,7 +21,7 @@ class CreateBoardControllerTest(
         val user = createTestUser()
         testContainer.userRepository.create(user)
 
-        val topic = Topic(1L, "testTopic")
+        val topic = Topic(1L, "testTopic", Instant.now(), Instant.now())
         testContainer.topicRepository.create(topic)
 
     }
@@ -33,7 +34,6 @@ class CreateBoardControllerTest(
             title = "테스트 게시판 제목",
             content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
             boardType = BoardType.BOARD,
-            userId = 1L,
             topicId = 1L
         )
 
