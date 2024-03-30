@@ -1,11 +1,8 @@
 package lyfe.lyfeBe.board
 
 import org.springframework.data.domain.Pageable
-import java.time.LocalDate
 
-data class BoardsGet(
+data class BoardsBestGet(
     val cursorId: Long,
-    val type: BoardType,
-    val date: LocalDate?,
     val pageable: Pageable
 )

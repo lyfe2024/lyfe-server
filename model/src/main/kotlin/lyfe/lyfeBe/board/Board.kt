@@ -16,8 +16,7 @@ data class Board(
     val createdAt: Instant?,
     val updatedAt: Instant?
 ) {
-    fun update(boardUpdate: BoardUpdate, userId: Long): Board {
-        validateUser(userId)
+    fun update(boardUpdate: BoardUpdate): Board {
         return Board(
             id = boardUpdate.boardId,
             title = boardUpdate.title,
@@ -29,11 +28,6 @@ data class Board(
             createdAt = createdAt,
             updatedAt = Instant.now()
         )
-    }
-    private fun validateUser(userId: Long) {
-        if (user.id != userId) {
-            throw IllegalArgumentException("User is not authorized to update this board")
-        }
     }
 
     companion object {

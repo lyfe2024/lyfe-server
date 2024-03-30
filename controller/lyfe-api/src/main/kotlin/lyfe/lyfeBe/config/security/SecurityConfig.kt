@@ -57,13 +57,14 @@ class SecurityConfig(
             }
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
-                    .requestMatchers(HttpMethod.GET, "/v1/boards/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/v1/boards/latest/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/v1/boards/popular/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/v1/topics/**").permitAll()
                     .requestMatchers(
                         "/health", "/",
                         "/v1/images/**",
                         "/v1/auth/**",
                         "/v1/users/check-nickname/**",
-                        "/v1/topics/**",
                         "/v1/comments/latest",
                         "/v1/policys/**",
                     ).permitAll()

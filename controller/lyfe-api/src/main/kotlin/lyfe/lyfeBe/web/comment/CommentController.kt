@@ -18,6 +18,7 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/v1/comments")
 class CommentController(
     private val service: CommentService
 ) {
@@ -25,7 +26,7 @@ class CommentController(
     /**
      * 댓글 id 로 1건 조회
      */
-    @GetMapping("/v1/comments/{commentId}")
+    @GetMapping("/{commentId}")
     fun getComment(
         @PathVariable commentId: Long
 
@@ -38,7 +39,7 @@ class CommentController(
     /**
      * 댓글 최근 목록 조회
      */
-    @GetMapping("/v1/comments/latest")
+    @GetMapping("/latest")
     fun getLatestCommentList(
         @RequestParam(name = "comment_board_id") boardId: Long,
         @RequestParam(required = false) cursorId: Long,
@@ -51,7 +52,7 @@ class CommentController(
             CommentGetsByBoard(
                 boardId = boardId,
                 cursorId = commentId,
-                        pageable = pageable
+                pageable = pageable
             )
         ).let { CommonResponse(it) }
     }
@@ -59,7 +60,7 @@ class CommentController(
     /**
      * 자신이 작성한 댓글 조회
      */
-    @GetMapping("/v1/comments")
+    @GetMapping("/me")
     fun getMyCommentList(
         @RequestParam(required = false) cursorId: Long,
 
@@ -69,7 +70,7 @@ class CommentController(
         return service.getCommentsWithCursorAndUser(cursorId = commentId).let { CommonResponse(it) }
     }
 
-    @PostMapping("/v1/comments")
+    @PostMapping("")
     fun create(
         @Valid @RequestBody req: SaveCommentRequest,
         @RequestParam("comment_board_id") boardId: Long,
@@ -86,7 +87,7 @@ class CommentController(
 
     }
 
-    @PutMapping("/v1/comments/{commentId}")
+    @PutMapping("/{commentId}")
     fun update(
         @PathVariable commentId: Long,
         @Valid @RequestBody request: UpdateCommentRequest,

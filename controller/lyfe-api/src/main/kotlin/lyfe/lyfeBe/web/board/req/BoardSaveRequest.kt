@@ -13,9 +13,6 @@ data class BoardSaveRequest(
     @NotNull
     val boardType: BoardType,
     @NotNull
-    val userId: Long,
-    @NotNull
     val topicId: Long,
-
-    val imageUrl: String = ""
+    val imageUrl: String? = ""
 )
