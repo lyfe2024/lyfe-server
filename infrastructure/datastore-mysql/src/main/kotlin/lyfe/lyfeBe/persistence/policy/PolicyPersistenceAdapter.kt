@@ -4,7 +4,6 @@ import lyfe.lyfeBe.policy.Policy
 import lyfe.lyfeBe.policy.PolicyType
 import lyfe.lyfeBe.policy.out.PolicyPort
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class PolicyPersistenceAdapter(

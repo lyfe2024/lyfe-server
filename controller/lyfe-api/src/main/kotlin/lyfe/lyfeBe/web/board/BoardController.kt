@@ -27,12 +27,12 @@ class BoardController(
      */
     @GetMapping("/best")
     fun getBestBoards(
-        @RequestParam(required = false) cursorValue: LocalDate?,
+        @RequestParam(required = false) cursorId: LocalDate?,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
     ): CommonResponse<BestBoardListDto> {
         return CommonResponse(
             service.getBestBoards(BoardsBestGet(
-                cursor = cursorValue?: LocalDate.now(),
+                cursor = cursorId?: LocalDate.now(),
                 pageable = pageable
             ))
         )

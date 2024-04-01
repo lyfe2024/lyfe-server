@@ -8,7 +8,7 @@ import lyfe.lyfeBe.web.policy.req.PolicyUpdateReq
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/v1/policys")
+@RequestMapping("/v1/policy")
 class UpdatePolicyController(
     val service: PolicyService
 ) {
