@@ -4,6 +4,7 @@ import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.port.out.BoardPort
 import org.springframework.data.domain.Pageable
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -79,7 +80,7 @@ class FakeBoardRepository : BoardPort {
         return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
     }
 
-    override fun getBoardWithCursorAndTopic(
+    override fun findBoardWithCursorAndTopic(
         cursorId: Long,
         type: BoardType,
         topicId: Long?,
@@ -103,6 +104,13 @@ class FakeBoardRepository : BoardPort {
         type: BoardType,
         pageable: Pageable
     ): List<Board> {
+        TODO("Not yet implemented")
+    }
+    override fun findUniqueDatesBeforeCursor(cursor: LocalDate, pageable: Pageable): List<LocalDate> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findByDateAndType(date: LocalDate, type: BoardType, pageable: Pageable): List<Board> {
         TODO("Not yet implemented")
     }
 

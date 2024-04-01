@@ -21,6 +21,7 @@ data class BoardDto(
                     user = UserDto.from(param.board.user),
                     title = param.board.title,
                     content = param.board.content,
+                    imageUrl = param.board.imageUrl,
                     boardType = param.board.boardType,
                     whiskyCount = param.whiskyCount.toString(),
                     commentCount = param.commentCount.toString(),

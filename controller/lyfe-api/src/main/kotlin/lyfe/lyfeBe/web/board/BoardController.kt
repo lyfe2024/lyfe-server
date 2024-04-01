@@ -2,6 +2,7 @@ package lyfe.lyfeBe.web.board
 
 import jakarta.validation.Valid
 import lyfe.lyfeBe.board.*
+import lyfe.lyfeBe.board.dto.BestBoardListDto
 import lyfe.lyfeBe.board.dto.BoardDto
 import lyfe.lyfeBe.board.dto.BoardListDto
 import lyfe.lyfeBe.board.dto.SaveBoardDto
@@ -24,18 +25,18 @@ class BoardController(
     /**
      * 과거 베스트 글 조회
      */
-//    @GetMapping("/best")
-//    fun getBestBoards(
-//        @RequestParam(required = false) cursorId: Long,
-//        @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
-//    ): CommonResponse<BestBoardListDto> {
-//        val cursorValue = getEffectiveCursorId(cursorId)
-//        return CommonResponse(service.getBestBoards(
-//            BoardsBestGet(
-//                cursorId = cursorValue,
-//                pageable = pageable
-//            )))
-//    }
+    @GetMapping("/best")
+    fun getBestBoards(
+        @RequestParam(required = false) cursorValue: LocalDate?,
+        @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+    ): CommonResponse<BestBoardListDto> {
+        return CommonResponse(
+            service.getBestBoards(BoardsBestGet(
+                cursor = cursorValue?: LocalDate.now(),
+                pageable = pageable
+            ))
+        )
+    }
 
     /**
      * 인기글 조회

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import java.time.LocalDate
 
 interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
     @Query(
@@ -80,4 +81,16 @@ interface BoardJpaRepository : JpaRepository<BoardJpaEntity, Long> {
         cursorId: Long,
         pageable: Pageable
     ): List<BoardJpaEntity>
+
+    @Query("SELECT DISTINCT t.appliedAt FROM BoardJpaEntity b JOIN b.topic t WHERE t.appliedAt < :cursor ORDER BY t.appliedAt DESC")
+    fun findUniqueDatesBeforeCursor(@Param("cursor") cursor: LocalDate, pageable: Pageable): List<LocalDate>
+
+    @Query(value = """
+            SELECT b.*, (SELECT COUNT(w.id) FROM whisky w WHERE w.board_id = b.id) AS whiskyCount 
+            FROM board b JOIN topic t ON b.topic_id = t.id 
+            WHERE t.applied_at = :date AND b.board_type =  :#{#type.name()}
+            ORDER BY whiskyCount DESC, b.id DESC
+        """,nativeQuery = true)
+    fun findByDateAndType(@Param("date") date: LocalDate, @Param("type") type: BoardType, pageable: Pageable): List<BoardJpaEntity>
+
 }

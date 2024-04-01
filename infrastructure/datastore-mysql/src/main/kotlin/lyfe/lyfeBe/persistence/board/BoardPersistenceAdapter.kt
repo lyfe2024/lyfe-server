@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Transactional
 @Repository
@@ -55,6 +56,14 @@ class BoardPersistenceAdapter(
         ).map { it.toDomain() }
     }
 
+    override fun findUniqueDatesBeforeCursor(cursor: LocalDate, pageable: Pageable): List<LocalDate> {
+        return boardJpaRepository.findUniqueDatesBeforeCursor(cursor, pageable)
+    }
+
+    override fun findByDateAndType(date: LocalDate, type: BoardType, pageable: Pageable): List<Board> {
+        return boardJpaRepository.findByDateAndType(date, type, pageable).map { it.toDomain() }
+    }
+
     override fun getBoardsWithCursorAndUser(
         cursorId: Long,
         type: BoardType,
@@ -62,24 +71,24 @@ class BoardPersistenceAdapter(
         pageable: Pageable
     ): List<Board> {
         return boardJpaRepository.findAllByUserIdAndBoardTypeAndIdLessThanOrderByIdDesc(
-            userId,
-            type,
-            cursorId,
-            pageable
+            userId = userId,
+            type = type,
+            cursorId = cursorId,
+            pageable = pageable
         ).map { it.toDomain() }
     }
 
-    override fun getBoardWithCursorAndTopic(
+    override fun findBoardWithCursorAndTopic(
         cursorId: Long,
         type: BoardType,
         topicId: Long?,
         pageable: Pageable
     ): List<Board> {
         return boardJpaRepository.findAllByBoardTypeAndTopicIdAndIdLessThanOrderByIdDesc(
-            type,
-            topicId,
-            cursorId,
-            pageable
+            type = type,
+            topicId = topicId,
+            cursorId = cursorId,
+            pageable = pageable
         ).map { it.toDomain() }
     }
 

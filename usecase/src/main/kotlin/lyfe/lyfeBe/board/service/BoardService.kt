@@ -3,16 +3,14 @@ package lyfe.lyfeBe.board.service
 import lyfe.lyfeBe.auth.service.SecurityUtils
 import lyfe.lyfeBe.auth.service.SecurityUtils.getLoginUser
 import lyfe.lyfeBe.board.*
-import lyfe.lyfeBe.board.dto.BoardDto
-import lyfe.lyfeBe.board.dto.BoardDtoAssembly
-import lyfe.lyfeBe.board.dto.BoardListDto
-import lyfe.lyfeBe.board.dto.SaveBoardDto
+import lyfe.lyfeBe.board.dto.*
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ForbiddenException
 import lyfe.lyfeBe.topic.port.TopicPort
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -39,27 +37,35 @@ class BoardService(
         return BoardDto.toBoardDto(params)
     }
 
-//    /**
-//     * 과거 베스트 글 목록 조회
-//     */
-//    fun getBestBoards(boardsBestGet: BoardsBestGet): BestBoardListDto {
-//        val boardPictures = boardPort.getBoardWithCursorAndTopic(
-//            cursorId = 0,
-//            type = BoardType.BOARD_PICTURE,
-//            topicId = topicPort.getDate(LocalDate.now()).id,
-//            pageable = Pageable.ofSize(3)
-//        )
-//
-//        val boards = boardPort.getBoardWithCursorAndTopic(
-//            cursorId = 0,
-//            type = BoardType.BOARD,
-//            topicId = topicPort.getDate(LocalDate.now()).id,
-//            pageable = Pageable.ofSize(3)
-//        )
-//
-//
-//    }
+    /**
+     * 과거 베스트 글 목록 조회
+     */
+    fun getBestBoards(boardsBestGet: BoardsBestGet): BestBoardListDto {
+        val dates = boardPort.findUniqueDatesBeforeCursor(boardsBestGet.cursor, boardsBestGet.pageable)
 
+        val bestBoardsList = dates.map { date ->
+            val boards = boardPort.findByDateAndType(date, BoardType.BOARD, PageRequest.of(0, 3))
+            val boardPictures = boardPort.findByDateAndType(date, BoardType.BOARD_PICTURE, PageRequest.of(0, 3))
+
+            BestBoardDto(
+                date = date,
+                boardList = boards.map { board ->
+                    val whiskyCount = fetchWhiskyCount(board.id)
+                    val commentCount = fetchCommentCount(board.id)
+                    val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+                    BoardDto.toBoardDto(params)
+                }.toList(),
+                boardPictureList = boardPictures.map { board ->
+                    val whiskyCount = fetchWhiskyCount(board.id)
+                    val commentCount = fetchCommentCount(board.id)
+                    val params = BoardDtoAssembly(board, whiskyCount, commentCount)
+                    BoardDto.toBoardDto(params)
+                }.toList()
+            )
+        }
+
+        return BestBoardListDto(list = bestBoardsList)
+    }
 
     /**
      * 게시글 날짜별 최신 목록 조회
@@ -72,7 +78,7 @@ class BoardService(
             topicPort.getDate(LocalDate.now()).id
         }
         val boards =
-            boardPort.getBoardWithCursorAndTopic(boardsGet.cursorId, boardsGet.type, topic, boardsGet.pageable).toList()
+            boardPort.findBoardWithCursorAndTopic(boardsGet.cursorId, boardsGet.type, topic, boardsGet.pageable).toList()
 
         return BoardListDto.toListDto(
             boards.map { board ->
