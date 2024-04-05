@@ -66,6 +66,7 @@ class SecurityConfig(
                         "/v1/topics/**",
                         "/v1/comments/latest",
                         "/v1/policys/**",
+                        "/v1/image-crawler/**",
                     ).permitAll()
                     .anyRequest().authenticated()
             }
