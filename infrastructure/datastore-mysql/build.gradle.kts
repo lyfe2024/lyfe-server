@@ -11,6 +11,9 @@ dependencies {
     implementation(project(":util:common-util"))
     implementation(project(":model"))
     implementation(project(":usecase"))
+
+    implementation("com.microsoft.playwright:playwright:1.33.0")
+
 }
 
 tasks.named<Jar>("jar") {
