@@ -1,40 +1,28 @@
 package lyfe.lyfeBe.web.whisky
 
-import jakarta.validation.Valid
 import lyfe.lyfeBe.dto.CommonResponse
-import lyfe.lyfeBe.web.whisky.req.WhiskySaveRequest
 import lyfe.lyfeBe.whisky.WhiskyCreate
-import lyfe.lyfeBe.whisky.WhiskyDelete
 import lyfe.lyfeBe.whisky.WhiskyService
-import lyfe.lyfeBe.whisky.dto.SaveWhiskyDto
-import org.springframework.web.bind.annotation.*
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/whiskies")
+@RequestMapping("/v1")
 class WhiskyController(
     private val service: WhiskyService
 ) {
-
-    @PostMapping("/boards")
-    fun create(
-        @RequestBody @Valid req: WhiskySaveRequest
-    ): CommonResponse<SaveWhiskyDto> =
-        CommonResponse(
-            service.create(
-                WhiskyCreate(
-                    req.boardId, req.userId
-                )
-            )
-        )
-
-
-    @DeleteMapping("/boards/{boardId}/users/{userId}")
-    fun delete(
-        @PathVariable boardId: Long,
-        @PathVariable userId: Long
-    ) = service.delete(
-        WhiskyDelete(
-            boardId, userId
-        )
-    )
+    @PostMapping("/boards/{boardId}/whisky")
+    fun likeWhiskyByBoardId(
+        @PathVariable boardId: Long
+    ): ResponseEntity<CommonResponse<Any>> {
+        val createWhiskeyBoard = service.createWhiskeyBoard(WhiskyCreate(id = boardId))
+        return if (createWhiskeyBoard != false) {
+            ResponseEntity.ok(CommonResponse(createWhiskeyBoard))
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
 }

@@ -8,24 +8,20 @@ import org.springframework.stereotype.Component
 class WhiskyPersistenceAdapter(
     private val whiskyRepository: WhiskyRepository
 ) : WhiskyPort {
-    override fun countByBoardId(boardId: Long) = whiskyRepository.countByBoardId(boardId)
-    override fun create(whisky: Whisky) =
-        whiskyRepository.save(WhiskyJpaEntity.from(whisky)).toDomain()
 
-    override fun update(boardId: Long) {
-
-        whiskyRepository
+    override fun existByBoardIdAndUserId(boardId: Long, userId: Long): Boolean {
+        return whiskyRepository.existsByBoardIdAndUserId(boardId, userId)
     }
 
-    override fun assertNoExistingWhisky(boardId: Long, userId: Long) {
-        whiskyRepository.findByBoardIdAndUserId(boardId, userId)?.let {
-            throw IllegalStateException("이미 좋아요를 누른 게시글입니다.")
-        }
-    }
-
-    override fun delete(boardId: Long, userId: Long) {
+    override fun deleteByBoardIdAndUserId(boardId: Long, userId: Long) {
         whiskyRepository.deleteByBoardIdAndUserId(boardId, userId)
     }
 
-    override fun get(whiskyId: Long) = whiskyRepository.findById(whiskyId).get().toDomain()
+    override fun create(whisky: Whisky): Whisky {
+        return whiskyRepository.save(WhiskyJpaEntity.from(whisky)).toDomain()
+    }
+
+    override fun countByBoardId(boardId: Long): Int {
+        return whiskyRepository.countByBoardId(boardId)
+    }
 }

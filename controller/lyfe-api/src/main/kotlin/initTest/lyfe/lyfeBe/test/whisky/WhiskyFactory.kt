@@ -26,8 +26,7 @@ class WhiskyFactory {
 
 
         fun createWhiskyCreate() = WhiskyCreate(
-            boardId = 1L,
-            userId = 1L
+            id = 1L,
         )
         fun createWhiskySaveRequest() = WhiskySaveRequest(
             userId = 1L,
