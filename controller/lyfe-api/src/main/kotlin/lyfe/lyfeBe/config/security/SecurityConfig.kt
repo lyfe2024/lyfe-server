@@ -60,6 +60,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/v1/boards/latest/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/popular/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/best/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/v1/boards/detail/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/topics/**").permitAll()
                     .requestMatchers(
                         "/health", "/",

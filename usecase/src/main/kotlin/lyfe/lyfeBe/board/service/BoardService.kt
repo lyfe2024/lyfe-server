@@ -49,6 +49,7 @@ class BoardService(
 
             BestBoardDto(
                 date = date,
+                topic = topicPort.getDate(date).content,
                 boardList = boards.map { board ->
                     val whiskyCount = fetchWhiskyCount(board.id)
                     val commentCount = fetchCommentCount(board.id)
