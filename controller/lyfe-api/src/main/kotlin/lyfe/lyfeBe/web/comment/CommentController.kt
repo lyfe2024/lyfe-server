@@ -42,7 +42,7 @@ class CommentController(
     @GetMapping("/latest")
     fun getLatestCommentList(
         @RequestParam(name = "comment_board_id") boardId: Long,
-        @RequestParam(required = false) cursorId: Long,
+        @RequestParam(required = false) cursorId: Long?,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
 
         ): CommonResponse<CommentListDto> {
@@ -62,7 +62,7 @@ class CommentController(
      */
     @GetMapping("/me")
     fun getMyCommentList(
-        @RequestParam(required = false) cursorId: Long,
+        @RequestParam(required = false) cursorId: Long?,
 
     ): CommonResponse<CommentListDto> {
 

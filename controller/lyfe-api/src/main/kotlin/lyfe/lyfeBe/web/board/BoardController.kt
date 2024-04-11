@@ -43,7 +43,7 @@ class BoardController(
      */
     @GetMapping("/popular")
     fun getPopularBoardsWithComment(
-        @RequestParam(required = false) cursorId: Long,
+        @RequestParam(required = false) cursorId: Long?,
         @RequestParam popularType: PopularType,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
@@ -64,7 +64,7 @@ class BoardController(
      */
     @GetMapping("/latest")
     fun getLatestBoards(
-        @RequestParam(required = false) cursorId: Long,
+        @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false) date: LocalDate?,
         @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(defaultValue = "BOARD") type: BoardType,
@@ -86,7 +86,7 @@ class BoardController(
      */
     @GetMapping("/me")
     fun getMyBoards(
-        @RequestParam(required = false) cursorId: Long,
+        @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "BOARD") type: BoardType,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         ): CommonResponse<BoardListDto> {
