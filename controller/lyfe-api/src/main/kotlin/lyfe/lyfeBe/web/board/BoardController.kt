@@ -28,7 +28,7 @@ class BoardController(
     @GetMapping("/best")
     fun getBestBoards(
         @RequestParam(required = false) cursorId: LocalDate?,
-        @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
     ): CommonResponse<BestBoardListDto> {
         return CommonResponse(
             service.getBestBoards(BoardsBestGet(
@@ -45,7 +45,7 @@ class BoardController(
     fun getPopularBoardsWithComment(
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam popularType: PopularType,
-        @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(required = false, defaultValue = "BOARD") type: BoardType,
     ): CommonResponse<BoardListDto> {
         val cursorValue = getEffectiveCursorId(cursorId)
@@ -66,7 +66,7 @@ class BoardController(
     fun getLatestBoards(
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false) date: LocalDate?,
-        @PageableDefault(size = 5, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(defaultValue = "BOARD") type: BoardType,
     ): CommonResponse<BoardListDto> {
         val cursorValue = getEffectiveCursorId(cursorId)
