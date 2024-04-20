@@ -15,11 +15,11 @@ class FakeWhiskyRepository : WhiskyPort {
     }
 
     override fun existByBoardIdAndUserId(boardId: Long, userId: Long): Boolean {
-        TODO("Not yet implemented")
+        return data.any { it.board.id == boardId && it.user.id == userId }
     }
 
     override fun deleteByBoardIdAndUserId(boardId: Long, userId: Long) {
-        TODO("Not yet implemented")
+        data.removeIf { it.board.id == boardId && it.user.id == userId }
     }
 
     override fun create(whisky: Whisky): Whisky {

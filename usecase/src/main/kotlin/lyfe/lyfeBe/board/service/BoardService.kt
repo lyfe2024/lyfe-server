@@ -170,8 +170,14 @@ class BoardService(
         return SaveBoardDto(boardPort.update(board).id)
     }
 
-    private fun fetchCommentCount(boardId: Long) = commentPort.countByBoardId(boardId)
+    private fun fetchCommentCount(boardId: Long) :Int {
+        val commentCount = commentPort.countByBoardId(boardId)
+        return if (commentCount > 0) commentCount else 0
+    }
 
-    private fun fetchWhiskyCount(boardId: Long) = whiskyPort.countByBoardId(boardId)
+    private fun fetchWhiskyCount(boardId: Long): Int {
+        val whiskyCount = whiskyPort.countByBoardId(boardId)
+        return if (whiskyCount > 0) whiskyCount else 0
+    }
 
 }

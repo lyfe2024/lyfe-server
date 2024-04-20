@@ -8,8 +8,3 @@ data class CommentGetsByBoard(
     val cursorId: Long,
     val pageable: Pageable,
 )
-
-data class CommentGetsByUserId(
-    val userId: Long,
-    val cursorId: Long,
-)

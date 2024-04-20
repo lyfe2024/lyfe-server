@@ -1,5 +1,6 @@
 package initTest.lyfe.lyfeBe.test.mock
 
+import lyfe.lyfeBe.error.ResourceNotFoundException
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.port.TopicPort
 import java.time.LocalDate
@@ -39,7 +40,7 @@ class FakeTopicRepository : TopicPort {
 
     override fun getToday(): Topic {
         val today = LocalDate.now()
-        return data.find { it.appliedAt == today }!!
+        return data.find { it.appliedAt == today }?: throw ResourceNotFoundException("주제가 존재하지 않습니다.")
     }
 
     fun clear() {

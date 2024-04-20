@@ -3,6 +3,7 @@ package initTest.lyfe.lyfeBe.test.board.service
 import initTest.lyfe.lyfeBe.test.board.BoardFactory
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardCreate
 import initTest.lyfe.lyfeBe.test.mock.*
+import initTest.lyfe.lyfeBe.test.user.UserFactory
 import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -29,16 +30,12 @@ class UpdateBoardServiceTest(
     beforeContainer {
         // 테스트에 필요한 사용자, 토픽, 게시물을 미리 생성하고 저장
         val user = createTestUser()
-
         fakeUserRepository.create(user)
 
         val topic = createTestTopic()
-
         fakeTopicRepository.create(topic)
 
-
-
-
+        UserFactory.setSecurityContextUser(user)
     }
 
     afterContainer {

@@ -11,8 +11,8 @@ data class BoardDto(
     val topic : String,
     val imageUrl: String? = null,
     val boardType: BoardType,
-    val whiskyCount: String,
-    val commentCount: String,
+    val whiskyCount: Int? = 0,
+    val commentCount: Int? = 0,
     val updatedAt: String
 ) {
     companion object {
@@ -25,8 +25,8 @@ data class BoardDto(
                     topic = param.board.topic.content,
                     imageUrl = param.board.imageUrl,
                     boardType = param.board.boardType,
-                    whiskyCount = param.whiskyCount.toString(),
-                    commentCount = param.commentCount.toString(),
+                    whiskyCount = param.whiskyCount,
+                    commentCount = param.commentCount,
                     updatedAt = param.board.updatedAt.toString()
             )
         }

@@ -42,7 +42,7 @@ class BoardController(
      * 인기글 조회
      */
     @GetMapping("/popular")
-    fun getPopularBoardsWithComment(
+    fun getPopularBoards(
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam popularType: PopularType,
         @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable,

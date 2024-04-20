@@ -7,12 +7,15 @@ import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.fcm.FCMService
 import lyfe.lyfeBe.fcm.NotificationController
 import lyfe.lyfeBe.fcm.port.FcmPort
+import lyfe.lyfeBe.policy.PolicyService
+import lyfe.lyfeBe.policy.out.PolicyPort
 import lyfe.lyfeBe.report.port.out.ReportPort
 import lyfe.lyfeBe.report.service.ReportService
 import lyfe.lyfeBe.topic.port.TopicService
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.web.board.BoardController
 import lyfe.lyfeBe.web.comment.CommentController
+import lyfe.lyfeBe.web.policy.PolicyController
 import lyfe.lyfeBe.web.report.ReportController
 import lyfe.lyfeBe.web.topic.TopicController
 import lyfe.lyfeBe.web.whisky.WhiskyController
@@ -26,12 +29,14 @@ class TestContainer(
     var notificationController: NotificationController,
     var whiskyController: WhiskyController,
     var reportController: ReportController,
+    var policyController: PolicyController,
 
     var boardService: BoardService,
     var boardRepository: BoardPort,
     var commentService: CommentService,
     var whiskyService: WhiskyService,
     var reportService: ReportService,
+    var policyService: PolicyService,
 
     var commentRepository: CommentPort,
     var userRepository: UserPort,
@@ -40,6 +45,7 @@ class TestContainer(
     var fakeNotificationRepository: FcmPort,
     var whiskyRepository: WhiskyPort,
     var reportRepository: ReportPort,
+    var policyRepository: PolicyPort,
 
 ) {
     companion object {
@@ -52,6 +58,7 @@ class TestContainer(
             val commentRepository = FakeCommentRepository()
             val fakeNotificationRepository = FakeNotificationRepository()
             val reportRepository = FakeReportRepository()
+            val policyRepository = FakePolicyRepository()
 
             val boardService = BoardService(
                 boardRepository,
@@ -90,6 +97,10 @@ class TestContainer(
                 commentRepository
             )
 
+            val policyService = PolicyService(
+                policyRepository
+            )
+
 
             val boardController = BoardController(boardService)
             val commentController = CommentController(commentService)
@@ -97,6 +108,7 @@ class TestContainer(
             val notificationController = NotificationController(fcmService)
             val whiskyController = WhiskyController(whiskyService)
             val reportController = ReportController(reportService)
+            val policyController = PolicyController(policyService)
 
             return TestContainer(
                 boardController = boardController,
@@ -105,12 +117,14 @@ class TestContainer(
                 notificationController = notificationController,
                 whiskyController= whiskyController,
                 reportController = reportController,
+                policyController = policyController,
 
                 boardService = boardService,
                 commentService = commentService,
                 whiskyService = whiskyService,
                 topicService = topicService,
                 reportService = reportService,
+                policyService = policyService,
 
                 boardRepository = boardRepository,
                 commentRepository = commentRepository,
@@ -118,7 +132,8 @@ class TestContainer(
                 topicRepository = topicRepository,
                 fakeNotificationRepository = fakeNotificationRepository,
                 whiskyRepository = fakeWhiskyRepository,
-                reportRepository = reportRepository
+                reportRepository = reportRepository,
+                policyRepository = policyRepository
             )
         }
     }

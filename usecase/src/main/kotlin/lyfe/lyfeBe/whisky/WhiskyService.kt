@@ -21,7 +21,7 @@ class WhiskyService(
 
         return if(whiskyPort.existByBoardIdAndUserId(whiskyCreate.id, user.id)){
             whiskyPort.deleteByBoardIdAndUserId(whiskyCreate.id, user.id)
-            false
+            return false
         } else {
             val whisky = Whisky.from(board, user)
             SaveWhiskyDto.from(whiskyPort.create(whisky).id)
