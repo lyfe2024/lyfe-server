@@ -36,8 +36,16 @@ class CommentPersistenceAdapter(
         boardId: Long,
         pageable: Pageable
     ): List<Comment> {
-        return commentRepository.findAllByBoardIdAndIdLessThanOrderByIdDesc(boardId, cursorId,  pageable)
+        return commentRepository.findAllByBoardIdAndCommentGroupIdIsNullAndIdGreaterThanOrderByIdAsc(boardId, cursorId, pageable)
             .map { it.toDomain() }.toList()
+    }
+
+    override fun getCommentsWithParentCommentIdAndBoard(
+        boardId: Long,
+        commentGroupId : Long
+    ): List<Comment> {
+        return commentRepository.findAllByBoardIdAndCommentGroupIdOrderByIdDesc(boardId, commentGroupId)
+            .map { it.toDomain() }
     }
 
     override fun getCommentsWithCursorAndUser(

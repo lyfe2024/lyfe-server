@@ -48,12 +48,15 @@ class CommentService(
      * 해당 게시글의 댓글 전체 조회
      */
     fun getCommentsWithCursorAndBoard(command: CommentGetsByBoard): CommentListDto {
-        commentPort.getCommentsWithCursorAndBoard(command.cursorId, command.boardId, command.pageable)
-            .let {
-                return CommentListDto.toListDto(
-                    it.map { CommentDto.from(it) }
-                )
-            }
+        val cursorId = command.cursorId ?: 0L
+        val primaryComments = commentPort.getCommentsWithCursorAndBoard(cursorId, command.boardId, command.pageable)
+
+        val comments = primaryComments.map { comments ->
+            val replies = commentPort.getCommentsWithParentCommentIdAndBoard(command.boardId, comments.id)
+            CommentDto.from(comments, replies)
+        }
+
+        return CommentListDto.toListDto(comments)
     }
 
     /**

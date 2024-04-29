@@ -47,11 +47,10 @@ class CommentController(
 
         ): CommonResponse<CommentListDto> {
 
-        val commentId = getEffectiveCursorId(cursorId)
         return service.getCommentsWithCursorAndBoard(
             CommentGetsByBoard(
                 boardId = boardId,
-                cursorId = commentId,
+                cursorId = cursorId,
                 pageable = pageable
             )
         ).let { CommonResponse(it) }

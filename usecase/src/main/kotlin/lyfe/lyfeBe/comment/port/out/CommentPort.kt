@@ -11,6 +11,11 @@ interface CommentPort {
         boardId: Long,
         pageable: Pageable
     ): List<Comment>
+    fun getCommentsWithParentCommentIdAndBoard(
+        boardId: Long,
+        commentGroupId: Long
+    ): List<Comment>
+
     fun getCommentsWithCursorAndUser(
         cursorId: Long,
         userId: Long

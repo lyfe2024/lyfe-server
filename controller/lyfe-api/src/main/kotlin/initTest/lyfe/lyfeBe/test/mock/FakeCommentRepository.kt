@@ -22,6 +22,10 @@ class FakeCommentRepository : CommentPort {
         return data.filter { it.board.id == boardId }
     }
 
+    override fun getCommentsWithParentCommentIdAndBoard(boardId: Long, commentGroupId: Long): List<Comment> {
+        return data.filter { it.board.id == boardId }
+    }
+
     override fun getCommentsWithCursorAndUser(cursorId: Long, userId: Long): List<Comment> {
         return data.filter { it.user.id == userId }
     }
