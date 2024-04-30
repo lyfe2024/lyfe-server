@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.web.notification
 
 import lyfe.lyfeBe.dto.CommonResponse
+import lyfe.lyfeBe.fomatter.DateConverter
 import lyfe.lyfeBe.notification.NotificationType
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -31,7 +32,7 @@ class NotificationMockController {
                 notificationType = notificationType,
                 notificationTargetId = i.toLong(),
                 content = "알림$i",
-                notifiedAt = Instant.now().toString()
+                notifiedAt = DateConverter.formatInstant(Instant.now())
             )
         }
 

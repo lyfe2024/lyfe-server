@@ -23,8 +23,11 @@ class DateConverter {
         }
 
         //Instant를 yy-MM-dd 포맷의 String으로 변환
-        fun formatInstant(instant: Instant): String {
-            val formatter = DateTimeFormatter.ofPattern("yy-MM-dd").withZone(ZoneId.systemDefault())
+        fun formatInstant(instant: Instant?): String {
+            if (instant == null) {
+                return ""
+            }
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault())
             return formatter.format(instant)
         }
     }

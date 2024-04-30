@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.board.dto
 
 import lyfe.lyfeBe.board.BoardType
+import lyfe.lyfeBe.fomatter.DateConverter
 import lyfe.lyfeBe.user.dto.UserDto
 
 data class BoardDto(
@@ -27,7 +28,7 @@ data class BoardDto(
                     boardType = param.board.boardType,
                     whiskyCount = param.whiskyCount,
                     commentCount = param.commentCount,
-                    updatedAt = param.board.updatedAt.toString()
+                    updatedAt = DateConverter.formatInstant(param.board.updatedAt)
             )
         }
     }
