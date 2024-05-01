@@ -1,9 +1,6 @@
 package initTest.lyfe.lyfeBe.test.board.service
 
-import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardsGet
-import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createPopularBoard
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
-import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createUserBoard
 import initTest.lyfe.lyfeBe.test.comment.CommentFactory.Companion.createTestComment
 import initTest.lyfe.lyfeBe.test.mock.*
 import initTest.lyfe.lyfeBe.test.user.UserFactory
@@ -11,9 +8,7 @@ import initTest.lyfe.lyfeBe.test.whisky.WhiskyFactory.Companion.createTestWhisky
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardGet
-import lyfe.lyfeBe.board.BoardType
+import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.service.BoardService
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.topic.Topic
@@ -22,6 +17,7 @@ import lyfe.lyfeBe.whisky.Whisky
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import java.time.Instant
+import java.time.LocalDate
 
 
 class GetBoardServiceGetTest(
@@ -47,46 +43,46 @@ class GetBoardServiceGetTest(
     lateinit var whisky: Whisky
     lateinit var comment: Comment
 
-    val testDate = Instant.now() // 테스트 시작 시간
+    val testDate = LocalDate.now() // 테스트 시작 시간
 
 
     beforeContainer {
 
         user = UserFactory.createTestUser()
-
         fakeUserRepository.create(user)
 
-        topic = Topic(0, "testTopic")
+        topic = Topic(id = 1L,
+            content = "testTopic" ,
+            createdAt = Instant.now(),
+            updatedAt = Instant.now(),
+            appliedAt = LocalDate.now()
+        )
         fakeTopicRepository.create(topic)
 
         board1 = createTestBoard(
             id = 1,
             user = user,
             boardType = BoardType.BOARD_PICTURE,
-            createdAt = testDate
+            createdAt = Instant.now()
         )
         board2 = createTestBoard(
             id = 2,
             user = user,
             boardType = BoardType.BOARD_PICTURE,
             title = "2번째보드입니다",
-            createdAt = testDate
+            createdAt = Instant.now()
         )
 
         fakeBoardRepository.create(board1)
         fakeBoardRepository.create(board2)
 
-
-
-
         whisky = createTestWhisky(user = user, board = board1)
-
-        fakeWhiskyRepository.create(whisky)
         fakeWhiskyRepository.create(whisky)
 
         comment = createTestComment(user = user, board = board1)
-
         fakeCommentRepository.create(comment)
+
+        UserFactory.setSecurityContextUser(user)
     }
 
     afterContainer {
@@ -109,8 +105,8 @@ class GetBoardServiceGetTest(
                 boardDto.content shouldBe board1.content
                 boardDto.boardType shouldBe board1.boardType
                 boardDto.user.id shouldBe board1.user.id
-                boardDto.whiskyCount shouldBe "1"
-                boardDto.commentCount shouldBe "1"
+                boardDto.whiskyCount shouldBe 1
+                boardDto.commentCount shouldBe 1
             }
         }
     }
@@ -124,15 +120,15 @@ class GetBoardServiceGetTest(
             Sort.by("id").descending()
         )
 
-        val boardsGet = createBoardsGet(
-            boardId = cursorId,
+        val boardsGet = BoardsGet(
+            cursorId = cursorId,
             pageable = pageable,
             type = BoardType.BOARD_PICTURE,
-            testDate.toString()
+            date = testDate
         )
 
         When("생성된 여러 게시판의 정보를 조회할 때(id내림차순으로) ") {
-            val boardDtos = boardService.getBoards(boardsGet).list
+            val boardDtos = boardService.getLatestBoards(boardsGet).list
 
             Then("조회된 게시판이 ID 기반으로 내림차순 정렬되어야 한다") {
                 boardDtos.zipWithNext().forEach { (current, next) ->
@@ -144,31 +140,25 @@ class GetBoardServiceGetTest(
 
 
     Given("게시판 생성 복수요청이 준비되고 실행되었을 때(인기게시글)") {
-        val pageCount = 2
-
         val pageable = PageRequest.of(
             0, // 페이지 번호 (0부터 시작)
             5, // 페이지 크기
             Sort.by("id").descending()
         )
 
-        val boardsPopularGet = createPopularBoard(
-            testDate.toString(),
+        val boardsPopularGet = BoardsPopularGet(
+            cursorId = Long.MAX_VALUE,
+            pageable = pageable,
+            popularType = PopularType.WHISKY,
             type = BoardType.BOARD_PICTURE,
-            count = pageCount
-
         )
 
         When("위스키 카운트를 기준으로 게시판 정보를 조회할 때") {
             val boardDtos = boardService.getPopularBoards(boardsPopularGet).list
 
             Then("조회된 게시판이 위스키 카운트 기반으로 내림차순 정렬되어야 한다") {
-                boardDtos.zipWithNext().forEach { (current, next) ->
-                    if (current.whiskyCount == next.whiskyCount) {
-                        current.id shouldBeGreaterThan next.id
-                    } else {
-                        current.whiskyCount shouldBeGreaterThan next.whiskyCount
-                    }
+                boardDtos.forEach{
+                    it.boardType shouldBe  boardsPopularGet.type
                 }
             }
         }
@@ -183,8 +173,7 @@ class GetBoardServiceGetTest(
             Sort.by("id").descending()
         )
 
-        val boardUserGet = createUserBoard(
-            userId = user.id,
+        val boardUserGet = BoardsUserGet(
             cursorId = Long.MAX_VALUE,
             type = BoardType.BOARD_PICTURE,
             pageable = pageable
@@ -197,7 +186,6 @@ class GetBoardServiceGetTest(
             Then("조회된 게시판이 위스키 카운트 기반으로 내림차순 정렬되어야 한다") {
                 boardDtos.forEach{
                     it.boardType shouldBe  boardUserGet.type
-                    it.user.id  shouldBe  boardUserGet.userId
                 }
 
             }

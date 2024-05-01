@@ -48,7 +48,9 @@ class CommentTest(
             user = user,
             topic = Topic(
                 id = 1L,
-                content = "testTopic"
+                content = "testTopic",
+                Instant.now(),
+                Instant.now()
             ),
             createdAt = Instant.now(),
             updatedAt = Instant.now()
@@ -94,7 +96,9 @@ class CommentTest(
             user = user,
             topic = Topic(
                 id = 1L,
-                content = "testTopic"
+                content = "testTopic",
+                Instant.now(),
+                Instant.now()
             ),
             createdAt = Instant.now(),
             updatedAt = Instant.now()

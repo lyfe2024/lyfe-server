@@ -3,8 +3,8 @@ package initTest.lyfe.lyfeBe.test.mock
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.board.port.out.BoardPort
-import lyfe.lyfeBe.fomatter.CursorGenerator.Companion.createCursorValue
 import org.springframework.data.domain.Pageable
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -34,35 +34,11 @@ class FakeBoardRepository : BoardPort {
         }
         return board
     }
-    override fun findByIdCursorId(cursorId: Long, date: String?, page: Pageable, type: BoardType): List<Board> {
-        // 필터링: cursorId보다 작고, type이 일치하는 Board 객체들을 선택
-        val boards = table.filter {
-            it.id < cursorId && it.boardType == type &&
-                    (date == null || it.createdAt.toString() == date) // date 처리는 단순화됨
-        }.sortedByDescending { it.id } // 내림차순 정렬
 
-        // 페이징 처리
-        val pageSize = page.pageSize
-        val offset = page.offset.toInt()
-        val toIndex = (offset + pageSize).coerceAtMost(boards.size)
-
-        return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
-    }
-
-
-    override fun findPopularBoards( cursor: Long,count: Int, date: String?, type: BoardType): List<Board> {
-        // 단순히 필터링 및 정렬된 게시판 리스트를 반환
-        return table.filter { board ->
-            board.boardType == type &&
-                    (date == null || board.createdAt.toString().startsWith(date))
-        }.sortedWith(compareByDescending<Board> { it.whiskyCount }.thenByDescending { it.id })
-            .take(count) // 요청된 개수만큼의 결과 반환
-    }
-
-    override fun findByUserAndBoardType(
-        userId: Long,
+    override fun getBoardsWithCursorAndUser(
         cursorId: Long,
         type: BoardType,
+        userId: Long,
         pageable: Pageable
     ): List<Board> {
         // 필터링: userId, boardType, cursorId 조건을 만족하는 Board 객체들을 선택
@@ -73,6 +49,95 @@ class FakeBoardRepository : BoardPort {
         }.sortedByDescending { it.id } // 내림차순 정렬
 
         // 페이징 처리
+        val pageSize = pageable.pageSize
+        val offset = pageable.offset.toInt()
+        val toIndex = (offset + pageSize).coerceAtMost(boards.size)
+
+        return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
+    }
+
+    override fun findBoardWithCursorAndTopic(
+        cursorId: Long,
+        type: BoardType,
+        topicId: Long?,
+        pageable: Pageable
+    ): List<Board> {
+        val boards = table.filter {
+            it.boardType == type &&
+                    (topicId == null || it.topic.id == topicId) &&
+                    it.id < cursorId
+        }.sortedByDescending { it.id }
+
+        val pageSize = pageable.pageSize
+        val offset = pageable.offset.toInt()
+        val toIndex = (offset + pageSize).coerceAtMost(boards.size)
+
+        return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
+    }
+
+    override fun findPopularBoardsWithWhisky(
+        cursorId: Long,
+        topicId: Long,
+        type: BoardType,
+        pageable: Pageable
+    ): List<Board> {
+        // whiskyCount 기준으로 내림차순 정렬
+        val boards = table.filter {
+            it.boardType == type &&
+                    it.topic.id == topicId &&
+                    it.id < cursorId
+        }.sortedWith(compareByDescending<Board> { it.whiskyCount }.thenByDescending { it.id })
+
+        val pageSize = pageable.pageSize
+        val offset = pageable.offset.toInt()
+        val toIndex = (offset + pageSize).coerceAtMost(boards.size)
+
+        return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
+    }
+
+
+    override fun findPopularBoardsWithComment(
+        cursorId: Long,
+        topicId: Long,
+        type: BoardType,
+        pageable: Pageable
+    ): List<Board> {
+        val boards = table.filter {
+            it.boardType == type &&
+                    it.topic.id == topicId &&
+                    it.id < cursorId
+        }.sortedByDescending { it.commentCount }
+
+        val pageSize = pageable.pageSize
+        val offset = pageable.offset.toInt()
+        val toIndex = (offset + pageSize).coerceAtMost(boards.size)
+
+        return if (offset < boards.size) boards.subList(offset, toIndex) else emptyList()
+    }
+    override fun findUniqueDatesBeforeCursor(
+        cursor: LocalDate,
+        pageable: Pageable
+    ): List<LocalDate> {
+        val uniqueDates = table.filter {
+            it.topic.appliedAt!! < cursor
+        }.map { it.topic.appliedAt!! }.distinct().sortedByDescending { it }
+
+        val pageSize = pageable.pageSize
+        val offset = pageable.offset.toInt()
+        val toIndex = (offset + pageSize).coerceAtMost(uniqueDates.size)
+
+        return if (offset < uniqueDates.size) uniqueDates.subList(offset, toIndex) else emptyList()
+    }
+
+    override fun findByDateAndType(
+        date: LocalDate,
+        type: BoardType,
+        pageable: Pageable
+    ): List<Board> {
+        val boards = table.filter {
+            it.topic.appliedAt!! == date && it.boardType == type
+        }.sortedByDescending { it.id }
+
         val pageSize = pageable.pageSize
         val offset = pageable.offset.toInt()
         val toIndex = (offset + pageSize).coerceAtMost(boards.size)

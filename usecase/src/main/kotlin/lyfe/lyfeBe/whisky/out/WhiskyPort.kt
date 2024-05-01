@@ -3,12 +3,10 @@ package lyfe.lyfeBe.whisky.out
 import lyfe.lyfeBe.whisky.Whisky
 
 interface WhiskyPort {
-    fun countByBoardId(boardId: Long): Int
+    fun existByBoardIdAndUserId(boardId: Long, userId: Long): Boolean
+    fun deleteByBoardIdAndUserId(boardId: Long, userId: Long)
+
     fun create(whisky: Whisky): Whisky
-    fun update(boardId: Long)
-    fun assertNoExistingWhisky(boardId: Long, userId: Long)
-    fun delete(boardId: Long, userId: Long)
 
-    fun get(whiskyId: Long): Whisky
-
+    fun countByBoardId(boardId: Long): Int
 }

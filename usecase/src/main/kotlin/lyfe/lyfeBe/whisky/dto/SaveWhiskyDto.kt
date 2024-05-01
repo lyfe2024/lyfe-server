@@ -1,11 +1,13 @@
 package lyfe.lyfeBe.whisky.dto
 
 data class SaveWhiskyDto(
-    val whiskyId: Long
+    val id: Long
 ) {
-
     companion object {
-        fun from(whiskyId: Long) = SaveWhiskyDto(whiskyId)
-
+        fun from(whiskyId: Long): SaveWhiskyDto {
+            return SaveWhiskyDto(
+                id = whiskyId
+            )
+        }
     }
 }

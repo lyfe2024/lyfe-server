@@ -1,12 +1,9 @@
 package initTest.lyfe.lyfeBe.test.mock
 
+import lyfe.lyfeBe.error.ResourceNotFoundException
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.port.TopicPort
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.Pageable
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -27,36 +24,23 @@ class FakeTopicRepository : TopicPort {
         }
     }
 
-    override fun getById(topicId: Long) = data.find { it.id == topicId }!!
+    override fun getById(id: Long) = data.find { it.id == id }!!
 
-    override fun update(from: Topic) {
-        data.removeIf { it.id == from.id }
-        data.add(from)
+    override fun update(from: Topic): Topic {
+        data.find { it.id == from.id }?.let {
+            data.remove(it)
+            data.add(from)
+        }
+        return from
     }
 
-
-
-    override fun getPast(date: String, cursorId: Long, pageable: Pageable): Page<Topic> {
-        // data 리스트에서 필터링 및 정렬을 수행
-        val filteredData = data.filter {
-            it.appliedAt!! < date && it.id < cursorId
-        }.sortedByDescending { it.id }
-
-        // 페이징 처리
-        val pageStart = pageable.pageNumber * pageable.pageSize
-        val pageEnd = (pageStart + pageable.pageSize).coerceAtMost(filteredData.size)
-        val pageContent = filteredData.subList(pageStart, pageEnd)
-
-        // Page 객체 반환
-        return PageImpl(pageContent, pageable, pageable.pageSize.toLong())
+    override fun getDate(date: LocalDate): Topic {
+        return data.find { it.appliedAt == date }!!
     }
-
 
     override fun getToday(): Topic {
-        val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"))
-        return data.find { topic ->
-            topic.appliedAt == today
-        } ?: throw IllegalStateException("Topic not found for the given date")
+        val today = LocalDate.now()
+        return data.find { it.appliedAt == today }?: throw ResourceNotFoundException("주제가 존재하지 않습니다.")
     }
 
     fun clear() {

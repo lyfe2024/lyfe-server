@@ -1,8 +1,7 @@
 package lyfe.lyfeBe.topic
 
-import org.springframework.data.domain.Pageable
+import java.time.LocalDate
 
 data class TopicPastGet(
-    val date: String,
-    val pageable: Pageable
+    val date: LocalDate
 )

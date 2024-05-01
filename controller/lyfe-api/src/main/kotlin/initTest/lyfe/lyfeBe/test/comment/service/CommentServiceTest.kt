@@ -22,6 +22,7 @@ import lyfe.lyfeBe.user.User
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.security.core.context.SecurityContextHolder
+import java.time.Instant
 
 class CommentServiceTest(
 ) : BehaviorSpec({
@@ -47,7 +48,7 @@ class CommentServiceTest(
         user = createTestUser()
         fakeUserRepository.create(user)
 
-        topic = Topic(0, "testTopic")
+        topic = Topic(0, "testTopic", Instant.now(), Instant.now())
         fakeTopicRepository.create(topic)
 
         board = createTestBoard()

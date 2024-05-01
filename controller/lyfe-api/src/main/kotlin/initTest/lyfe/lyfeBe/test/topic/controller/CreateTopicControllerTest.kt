@@ -1,20 +1,32 @@
 package initTest.lyfe.lyfeBe.test.topic.controller
 
 import initTest.lyfe.lyfeBe.test.mock.TestContainer
+import initTest.lyfe.lyfeBe.test.user.UserFactory
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.web.topic.req.SaveTopicRequest
 
 
-class CreateControllerTest(
+class CreateTopicControllerTest(
 ) : BehaviorSpec({
 
     val testContainer = TestContainer.build()
+
+    lateinit var user : User
+
+    beforeContainer {
+        user = UserFactory.createTestAdmin()
+        testContainer.userRepository.create(user)
+
+        UserFactory.setSecurityContextUser(user)
+    }
 
     Given("토픽 생성 요청이 준비되었을 때") {
 
         val req = SaveTopicRequest(
             content = "testTopic",
+            appliedAt = null
         )
 
         When("토픽 생성 요청을 처리할 하고 조회 했을때") {

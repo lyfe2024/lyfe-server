@@ -36,7 +36,7 @@ class UpdateReportControllerTest : BehaviorSpec({
         board = BoardFactory.createTestBoard()
         testContainer.boardRepository.create(board)
 
-        topic = Topic(1L, "testTopic")
+        topic = Topic(1L, "testTopic", Instant.now(), Instant.now())
         testContainer.topicRepository.create(topic)
 
         report = ReportFactory.createTestReport()

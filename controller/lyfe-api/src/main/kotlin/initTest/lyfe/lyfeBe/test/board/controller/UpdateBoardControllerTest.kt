@@ -6,23 +6,34 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.BoardType
 import lyfe.lyfeBe.topic.Topic
+import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.web.board.req.BoardSaveRequest
 import lyfe.lyfeBe.web.board.req.BoardUpdateRequest
+import java.time.Instant
+import java.time.LocalDate
 
 
 class UpdateBoardControllerTest(
 ) : BehaviorSpec({
-
     val testContainer = TestContainer.build()
-    val user = UserFactory.createTestUser()
-    val topic = Topic(1L, "testTopic")
 
+    lateinit var user: User
+    lateinit var topic: Topic
 
     beforeContainer {
 
+        user = UserFactory.createTestUser(id = 1L)
         testContainer.userRepository.create(user)
 
+        topic = Topic(id = 1L,
+            content = "testTopic" ,
+            createdAt = Instant.now(),
+            updatedAt = Instant.now(),
+            appliedAt = LocalDate.now()
+        )
         testContainer.topicRepository.create(topic)
+
+        UserFactory.setSecurityContextUser(user)
 
     }
 
@@ -32,7 +43,6 @@ class UpdateBoardControllerTest(
             title = "테스트 게시판 제목",
             content = "테스트 내용입니다. 여기에 게시판 내용이 들어갑니다.",
             boardType = BoardType.BOARD,
-            userId = 1L,
             topicId = 1L
         )
 
@@ -45,7 +55,10 @@ class UpdateBoardControllerTest(
                 content = "바뀐 테스트 내용입니다. 여기에 게시판 내용이 들어갑니다."
             )
 
-            val boardId = testContainer.boardController.update(1L, updateReq,user)
+            val boardId = testContainer.boardController.update(
+                boardId = 1L,
+                req = updateReq
+            )
 
             val board = testContainer.boardService.getById(boardId.result.id)
 

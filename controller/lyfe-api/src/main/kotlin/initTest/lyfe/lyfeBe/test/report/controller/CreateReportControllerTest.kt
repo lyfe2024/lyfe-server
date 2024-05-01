@@ -10,6 +10,7 @@ import lyfe.lyfeBe.report.ReportTarget
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.web.report.req.SaveReportRequest
 import org.springframework.security.core.context.SecurityContextHolder
+import java.time.Instant
 
 class CreateReportControllerTest : BehaviorSpec({
 
@@ -26,7 +27,7 @@ class CreateReportControllerTest : BehaviorSpec({
         board = BoardFactory.createTestBoard()
         testContainer.boardRepository.create(board)
 
-        topic = Topic(1L, "testTopic")
+        topic = Topic(1L, "testTopic", Instant.now(), Instant.now())
         testContainer.topicRepository.create(topic)
 
         UserFactory.setSecurityContextUser(reporter)

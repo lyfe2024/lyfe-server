@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.board.dto
 
 import lyfe.lyfeBe.board.BoardType
+import lyfe.lyfeBe.fomatter.DateConverter
 import lyfe.lyfeBe.user.dto.UserDto
 
 data class BoardDto(
@@ -8,10 +9,11 @@ data class BoardDto(
     val user: UserDto,
     val title: String,
     val content: String,
+    val topic : String,
     val imageUrl: String? = null,
     val boardType: BoardType,
-    val whiskyCount: String,
-    val commentCount: String,
+    val whiskyCount: Int? = 0,
+    val commentCount: Int? = 0,
     val updatedAt: String
 ) {
     companion object {
@@ -21,10 +23,12 @@ data class BoardDto(
                     user = UserDto.from(param.board.user),
                     title = param.board.title,
                     content = param.board.content,
+                    topic = param.board.topic.content,
+                    imageUrl = param.board.imageUrl,
                     boardType = param.board.boardType,
-                    whiskyCount = param.whiskyCount.toString(),
-                    commentCount = param.commentCount.toString(),
-                    updatedAt = param.board.updatedAt.toString()
+                    whiskyCount = param.whiskyCount,
+                    commentCount = param.commentCount,
+                    updatedAt = DateConverter.formatInstant(param.board.updatedAt)
             )
         }
     }

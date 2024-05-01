@@ -1,4 +1,11 @@
 package lyfe.lyfeBe.board
 
+import org.springframework.data.domain.Pageable
 
-data class BoardsPopularGet(val whiskyCount: Long, val date: String?, val type: BoardType, val count: Int)
+
+data class BoardsPopularGet(
+    val cursorId: Long,
+    val popularType: PopularType,
+    val type: BoardType,
+    val pageable: Pageable
+)

@@ -2,16 +2,10 @@ package initTest.lyfe.lyfeBe.test.topic.domain
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import lyfe.lyfeBe.board.Board
-import lyfe.lyfeBe.board.BoardCreate
-import lyfe.lyfeBe.board.BoardType
-import lyfe.lyfeBe.board.BoardUpdate
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.topic.TopicCreate
 import lyfe.lyfeBe.topic.TopicUpdate
-import lyfe.lyfeBe.user.Role
-import lyfe.lyfeBe.user.User
-import lyfe.lyfeBe.user.UserStatus
+import java.time.LocalDate
 
 
 class TopicTest(
@@ -22,6 +16,7 @@ class TopicTest(
 
         val topicCreate = TopicCreate(
             content = "testTopic",
+            appliedAt = null,
         )
 
         When("TopicCreate 객체를 사용하여 새 Topic 객체를 생성했을 때") {
@@ -38,10 +33,12 @@ class TopicTest(
         val topicUpdate = TopicUpdate(
             1L,
             "testTopic",
+            LocalDate.now()
         )
 
             When("TopicUpdate 객체를 사용하여 Topic 객체를 업데이트 했을 때") {
-                val topic = Topic.from(topicUpdate)
+                val topic = Topic(1L, "testTopic", null, null)
+                    .update(topicUpdate)
 
                 Then("업데이트된 Topic 객체의 속성이 topicUpdate와 일치") {
                     topic.id shouldBe topicUpdate.topicId

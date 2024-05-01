@@ -35,6 +35,31 @@ class UserFactory {
                 )
         }
 
+        fun createTestAdmin(
+            id: Long = 1L,
+            name: String = "testName",
+            email: String = "testEmail",
+            password: String = "testPassword",
+            role: Role = Role.ADMIN,
+            profileUrl: String = "https://example.com/image.jpg",
+            status: UserStatus = UserStatus.ACTIVE
+        ): User {
+            return User(
+                id = id,
+                nickname = name,
+                email = email,
+                hashedPassword = password,
+                socialId = "",
+                socialType = SocialType.GOOGLE,
+                socialRefreshToken = "@@@@@",
+                notificationConsent = true,
+                fcmRegistration = true,
+                role = role,
+                profileUrl = profileUrl,
+                userStatus = status,
+                )
+        }
+
         fun setSecurityContextUser(user : User){
             // PrincipalDetails의 가짜 구현 생성
             val fakeUserDetails = PrincipalDetails(user)

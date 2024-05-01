@@ -2,10 +2,13 @@ package initTest.lyfe.lyfeBe.test.board.service
 
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardCreate
 import initTest.lyfe.lyfeBe.test.mock.*
+import initTest.lyfe.lyfeBe.test.user.UserFactory
 import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.service.BoardService
+import lyfe.lyfeBe.topic.Topic
+import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.web.topic.TopicFactory.Companion.createTestTopic
 
 
@@ -25,17 +28,18 @@ class CreateBoardServiceTest(
         fakeCommentRepository
     )
 
+    lateinit var topic: Topic
+    lateinit var user: User
+
     beforeContainer {
         // 테스트에 필요한 사용자, 토픽, 게시물을 미리 생성하고 저장
-        val user = createTestUser()
-
+        user = createTestUser()
         fakeUserRepository.create(user)
 
-        val topic = createTestTopic()
-
+        topic = createTestTopic()
         fakeTopicRepository.create(topic)
 
-
+        UserFactory.setSecurityContextUser(user)
     }
 
     afterContainer {
@@ -62,7 +66,6 @@ class CreateBoardServiceTest(
                 newBoard.title shouldBe boardCreate.title
                 newBoard.content shouldBe boardCreate.content
                 newBoard.boardType shouldBe boardCreate.boardType
-                newBoard.user.id shouldBe boardCreate.userId
                 newBoard.topic.id shouldBe boardCreate.topicId
             }
         }

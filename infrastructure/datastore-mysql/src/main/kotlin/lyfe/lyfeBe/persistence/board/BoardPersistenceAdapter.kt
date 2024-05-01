@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Transactional
 @Repository
@@ -27,25 +28,69 @@ class BoardPersistenceAdapter(
         return boardJpaRepository.save(update).toDomain()
     }
 
-    override fun findByIdCursorId(cursorId: Long, date: String?, pageable: Pageable, type: BoardType) =
-        boardJpaRepository.findByIdCursorId(cursorId, date, type, pageable).map { it.toDomain() }
-
-
-    override fun findPopularBoards(whiskyCount: Long, count: Int, date: String?, type: BoardType): List<Board> {
-        println("@@@@@@")
-        println(whiskyCount)
-        println(count)
-        println(date)
-        println(type)
-        return boardJpaRepository.findBoardsWithWhiskyCount(whiskyCount, count, date, type).map { it.toDomain() }
-
-    }
-
-    override fun findByUserAndBoardType(
-        userId: Long,
+    override fun findPopularBoardsWithWhisky(
         cursorId: Long,
+        topicId: Long,
         type: BoardType,
         pageable: Pageable
-    ) = boardJpaRepository.findByUserIdAndBoardTypeAndCursorId(userId, cursorId, type, pageable).map { it.toDomain() }
+    ): List<Board> {
+        return boardJpaRepository.findPopularBoardsWithWhisky(
+            cursorId = cursorId,
+            topicId = topicId,
+            type = type,
+            pageCount = pageable.pageSize
+        ).map { it.toDomain() }
+    }
+
+    override fun findPopularBoardsWithComment(
+        cursorId: Long,
+        topicId: Long,
+        type: BoardType,
+        pageable: Pageable
+    ): List<Board> {
+        return boardJpaRepository.findPopularBoardsWithComment(
+            cursorId = cursorId,
+            topicId = topicId,
+            type = type,
+            pageCount = pageable.pageSize
+        ).map { it.toDomain() }
+    }
+
+    override fun findUniqueDatesBeforeCursor(cursor: LocalDate, pageable: Pageable): List<LocalDate> {
+        return boardJpaRepository.findUniqueDatesBeforeCursor(cursor, pageable)
+    }
+
+    override fun findByDateAndType(date: LocalDate, type: BoardType, pageable: Pageable): List<Board> {
+        return boardJpaRepository.findByDateAndType(date, type, pageable).map { it.toDomain() }
+    }
+
+    override fun getBoardsWithCursorAndUser(
+        cursorId: Long,
+        type: BoardType,
+        userId: Long,
+        pageable: Pageable
+    ): List<Board> {
+        return boardJpaRepository.findAllByUserIdAndBoardTypeAndIdLessThanOrderByIdDesc(
+            userId = userId,
+            type = type,
+            cursorId = cursorId,
+            pageable = pageable
+        ).map { it.toDomain() }
+    }
+
+    override fun findBoardWithCursorAndTopic(
+        cursorId: Long,
+        type: BoardType,
+        topicId: Long?,
+        pageable: Pageable
+    ): List<Board> {
+        return boardJpaRepository.findAllByBoardTypeAndTopicIdAndIdLessThanOrderByIdDesc(
+            type = type,
+            topicId = topicId,
+            cursorId = cursorId,
+            pageable = pageable
+        ).map { it.toDomain() }
+    }
+
 
 }

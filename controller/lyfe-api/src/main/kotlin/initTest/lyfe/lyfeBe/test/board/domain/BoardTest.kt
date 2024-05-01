@@ -1,8 +1,8 @@
 package initTest.lyfe.lyfeBe.test.board.domain
 
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardCreate
-import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
 import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createBoardUpdate
+import initTest.lyfe.lyfeBe.test.board.BoardFactory.Companion.createTestBoard
 import initTest.lyfe.lyfeBe.test.user.UserFactory.Companion.createTestUser
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -31,7 +31,6 @@ class BoardTest(
                 board.title shouldBe boardCreate.title
                 board.content shouldBe boardCreate.content
                 board.boardType shouldBe boardCreate.boardType
-                board.user.id shouldBe boardCreate.userId
                 board.topic.id shouldBe boardCreate.topicId
             }
         }
@@ -45,7 +44,7 @@ class BoardTest(
 
         When("Board 객체를 BoardUpdate 정보로 업데이트했을 때") {
 
-            board.update(boardUpdate,user.id)
+            board.update(boardUpdate)
 
             Then("해당 보드 타이틀과 본문이 변경된다 .") {
                 board.title shouldBe boardUpdate.title

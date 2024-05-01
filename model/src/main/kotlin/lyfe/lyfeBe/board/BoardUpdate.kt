@@ -5,5 +5,4 @@ data class BoardUpdate(
     val title: String,
     val content: String,
     val imageUrl: String? = null,
-    val userId: Long
 )

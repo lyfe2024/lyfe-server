@@ -12,6 +12,7 @@ import lyfe.lyfeBe.topic.Topic
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.security.core.context.SecurityContextHolder
+import java.time.Instant
 
 class GetReportControllerTest: BehaviorSpec({
 
@@ -30,7 +31,7 @@ class GetReportControllerTest: BehaviorSpec({
         board = BoardFactory.createTestBoard()
         testContainer.boardRepository.create(board)
 
-        topic = Topic(1L, "testTopic")
+        topic = Topic(1L, "testTopic", Instant.now(), Instant.now())
         testContainer.topicRepository.create(topic)
 
         UserFactory.setSecurityContextUser(reporter)
