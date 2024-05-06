@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
 
 
-class KakaoHeaderConfiguration {
+class KakaoApiHeaderConfiguration {
     @Bean
     fun requestInterceptor(): RequestInterceptor {
         return RequestInterceptor { template: RequestTemplate ->
             template.header(
                 "Content-Type",
-                MediaType.APPLICATION_JSON_VALUE
+                MediaType.APPLICATION_FORM_URLENCODED_VALUE
             )
         }
     }

@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.auth.service.google
 
 import feign.Response
+import lyfe.lyfeBe.aop.FeignClientConfiguration
 import lyfe.lyfeBe.auth.dto.google.GoogleRefreshTokenResult
 import lyfe.lyfeBe.auth.dto.google.GoogleTokenResult
 import org.springframework.cloud.openfeign.FeignClient
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 
-@FeignClient(name = "google", url = "https://oauth2.googleapis.com", configuration = [GoogleHeaderConfiguration::class])
+@FeignClient(name = "google", url = "https://oauth2.googleapis.com", configuration = [GoogleHeaderConfiguration::class, FeignClientConfiguration::class])
 interface GoogleTokenClient {
 
     /**

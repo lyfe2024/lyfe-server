@@ -5,6 +5,6 @@ import lyfe.lyfeBe.auth.SocialType
 data class AuthRequest(
     val socialType: SocialType,
     val authorizationCode: String,
-    val identityToken: String?,
+    val idToken: String?,
     val fcmToken: String?,
 )

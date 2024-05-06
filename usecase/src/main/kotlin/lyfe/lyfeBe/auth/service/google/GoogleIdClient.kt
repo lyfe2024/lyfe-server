@@ -1,11 +1,12 @@
 package lyfe.lyfeBe.auth.service.google
 
+import lyfe.lyfeBe.aop.FeignClientConfiguration
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 
-@FeignClient(name = "googleIdClient", url = "https://www.googleapis.com", configuration = [GoogleHeaderConfiguration::class])
+@FeignClient(name = "googleIdClient", url = "https://www.googleapis.com", configuration = [GoogleHeaderConfiguration::class, FeignClientConfiguration::class])
 interface GoogleIdClient {
 
     /**

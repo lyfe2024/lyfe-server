@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.auth.service.apple
 
 import feign.Response
+import lyfe.lyfeBe.aop.FeignClientConfiguration
 import lyfe.lyfeBe.auth.dto.apple.ApplePublicKeysResult
 import lyfe.lyfeBe.auth.dto.apple.AppleRevokeRequest
 import lyfe.lyfeBe.auth.dto.apple.AppleTokenRequest
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
-@FeignClient(name = "apple", url = "https://appleid.apple.com/auth")
+@FeignClient(name = "apple", url = "https://appleid.apple.com/auth", configuration = [FeignClientConfiguration::class])
 interface AppleClient {
 
     /**
