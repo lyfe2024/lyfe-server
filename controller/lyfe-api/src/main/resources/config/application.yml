@@ -15,9 +15,11 @@ logging:
   level:
     ROOT: INFO
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    lyfe.lyfeBe.auth.service: DEBUG
 
 server:
   tomcat:
     access-log:
       enabled: true
   port: 8081
+
