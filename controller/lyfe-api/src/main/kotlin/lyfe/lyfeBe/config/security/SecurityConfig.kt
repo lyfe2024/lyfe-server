@@ -65,7 +65,10 @@ class SecurityConfig(
                     .requestMatchers(
                         "/health", "/",
                         "/v1/images/**",
-                        "/v1/auth/**",
+                        "/v1/auth/admin",
+                        "/v1/auth/login",
+                        "/v1/auth/join",
+                        "/v1/auth/reissue",
                         "/v1/users/check-nickname/**",
                         "/v1/comments/latest",
                         "/v1/policy/**",
