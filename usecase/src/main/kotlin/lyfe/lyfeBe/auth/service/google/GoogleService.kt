@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.auth.service.google
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import lyfe.lyfeBe.auth.AuthLogin
 import lyfe.lyfeBe.auth.SocialType
 import lyfe.lyfeBe.auth.dto.OAuthIdAndRefreshTokenDto
@@ -19,6 +20,8 @@ class GoogleService(
     @Value("\${google.clientSecret}") private var clientSecret: String,
     @Value("\${google.redirectUri}") private var redirectUri: String,
 ) : AuthProviderService {
+
+    private val log = KotlinLogging.logger {}
 
     override fun fetchAuthToken(authLoginRequest: AuthLogin): OAuthIdAndRefreshTokenDto {
         val code = URLDecoder.decode(authLoginRequest.authorizationCode, StandardCharsets.UTF_8)
@@ -42,17 +45,23 @@ class GoogleService(
     }
 
     override fun revoke(socialId: String, socialRefreshToken: String?): Boolean {
-        val googleRefreshTokenDto = googleTokenClient.refreshToken(
-            clientId = clientId,
-            clientSecret = clientSecret,
-            refreshToken = socialRefreshToken ?: throw UnauthenticatedException("refreshToken is null"),
-            grantType = "refresh_token"
-        )
-        val accessToken = googleRefreshTokenDto.accessToken
-        val response = googleTokenClient.revoke(accessToken)
+        return runCatching {
+            val googleRefreshTokenDto = googleTokenClient.refreshToken(
+                clientId = clientId,
+                clientSecret = clientSecret,
+                refreshToken = socialRefreshToken ?: throw IllegalArgumentException("Google refreshToken is null"),
+                grantType = "refresh_token"
+            )
+            val accessToken = googleRefreshTokenDto.accessToken
+            val response = googleTokenClient.revoke(accessToken)
 
-        require(response.status() == 200)
-        return true
+            require(response.status() == 200) { "Failed to revoke Google token: ${response.status()}" }
+            true
+        }.onFailure {
+            log.error{"Error revoking Google token for user $socialId"}
+        }.getOrDefault(false)
+
+
     }
 
     private fun getGoogleId(accessToken: String): String {
