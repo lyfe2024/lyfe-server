@@ -9,11 +9,15 @@ import java.util.*
 @Component
 class AppleJwtParser(private val objectMapper: ObjectMapper) {
 
+    companion object {
+        private const val HEADER_INDEX = 0
+    }
+
     fun parseHeaders(identityToken: String): Map<String, String> {
-        try {
-            val encodedHeader = identityToken.substring(0, identityToken.indexOf("."))
+        return try {
+            val encodedHeader = identityToken.split(".")[HEADER_INDEX]
             val decodedHeader = String(Base64.getUrlDecoder().decode(encodedHeader))
-            return objectMapper.readValue(decodedHeader, object : TypeReference<Map<String, String>>() {})
+            objectMapper.readValue(decodedHeader, object : TypeReference<Map<String, String>>() {})
         } catch (e: Exception) {
             throw UnauthenticatedException("Apple OAuth Identity Token 형식이 올바르지 않습니다.")
         }
