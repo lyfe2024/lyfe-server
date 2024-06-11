@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
 
 
-class GoogleHeaderConfiguration {
+class SocialHeaderConfiguration {
     @Bean
     fun requestInterceptor(): RequestInterceptor {
         return RequestInterceptor { template: RequestTemplate ->

@@ -13,8 +13,6 @@ data class AppleTokenRequest(
     val code: String?,
     @JsonProperty("grant_type")
     val grantType: String,
-    @JsonProperty("refresh_token")
-    val refreshToken: String? = null,
     @JsonProperty("redirect_uri")
     val redirectUri: String?
 )

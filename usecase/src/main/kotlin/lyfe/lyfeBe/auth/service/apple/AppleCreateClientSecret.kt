@@ -16,21 +16,21 @@ import java.util.*
 
 @Component
 class AppleCreateClientSecret(
-    @Value("\${apple.appleBundleId}")
-    private var appleBundleId: String,
-
     @Value("\${apple.appleTeamId}")
     private val appleTeamId: String,
 
-    @Value("\${apple.appleSignKeyId}")
-    private val appleSignKeyId: String,
+    @Value("\${apple.appleAud}")
+    private val appleAud: String,
+
+    @Value("\${apple.appleKeyId}")
+    private val appleKeyId: String,
 
     @Value("\${apple.appleKey}")
     private val appleKey: String
 ) {
     fun createClientSecret(): String {
         val expirationDate = Date.from(LocalDateTime.now().plusDays(30).atZone(ZoneId.systemDefault()).toInstant())
-        val jwtHeader: Map<String, Any?> = mapOf("kid" to appleSignKeyId, "alg" to "ES256")
+        val jwtHeader: Map<String, Any?> = mapOf("kid" to appleKeyId, "alg" to "ES256")
 
         return Jwts.builder()
             .setHeader(jwtHeader)
@@ -38,7 +38,7 @@ class AppleCreateClientSecret(
             .setIssuedAt(Date(System.currentTimeMillis())) // 발행 시간
             .setExpiration(expirationDate) // 만료 시간
             .setAudience("https://appleid.apple.com")
-            .setSubject(appleBundleId)
+            .setSubject(appleAud)
             .signWith(getPrivateKey(), SignatureAlgorithm.ES256)
             .compact()
     }

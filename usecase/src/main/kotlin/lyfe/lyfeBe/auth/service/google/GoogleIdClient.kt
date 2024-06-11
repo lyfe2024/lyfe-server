@@ -5,7 +5,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 
-@FeignClient(name = "googleIdClient", url = "https://www.googleapis.com", configuration = [GoogleHeaderConfiguration::class])
+@FeignClient(name = "googleIdClient", url = "https://www.googleapis.com", configuration = [SocialHeaderConfiguration::class])
 interface GoogleIdClient {
 
     /**
