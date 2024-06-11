@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.auth.service.apple
 
 import feign.Response
+import lyfe.lyfeBe.aop.FeignClientConfiguration
 import lyfe.lyfeBe.auth.dto.apple.ApplePublicKeysResult
 import lyfe.lyfeBe.auth.dto.apple.AppleRevokeRequest
 import lyfe.lyfeBe.auth.dto.apple.AppleTokenResult

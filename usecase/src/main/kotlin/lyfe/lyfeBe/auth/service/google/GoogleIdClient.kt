@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.auth.service.google
 
+import lyfe.lyfeBe.aop.FeignClientConfiguration
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
