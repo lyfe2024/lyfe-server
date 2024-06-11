@@ -49,7 +49,7 @@ class AuthService(
         val email = claims[EMAIL_CLAIM] as String
         val socialRefreshToken = claims[REFRESH_TOKEN] as String
         val userCredentials =
-            claims[EMAIL_CLAIM] as String to passwordEncoder.encode(email+"lyfe")
+            claims[EMAIL_CLAIM] as String to passwordEncoder.encode(email + "lyfe")
 
         val user = User.from(userJoin, userCredentials, socialRefreshToken)
         userPort.create(user)

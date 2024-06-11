@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.error
 
+import feign.FeignException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.*
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -56,6 +57,28 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
             request = request
         )
     }
+
+    /**
+     * FeignException 은 400 Bad Request 로 처리한다.
+     */
+    @ExceptionHandler(FeignException::class)
+    fun handleFeignException(
+        ex: FeignException,
+        request: WebRequest
+    ): ResponseEntity<Any>? {
+        val statusCode = HttpStatus.BAD_REQUEST
+        val body = ProblemDetail.forStatusAndDetail(statusCode, ex.message ?: statusCode.reasonPhrase)
+            .apply { type = URI.create("/errors/bad-request") }
+
+        return handleExceptionInternal(
+            ex = ex,
+            body = body,
+            headers = HttpHeaders(),
+            statusCode = statusCode,
+            request = request
+        )
+    }
+
 
     /**
      * UnauthenticatedException 은 401 Unauthorized 로 처리한다.

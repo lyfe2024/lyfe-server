@@ -9,8 +9,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-
-@FeignClient(name = "google", url = "https://oauth2.googleapis.com", configuration = [GoogleHeaderConfiguration::class, FeignClientConfiguration::class])
+@FeignClient(name = "google", url = "https://oauth2.googleapis.com", configuration = [SocialHeaderConfiguration::class])
 interface GoogleTokenClient {
 
     /**

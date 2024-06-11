@@ -6,7 +6,7 @@ import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.spec.RSAPublicKeySpec
-import java.util.Base64
+import java.util.*
 
 @Component
 class ApplePublicKeyGenerator {
@@ -31,11 +31,11 @@ class ApplePublicKeyGenerator {
 
         val publicKeySpec = RSAPublicKeySpec(n, e)
 
-        try {
-            val keyFactory = KeyFactory.getInstance(applePublicKey.kty)
-            return keyFactory.generatePublic(publicKeySpec)
+        return try {
+            val keyFactory = KeyFactory.getInstance("RSA") // "RSA" 대신 applePublicKey.kty 사용을 고려해야 할 수도 있음
+            keyFactory.generatePublic(publicKeySpec)
         } catch (exception: Exception) {
-            throw IllegalStateException("Apple OAuth 로그인 중 public key 생성에 문제가 발생했습니다.")
+            throw IllegalStateException("Apple OAuth 로그인 중 public key 생성에 문제가 발생했습니다.", exception)
         }
     }
 }

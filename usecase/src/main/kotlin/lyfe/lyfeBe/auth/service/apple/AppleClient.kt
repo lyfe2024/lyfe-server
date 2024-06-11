@@ -4,15 +4,16 @@ import feign.Response
 import lyfe.lyfeBe.aop.FeignClientConfiguration
 import lyfe.lyfeBe.auth.dto.apple.ApplePublicKeysResult
 import lyfe.lyfeBe.auth.dto.apple.AppleRevokeRequest
-import lyfe.lyfeBe.auth.dto.apple.AppleTokenRequest
 import lyfe.lyfeBe.auth.dto.apple.AppleTokenResult
+import lyfe.lyfeBe.auth.service.google.SocialHeaderConfiguration
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 
-@FeignClient(name = "apple", url = "https://appleid.apple.com/auth", configuration = [FeignClientConfiguration::class])
+@FeignClient(name = "apple", url = "https://appleid.apple.com/auth", configuration = [SocialHeaderConfiguration::class])
 interface AppleClient {
 
     /**
@@ -28,7 +29,11 @@ interface AppleClient {
      */
     @PostMapping("/token", produces = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
     fun getToken(
-        @RequestBody appleTokenRequest: AppleTokenRequest
+        @RequestParam("client_id") clientId: String,
+        @RequestParam("client_secret") clientSecret: String,
+        @RequestParam("code") code: String,
+        @RequestParam("grant_type") grantType: String,
+        @RequestParam("redirect_uri") redirectUri: String,
     ): AppleTokenResult
 
     /**
