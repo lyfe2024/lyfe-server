@@ -9,4 +9,27 @@ data class Feedback(
     val checked: Boolean,
     val createdAt: Instant,
     val user: User
-)
+){
+    fun check() =
+        Feedback(
+            id = id,
+            content = content,
+            checked = true,
+            createdAt = createdAt,
+            user = user
+        )
+    companion object {
+        fun from(
+            feedbackCreate: FeedbackCreate,
+            user: User
+        ): Feedback {
+            return Feedback(
+                id = 0,
+                content = feedbackCreate.feedback,
+                checked = false,
+                createdAt = Instant.now(),
+                user = user
+            )
+        }
+    }
+}
