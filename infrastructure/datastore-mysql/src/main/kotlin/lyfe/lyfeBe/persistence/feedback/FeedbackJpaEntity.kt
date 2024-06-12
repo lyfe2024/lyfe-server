@@ -1,6 +1,7 @@
 package lyfe.lyfeBe.persistence.feedback
 
 import jakarta.persistence.*
+import lyfe.lyfeBe.feedback.Feedback
 import lyfe.lyfeBe.persistence.user.UserJpaEntity
 import org.jetbrains.annotations.NotNull
 import org.springframework.data.annotation.CreatedDate
@@ -29,4 +30,24 @@ class FeedbackJpaEntity(
     @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_feedback_user_id"))
     val user: UserJpaEntity
 ) {
+
+    fun toDomain(): Feedback =
+        Feedback(
+            id = id,
+            content = content,
+            checked = checked,
+            createdAt = createdAt,
+            user = user.toDomain()
+        )
+
+    companion object {
+        fun from(feedback: Feedback): FeedbackJpaEntity =
+            FeedbackJpaEntity(
+                id = feedback.id,
+                content = feedback.content,
+                checked = feedback.checked,
+                createdAt = feedback.createdAt,
+                user = UserJpaEntity.from(feedback.user)
+            )
+    }
 }
