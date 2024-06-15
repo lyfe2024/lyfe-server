@@ -1,12 +1,11 @@
 package lyfe.lyfeBe.topic.dto
 
 import lyfe.lyfeBe.topic.Topic
-import java.time.LocalDate
 
-class TopicDto(
+data class TopicDto(
     val id: Long,
     val content: String,
-    val date: LocalDate?
+    val date: String?
 ) {
 
     companion object {
@@ -14,7 +13,7 @@ class TopicDto(
             return TopicDto(
                 id = topic.id,
                 content = topic.content,
-                date = topic.appliedAt
+                date = topic.appliedAt.toString()
             )
         }
     }
