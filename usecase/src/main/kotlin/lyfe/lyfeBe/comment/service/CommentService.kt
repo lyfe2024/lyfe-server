@@ -17,6 +17,7 @@ import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 @Transactional(readOnly = true)
 @Service
@@ -89,7 +90,15 @@ class CommentService(
     }
 
     private fun checkUserStatus(user: User) {
-        if (user.userStatus != UserStatus.ACTIVE) {
+        user.takeIf {
+            user.userStatus == UserStatus.WARNING && user.warningAt
+                ?.let { Instant.now().isAfter(it) } == true
+        }?.apply {
+            userPort.update(updateActive())
+        }
+
+        val checkUser = getLoginUser(userPort)
+        if (checkUser.userStatus != UserStatus.ACTIVE) {
             throw ForbiddenException("댓글을 작성할 수 없습니다.")
         }
     }

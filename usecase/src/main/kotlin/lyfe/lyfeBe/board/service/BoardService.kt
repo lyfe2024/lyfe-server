@@ -14,6 +14,7 @@ import lyfe.lyfeBe.whisky.out.WhiskyPort
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.time.LocalDate
 
 @Service
@@ -185,7 +186,15 @@ class BoardService(
     }
 
     private fun checkUserStatus(user: User) {
-        if (user.userStatus != UserStatus.ACTIVE) {
+        user.takeIf {
+            user.userStatus == UserStatus.WARNING && user.warningAt
+            ?.let { Instant.now().isAfter(it) } == true
+        }?.apply {
+            userPort.update(updateActive())
+        }
+
+        val checkUser = getLoginUser(userPort)
+        if (checkUser.userStatus != UserStatus.ACTIVE) {
             throw ForbiddenException("게시글을 작성할 수 없습니다.")
         }
     }

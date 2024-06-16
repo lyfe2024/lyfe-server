@@ -16,6 +16,7 @@ import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 @Transactional(readOnly = true)
 @Service
@@ -31,10 +32,15 @@ class ReportService(
     fun createReport(reportCreate: ReportCreate): SaveReportDto {
         val user = getLoginUser()
         val reportedUser = userPort.getById(reportCreate.reportTargetId)
+
         validateReportTargetExists(reportCreate.reportTarget, reportCreate.reportTargetId)
         val report = Report.from(reportCreate, user, reportedUser)
         checkDuplicatedReport(report)
-        return SaveReportDto.from(reportPort.create(report))
+
+        val saveReport = reportPort.create(report)
+        updateUserStatus(reportedUser)
+
+        return SaveReportDto.from(saveReport)
     }
 
     // 신고 단건 조회
@@ -69,6 +75,19 @@ class ReportService(
         return SaveReportDto.from(reportPort.update(cancel))
     }
 
+    fun updateUserStatus(user: User) {
+        val reportCount = reportPort.getReportedCount(user.id)
+        val warningAt = Instant.now()
+
+        user.apply {
+            when {
+                reportCount >= 50 -> updateSuspended()
+                reportCount >= 30 -> updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 30))
+                reportCount >= 15 -> updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 15))
+                reportCount >= 5  -> updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 5))
+            }
+        }.also { userPort.update(it) }
+    }
 
     fun checkDuplicatedReport(report: Report) {
         val duplicatedReport = reportPort.getByUserIdAndReportTargetIdAndReportTarget(

@@ -66,6 +66,24 @@ data class User(
             withdrawnAt = withdrawnAt,
         )
 
+    fun updateActive() =
+        User(
+            id = id,
+            email = email,
+            hashedPassword = hashedPassword,
+            nickname = nickname,
+            socialId = socialId,
+            socialType = socialType,
+            socialRefreshToken = socialRefreshToken,
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            role = role,
+            userStatus = UserStatus.ACTIVE,
+            createdAt = createdAt,
+            updatedAt = Instant.now(),
+            profileUrl = profileUrl,
+        )
+
     fun updateSuspended() =
         User(
             id = id,
