@@ -1,5 +1,6 @@
 package lyfe.lyfeBe.comment.service
 
+import lyfe.lyfeBe.auth.service.SecurityUtils.getLoginUser
 import lyfe.lyfeBe.auth.service.SecurityUtils.getLoginUserId
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.Comment
@@ -11,6 +12,8 @@ import lyfe.lyfeBe.comment.dto.CommentListDto
 import lyfe.lyfeBe.comment.dto.SaveCommentDto
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ForbiddenException
+import lyfe.lyfeBe.user.User
+import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,8 +28,9 @@ class CommentService(
 
     @Transactional
     fun create(commentCreate: CommentCreate): SaveCommentDto {
+        val user = getLoginUser(userPort)
+        checkUserStatus(user)
 
-        val user = userPort.getById(userId = getLoginUserId(userPort))
         val board = boardPort.getById(id = commentCreate.boardId)
 
         commentCreate.commentGroupId?.let {
@@ -73,12 +77,20 @@ class CommentService(
 
     @Transactional
     fun update(commentUpdate: CommentUpdate): SaveCommentDto {
+        val user = getLoginUser(userPort)
+        checkUserStatus(user)
         val comment = commentPort.getById(id = commentUpdate.commentId).update(commentUpdate)
 
-        if (comment.user.id != getLoginUserId(userPort)) {
+        if (comment.user.id != user.id) {
             throw ForbiddenException("자신의 댓글만 수정할 수 있습니다.")
         }
 
         return SaveCommentDto(commentPort.update(comment).id)
+    }
+
+    private fun checkUserStatus(user: User) {
+        if (user.userStatus != UserStatus.ACTIVE) {
+            throw ForbiddenException("댓글을 작성할 수 없습니다.")
+        }
     }
 }

@@ -1,6 +1,5 @@
 package lyfe.lyfeBe.board.service
 
-import lyfe.lyfeBe.auth.service.SecurityUtils
 import lyfe.lyfeBe.auth.service.SecurityUtils.getLoginUser
 import lyfe.lyfeBe.board.*
 import lyfe.lyfeBe.board.dto.*
@@ -8,6 +7,8 @@ import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
 import lyfe.lyfeBe.error.ForbiddenException
 import lyfe.lyfeBe.topic.port.TopicPort
+import lyfe.lyfeBe.user.User
+import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.user.port.out.UserPort
 import lyfe.lyfeBe.whisky.out.WhiskyPort
 import org.springframework.data.domain.PageRequest
@@ -154,6 +155,7 @@ class BoardService(
     @Transactional
     fun create(boardCreate: BoardCreate): SaveBoardDto {
         val user = getLoginUser(userPort)
+        checkUserStatus(user)
         val topic = topicPort.getById(boardCreate.topicId)
         val board = Board.from(boardCreate, user, topic)
         return SaveBoardDto(boardPort.create(board).id)
@@ -161,9 +163,11 @@ class BoardService(
 
     @Transactional
     fun update(boardUpdate: BoardUpdate): SaveBoardDto {
+        val user = getLoginUser(userPort)
+        checkUserStatus(user)
         val board = getById(boardUpdate.boardId).update(boardUpdate)
 
-        if (board.user.id != SecurityUtils.getLoginUserId(userPort)) {
+        if (board.user.id != user.id) {
             throw ForbiddenException("자신의 글만 수정할 수 있습니다.")
         }
 
@@ -178,6 +182,12 @@ class BoardService(
     private fun fetchWhiskyCount(boardId: Long): Int {
         val whiskyCount = whiskyPort.countByBoardId(boardId)
         return if (whiskyCount > 0) whiskyCount else 0
+    }
+
+    private fun checkUserStatus(user: User) {
+        if (user.userStatus != UserStatus.ACTIVE) {
+            throw ForbiddenException("게시글을 작성할 수 없습니다.")
+        }
     }
 
 }
