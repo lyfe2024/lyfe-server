@@ -19,7 +19,8 @@ data class User(
     val userStatus: UserStatus,
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
-    val withdrawnAt: Instant? = null
+    val withdrawnAt: Instant? = null,
+    val warningAt: Instant? = null,
 ){
     fun validateActive() {
         if (this.withdrawnAt != null) {
@@ -44,6 +45,43 @@ data class User(
             createdAt = createdAt,
             updatedAt = Instant.now(),
             withdrawnAt = Instant.now(),
+        )
+
+    fun updateWarning(withdrawnAt: Instant) =
+        User(
+            id = id,
+            email = email,
+            hashedPassword = hashedPassword,
+            nickname = nickname,
+            socialId = socialId,
+            socialType = socialType,
+            socialRefreshToken = socialRefreshToken,
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            role = role,
+            userStatus = UserStatus.WARNING,
+            createdAt = createdAt,
+            updatedAt = Instant.now(),
+            profileUrl = profileUrl,
+            withdrawnAt = withdrawnAt,
+        )
+
+    fun updateSuspended() =
+        User(
+            id = id,
+            email = email,
+            hashedPassword = hashedPassword,
+            nickname = nickname,
+            socialId = socialId,
+            socialType = socialType,
+            socialRefreshToken = socialRefreshToken,
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            role = role,
+            userStatus = UserStatus.SUSPENDED,
+            createdAt = createdAt,
+            updatedAt = Instant.now(),
+            profileUrl = profileUrl,
         )
 
     fun updateNickName(nickname: String) =

@@ -29,9 +29,9 @@ class UserJpaEntity(
 
     val notificationConsent: Boolean,
 
-
     val fcmRegistration: Boolean,
     val withdrawnAt: Instant? = null,
+    val warningAt: Instant? = null,
 
     val socialId: String,
 
