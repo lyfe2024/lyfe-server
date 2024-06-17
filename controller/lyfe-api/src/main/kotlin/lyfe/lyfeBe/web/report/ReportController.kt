@@ -1,10 +1,13 @@
 package lyfe.lyfeBe.web.report
 
 import lyfe.lyfeBe.dto.CommonResponse
+import lyfe.lyfeBe.dto.CommonResponse.Companion.EMPTY
+import lyfe.lyfeBe.dto.EmptyDto
 import lyfe.lyfeBe.report.ReportCreate
 import lyfe.lyfeBe.report.ReportGets
 import lyfe.lyfeBe.report.dto.ReportDto
 import lyfe.lyfeBe.report.dto.ReportListDto
+import lyfe.lyfeBe.report.dto.ReportMessageDto
 import lyfe.lyfeBe.report.dto.SaveReportDto
 import lyfe.lyfeBe.report.service.ReportService
 import lyfe.lyfeBe.utils.ControllerUtils
@@ -59,6 +62,20 @@ class ReportController(
     ): CommonResponse<SaveReportDto> {
         return service.cancelReport(reportId)
             .let { CommonResponse(it) }
+    }
+
+    @GetMapping("/me")
+    fun checkMyReports(
+    ): CommonResponse<ReportMessageDto> {
+        return service.checkReportedStatus()
+            .let { CommonResponse(it) }
+    }
+
+    @PostMapping("/consent")
+    fun updateReportMessageConsent(
+    ): CommonResponse<EmptyDto> {
+        service.updateReportMessageConsent()
+        return EMPTY
     }
 
 }

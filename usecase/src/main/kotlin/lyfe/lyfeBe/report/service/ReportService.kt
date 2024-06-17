@@ -3,16 +3,19 @@ package lyfe.lyfeBe.report.service
 import lyfe.lyfeBe.auth.service.SecurityUtils
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
+import lyfe.lyfeBe.error.ResourceNotFoundException
 import lyfe.lyfeBe.report.Report
 import lyfe.lyfeBe.report.ReportCreate
 import lyfe.lyfeBe.report.ReportGets
 import lyfe.lyfeBe.report.ReportTarget
 import lyfe.lyfeBe.report.dto.ReportDto
 import lyfe.lyfeBe.report.dto.ReportListDto
+import lyfe.lyfeBe.report.dto.ReportMessageDto
 import lyfe.lyfeBe.report.dto.SaveReportDto
 import lyfe.lyfeBe.report.port.out.ReportPort
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
+import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -65,6 +68,47 @@ class ReportService(
             }
         )
     }
+
+    // 특정 유저의 신고 현황 확인
+    fun checkReportedStatus(): ReportMessageDto {
+        val user = getLoginUser()
+        val userStatus = user.userStatus
+
+        if (userStatus != UserStatus.ACTIVE && user.warningConsent == false) {
+            val reportedCount = reportPort.getReportedCount(user.id)
+
+            val messages = mapOf(
+                5 to Pair("신고가 5회 누적되었습니다.", "신고가 5회 누적되었습니다.\n5일간 게시글과 댓글 작성이 불가하며 관련 게시글/댓글은 삭제됩니다."),
+                15 to Pair("신고가 15회 누적되었습니다.", "신고가 15회 누적되었습니다.\n15일간 게시글과 댓글 작성이 불가하며 관련 게시글/댓글은 삭제됩니다."),
+                30 to Pair(
+                    "신고가 30회 누적되었습니다.",
+                    "신고가 30회 누적되었습니다.\n30일간 게시글과 댓글 작성이 불가하며 관련 게시글/댓글은 삭제됩니다.\n50회 이상 누적 신고될 경우 계정 이용에 제한이 있을 수 있습니다."
+                ),
+                50 to Pair(
+                    "계정이용이 정지되었습니다.",
+                    "50회 이상 신고되어 계정이용이 정지되었습니다. 메일을 통해 문의 부탁 드립니다. Lyfe 대표 메일: sectionr0@gmail.com"
+                )
+            )
+
+            val (title, content) = when {
+                reportedCount >= 50 -> messages[50]
+                reportedCount >= 30 -> messages[30]
+                reportedCount >= 15 -> messages[15]
+                reportedCount >= 5 -> messages[5]
+                else -> null
+            } ?: Pair("신고가 ${reportedCount}회 누적되었습니다.", "")
+            return ReportMessageDto(title = title, content = content)
+        } else {
+            throw ResourceNotFoundException("신고가 누적되지 않았거나, 이미 경고를 수락하였습니다.")
+        }
+    }
+
+    fun updateReportMessageConsent() {
+        val user = getLoginUser()
+        user.updateWarningConsent(true)
+        userPort.update(user)
+    }
+
 
     // 신고 취소
     @Transactional

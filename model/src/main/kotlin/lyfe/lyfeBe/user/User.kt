@@ -21,6 +21,7 @@ data class User(
     val updatedAt: Instant? = null,
     val withdrawnAt: Instant? = null,
     val warningAt: Instant? = null,
+    val warningConsent: Boolean? = null,
 ){
     fun validateActive() {
         if (this.withdrawnAt != null) {
@@ -64,6 +65,25 @@ data class User(
             updatedAt = Instant.now(),
             profileUrl = profileUrl,
             withdrawnAt = withdrawnAt,
+        )
+
+    fun updateWarningConsent(warningConsent: Boolean) =
+        User(
+            id = id,
+            email = email,
+            hashedPassword = hashedPassword,
+            nickname = nickname,
+            socialId = socialId,
+            socialType = socialType,
+            socialRefreshToken = socialRefreshToken,
+            notificationConsent = notificationConsent,
+            fcmRegistration = fcmRegistration,
+            role = role,
+            userStatus = userStatus,
+            createdAt = createdAt,
+            updatedAt = Instant.now(),
+            profileUrl = profileUrl,
+            warningConsent = warningConsent,
         )
 
     fun updateActive() =
