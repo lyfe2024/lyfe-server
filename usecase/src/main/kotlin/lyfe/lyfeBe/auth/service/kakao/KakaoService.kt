@@ -44,13 +44,11 @@ class KakaoService(
     }
 
     override fun revoke(socialId: String, socialRefreshToken: String?): Boolean {
-        val unlinkResponse = kakaoClient.unlink(
+        KakaoApiClient.unlink(
             adminKey = "KakaoAK $adminKey",
             targetIdType = "user_id",
             targetId = socialId
         )
-
-        require(unlinkResponse.id.toString() != socialId)
         return true
     }
 
