@@ -37,6 +37,9 @@ class ReportService(
         val user = getLoginUser()
         val reportedUserId = validateReportTargetExists(reportCreate.reportTarget, reportCreate.reportTargetId)
         val reportedUser = userPort.getById(reportedUserId)
+        if (user.id == reportedUserId) {
+            throw IllegalArgumentException("자신을 신고할 수 없습니다.")
+        }
 
         val report = Report.from(reportCreate, user, reportedUser)
         checkDuplicatedReport(report)
