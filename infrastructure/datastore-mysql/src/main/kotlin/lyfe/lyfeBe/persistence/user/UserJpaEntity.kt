@@ -29,9 +29,10 @@ class UserJpaEntity(
 
     val notificationConsent: Boolean,
 
-
     val fcmRegistration: Boolean,
     val withdrawnAt: Instant? = null,
+    val warningAt: Instant? = null,
+    val warningConsent: Boolean? = null,
 
     val socialId: String,
 
@@ -65,6 +66,8 @@ class UserJpaEntity(
             notificationConsent = notificationConsent,
             fcmRegistration = fcmRegistration,
             withdrawnAt = withdrawnAt,
+            warningAt = warningAt,
+            warningConsent = warningConsent,
             userStatus = userStatus,
             role = role,
             createdAt = baseEntity.createdAt,
@@ -86,6 +89,8 @@ class UserJpaEntity(
             profileUrl = user.profileUrl,
             fcmRegistration = user.fcmRegistration,
             withdrawnAt = user.withdrawnAt,
+            warningAt = user.warningAt,
+            warningConsent = user.warningConsent,
             userStatus = user.userStatus,
             role = user.role,
             baseEntity = BaseEntity(
@@ -105,6 +110,8 @@ class UserJpaEntity(
             notificationConsent = user.notificationConsent,
             fcmRegistration = user.fcmRegistration,
             withdrawnAt = user.withdrawnAt,
+            warningAt = user.warningAt,
+            warningConsent = user.warningConsent,
             userStatus = user.userStatus,
             role = user.role,
             profileUrl = user.profileUrl,

@@ -8,10 +8,12 @@ import lyfe.lyfeBe.auth.dto.*
 import lyfe.lyfeBe.auth.port.out.RefreshTokenPort
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.EMAIL_CLAIM
 import lyfe.lyfeBe.auth.service.JwtTokenInfo.REFRESH_TOKEN
+import lyfe.lyfeBe.error.ForbiddenException
 import lyfe.lyfeBe.error.ResourceNotFoundException
 import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserJoin
+import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.user.port.out.UserPort
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.AuthenticationManager
@@ -41,6 +43,7 @@ class AuthService(
         val socialEmail = "${socialIdAndRefreshToken.oAuthId}@${authLogin.socialType.name}"
         val user = userPort.getByEmail(socialEmail)
             ?: return JoinDto(jwtTokenProvider.createTokenForOAuth2(socialEmail, socialIdAndRefreshToken.refreshToken))
+        checkSuspendUser(user)
         return login(LoginDto.fromUser(user))
     }
 
@@ -153,6 +156,12 @@ class AuthService(
 
         refreshTokenPort.deleteByUserId(loginUserId)
         userPort.update(revokeUser.withdraw())
+    }
+
+    fun checkSuspendUser(user: User) {
+        if (user.userStatus == UserStatus.SUSPENDED) {
+            throw ForbiddenException("정지된 유저입니다.")
+        }
     }
 
     fun getLoginUserId(): Long {
