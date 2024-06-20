@@ -3,7 +3,7 @@ package lyfe.lyfeBe.report.service
 import lyfe.lyfeBe.auth.service.SecurityUtils
 import lyfe.lyfeBe.board.port.out.BoardPort
 import lyfe.lyfeBe.comment.port.out.CommentPort
-import lyfe.lyfeBe.error.ResourceNotFoundException
+import lyfe.lyfeBe.dto.CommonResponse
 import lyfe.lyfeBe.report.Report
 import lyfe.lyfeBe.report.ReportCreate
 import lyfe.lyfeBe.report.ReportGets
@@ -17,6 +17,8 @@ import lyfe.lyfeBe.user.Role
 import lyfe.lyfeBe.user.User
 import lyfe.lyfeBe.user.UserStatus
 import lyfe.lyfeBe.user.port.out.UserPort
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
@@ -29,14 +31,13 @@ class ReportService(
     private val boardPort: BoardPort,
     private val commentPort: CommentPort
 ) {
-
     // 신고 생성
     @Transactional
     fun createReport(reportCreate: ReportCreate): SaveReportDto {
         val user = getLoginUser()
-        val reportedUser = userPort.getById(reportCreate.reportTargetId)
+        val reportedUserId = validateReportTargetExists(reportCreate.reportTarget, reportCreate.reportTargetId)
+        val reportedUser = userPort.getById(reportedUserId)
 
-        validateReportTargetExists(reportCreate.reportTarget, reportCreate.reportTargetId)
         val report = Report.from(reportCreate, user, reportedUser)
         checkDuplicatedReport(report)
 
@@ -70,11 +71,11 @@ class ReportService(
     }
 
     // 특정 유저의 신고 현황 확인
-    fun checkReportedStatus(): ReportMessageDto {
+    fun checkReportedStatus(): ResponseEntity<CommonResponse<ReportMessageDto>> {
         val user = getLoginUser()
         val userStatus = user.userStatus
 
-        if (userStatus != UserStatus.ACTIVE && user.warningConsent == false) {
+        if (userStatus != UserStatus.ACTIVE && user.warningConsent != true) {
             val reportedCount = reportPort.getReportedCount(user.id)
 
             val messages = mapOf(
@@ -97,18 +98,19 @@ class ReportService(
                 reportedCount >= 5 -> messages[5]
                 else -> null
             } ?: Pair("신고가 ${reportedCount}회 누적되었습니다.", "")
-            return ReportMessageDto(title = title, content = content)
+            val response = ReportMessageDto(title = title, content = content)
+            return ResponseEntity.status(HttpStatus.OK).body(CommonResponse(response))
         } else {
-            throw ResourceNotFoundException("신고가 누적되지 않았거나, 이미 경고를 수락하였습니다.")
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
         }
     }
 
+    @Transactional
     fun updateReportMessageConsent() {
         val user = getLoginUser()
-        user.updateWarningConsent(true)
-        userPort.update(user)
+        val updateUser = user.updateWarningConsent(true)
+        userPort.update(updateUser)
     }
-
 
     // 신고 취소
     @Transactional
@@ -119,18 +121,20 @@ class ReportService(
         return SaveReportDto.from(reportPort.update(cancel))
     }
 
+    @Transactional
     fun updateUserStatus(user: User) {
         val reportCount = reportPort.getReportedCount(user.id)
         val warningAt = Instant.now()
 
-        user.apply {
-            when {
-                reportCount >= 50 -> updateSuspended()
-                reportCount >= 30 -> updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 30))
-                reportCount >= 15 -> updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 15))
-                reportCount >= 5  -> updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 5))
-            }
-        }.also { userPort.update(it) }
+        val updateUser: User? = when {
+            reportCount >= 50 -> user.updateSuspended()
+            reportCount == 30 -> user.updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 30))
+            reportCount == 15 -> user.updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 15))
+            reportCount == 5 -> user.updateWarning(warningAt.plusSeconds(60L * 60 * 24 * 5))
+            else -> null
+        }
+
+        updateUser?.let { userPort.update(it) }
     }
 
     fun checkDuplicatedReport(report: Report) {
@@ -149,14 +153,15 @@ class ReportService(
         return SecurityUtils.getLoginUser(userPort)
     }
 
-    fun validateReportTargetExists(reportTarget: ReportTarget, reportTargetId: Long) {
+    fun validateReportTargetExists(reportTarget: ReportTarget, reportTargetId: Long): Long {
         require(reportTargetId > 0L) { "신고 대상 ID가 유효하지 않습니다." }
 
-        when (reportTarget) {
-            ReportTarget.BOARD, ReportTarget.BOARD_PICTURE -> boardPort.getById(reportTargetId)
-            ReportTarget.USER -> userPort.getById(reportTargetId)
-            ReportTarget.COMMENT -> commentPort.getById(reportTargetId)
+        val userId = when (reportTarget) {
+            ReportTarget.BOARD, ReportTarget.BOARD_PICTURE -> boardPort.getById(reportTargetId).user.id
+            ReportTarget.USER -> userPort.getById(reportTargetId).id
+            ReportTarget.COMMENT -> commentPort.getById(reportTargetId).user.id
             else -> throw IllegalArgumentException("지원하지 않는 신고 대상 유형입니다.")
         }
+        return userId
     }
 }

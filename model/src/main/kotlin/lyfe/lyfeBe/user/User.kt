@@ -48,7 +48,7 @@ data class User(
             withdrawnAt = Instant.now(),
         )
 
-    fun updateWarning(withdrawnAt: Instant) =
+    fun updateWarning(warningAt: Instant) =
         User(
             id = id,
             email = email,
@@ -64,7 +64,8 @@ data class User(
             createdAt = createdAt,
             updatedAt = Instant.now(),
             profileUrl = profileUrl,
-            withdrawnAt = withdrawnAt,
+            warningAt = warningAt,
+            warningConsent = false,
         )
 
     fun updateWarningConsent(warningConsent: Boolean) =

@@ -15,6 +15,7 @@ import lyfe.lyfeBe.web.report.req.SaveReportRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -66,9 +67,8 @@ class ReportController(
 
     @GetMapping("/me")
     fun checkMyReports(
-    ): CommonResponse<ReportMessageDto> {
+    ): ResponseEntity<CommonResponse<ReportMessageDto>> {
         return service.checkReportedStatus()
-            .let { CommonResponse(it) }
     }
 
     @PostMapping("/consent")
