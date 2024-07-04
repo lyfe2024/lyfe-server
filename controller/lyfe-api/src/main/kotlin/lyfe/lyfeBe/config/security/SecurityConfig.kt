@@ -1,7 +1,6 @@
 package lyfe.lyfeBe.config.security
 
 import lyfe.lyfeBe.auth.service.PrincipalDetailService
-import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -18,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.springframework.web.filter.CorsFilter
 
 @EnableWebSecurity
 @Configuration
@@ -26,7 +24,8 @@ class SecurityConfig(
     private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint,
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val principalDetailService : PrincipalDetailService,
+    private val principalDetailService: PrincipalDetailService,
+    private val customUrlFilter: CustomUrlFilter,
 ) {
 
     @Bean
@@ -45,19 +44,17 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .httpBasic { httpBasic -> httpBasic.disable() }
-            .csrf { csrf -> csrf.disable() }
+            .httpBasic { it.disable() }
+            .csrf { it.disable() }
             .cors { }
-            .formLogin { formLogin -> formLogin.disable() }
-            .sessionManagement { sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .exceptionHandling { exceptionHandling ->
-                exceptionHandling
-                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                    .accessDeniedHandler(jwtAccessDeniedHandler)
+            .formLogin { it.disable() }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .exceptionHandling {
+                it.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                it.accessDeniedHandler(jwtAccessDeniedHandler)
             }
-            .authorizeHttpRequests { authorizeHttpRequests ->
-                authorizeHttpRequests
-                    .requestMatchers(HttpMethod.GET, "/v1/boards/latest/**").permitAll()
+            .authorizeHttpRequests {
+                it.requestMatchers(HttpMethod.GET, "/v1/boards/latest/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/popular/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/best/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/detail/**").permitAll()
@@ -76,33 +73,32 @@ class SecurityConfig(
                     .anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(customUrlFilter, JwtAuthenticationFilter::class.java) // 새로운 필터 추가
 
         return http.build()
     }
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration()
-        configuration.allowCredentials = true
-        configuration.allowedOrigins = listOf(
-            "https://api.lyfeteam.info",
-            "http://localhost:3000",
-            "http://localhost:8080",
-        )
-        configuration.allowedMethods = listOf(
-            HttpMethod.POST.name(),
-            HttpMethod.GET.name(),
-            HttpMethod.PUT.name(),
-            HttpMethod.DELETE.name(),
-            HttpMethod.OPTIONS.name()
-        )
-        configuration.allowedHeaders = listOf("*")
+        val configuration = CorsConfiguration().apply {
+            allowCredentials = true
+            allowedOrigins = listOf(
+                "https://api.lyfeteam.info",
+                "http://localhost:3000",
+                "http://localhost:8080",
+            )
+            allowedMethods = listOf(
+                HttpMethod.POST.name(),
+                HttpMethod.GET.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name(),
+                HttpMethod.OPTIONS.name()
+            )
+            allowedHeaders = listOf("*")
+        }
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
-        val bean = FilterRegistrationBean(CorsFilter(source))
-        bean.order = 0
         return source
     }
 }
-
