@@ -54,7 +54,8 @@ class SecurityConfig(
                 it.accessDeniedHandler(jwtAccessDeniedHandler)
             }
             .authorizeHttpRequests {
-                it.requestMatchers(HttpMethod.GET, "/v1/boards/latest/**").permitAll()
+                it
+                    .requestMatchers(HttpMethod.GET, "/v1/boards/latest/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/popular/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/best/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/v1/boards/detail/**").permitAll()
