@@ -40,6 +40,11 @@ class CommentPersistenceAdapter(
             .map { it.toDomain() }.toList()
     }
 
+    override fun getCommentsWithBoard(boardId: Long): List<Comment> {
+        return commentRepository.findAllByBoardIdOrderByIdDesc(boardId)
+            .map { it.toDomain() }
+    }
+
     override fun getCommentsWithParentCommentIdAndBoard(
         boardId: Long,
         commentGroupId : Long

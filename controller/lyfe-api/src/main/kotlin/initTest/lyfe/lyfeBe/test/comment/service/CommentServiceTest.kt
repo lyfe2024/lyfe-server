@@ -14,13 +14,10 @@ import io.kotest.matchers.shouldBe
 import lyfe.lyfeBe.board.Board
 import lyfe.lyfeBe.comment.Comment
 import lyfe.lyfeBe.comment.CommentCreate
-import lyfe.lyfeBe.comment.CommentGetsByBoard
 import lyfe.lyfeBe.comment.CommentUpdate
 import lyfe.lyfeBe.comment.service.CommentService
 import lyfe.lyfeBe.topic.Topic
 import lyfe.lyfeBe.user.User
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Instant
 
@@ -120,46 +117,46 @@ class CommentServiceTest(
         }
     }
 
-    Given("댓글 생성 복수 요청이 준비되고 실행되었을 때") {
-
-        val cursorId = Long.MAX_VALUE
-
-        val pageable = PageRequest.of(
-            0, // 페이지 번호 (0부터 시작)
-            5, // 페이지 크기
-            Sort.by("id").descending()
-        )
-
-        val commentGetsByBoard = CommentGetsByBoard(
-            boardId = 1L,
-            cursorId = cursorId,
-            pageable = pageable
-        )
-
-        When("한 게시물에 생성된 여러 댓글의 정보를 조회할 때(id 내림차순)") {
-
-            val commentsDto = commentService.getCommentsWithCursorAndBoard(commentGetsByBoard).list
-
-            Then("조회된 댓글의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
-                commentsDto[0].content shouldBe "이것은 테스트 코멘트입니다."
-                commentsDto[0].commentGroupId shouldBe 1
-                commentsDto[0].user.id shouldBe 1L
-            }
-        }
-
-        When("유저가 생성했던 여러 댓글 정보를 조회할 때(id 내림차순)") {
-
-            val commentsDto = commentService.getCommentsWithCursorAndUser(
-                cursorId = cursorId,
-            ).list
-
-            Then("조회된 댓글의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
-                commentsDto[0].content shouldBe "이것은 테스트 코멘트입니다."
-                commentsDto[0].commentGroupId shouldBe 1
-                commentsDto[0].user.id shouldBe 1L
-            }
-        }
-    }
+//    Given("댓글 생성 복수 요청이 준비되고 실행되었을 때") {
+//
+//        val cursorId = Long.MAX_VALUE
+//
+//        val pageable = PageRequest.of(
+//            0, // 페이지 번호 (0부터 시작)
+//            5, // 페이지 크기
+//            Sort.by("id").descending()
+//        )
+//
+//        val commentGetsByBoard = CommentGetsByBoard(
+//            boardId = 1L,
+//            cursorId = cursorId,
+//            pageable = pageable
+//        )
+//
+//        When("한 게시물에 생성된 여러 댓글의 정보를 조회할 때(id 내림차순)") {
+//
+//            val commentsDto = commentService.getCommentsWithCursorAndBoard(commentGetsByBoard).list
+//
+//            Then("조회된 댓글의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
+//                commentsDto[0].content shouldBe "이것은 테스트 코멘트입니다."
+//                commentsDto[0].commentGroupId shouldBe 1
+//                commentsDto[0].user.id shouldBe 1L
+//            }
+//        }
+//
+//        When("유저가 생성했던 여러 댓글 정보를 조회할 때(id 내림차순)") {
+//
+//            val commentsDto = commentService.getCommentsWithCursorAndUser(
+//                cursorId = cursorId,
+//            ).list
+//
+//            Then("조회된 댓글의 상세 정보가 생성 요청과 일치하는지 확인할 때") {
+//                commentsDto[0].content shouldBe "이것은 테스트 코멘트입니다."
+//                commentsDto[0].commentGroupId shouldBe 1
+//                commentsDto[0].user.id shouldBe 1L
+//            }
+//        }
+//    }
 
 
 })

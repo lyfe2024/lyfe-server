@@ -42,16 +42,12 @@ class CommentController(
     @GetMapping("/latest")
     fun getLatestCommentList(
         @RequestParam(name = "comment_board_id") boardId: Long,
-        @RequestParam(required = false) cursorId: Long?,
-        @PageableDefault(size = 10, page = 0, sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
 
         ): CommonResponse<CommentListDto> {
 
         return service.getCommentsWithCursorAndBoard(
             CommentGetsByBoard(
                 boardId = boardId,
-                cursorId = cursorId,
-                pageable = pageable
             )
         ).let { CommonResponse(it) }
     }
