@@ -20,4 +20,8 @@ interface CommentRepository: JpaRepository<CommentJpaEntity, Long> {
     fun findFirstByBoardIdOrderByIdDesc(boardId: Long): CommentJpaEntity?
     @Query("SELECT COUNT(c) FROM CommentJpaEntity c WHERE c.board.id = :boardId")
     fun countByBoardId(@Param("boardId") boardId: Long): Int
+
+    fun findAllByBoardIdOrderByIdDesc(
+        boardId: Long
+    ): List<CommentJpaEntity>
 }

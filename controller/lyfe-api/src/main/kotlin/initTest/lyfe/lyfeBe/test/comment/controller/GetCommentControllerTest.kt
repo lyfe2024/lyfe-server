@@ -82,7 +82,7 @@ class GetCommentControllerTest(
         )
 
         When("댓글 리스트를 조회 했을 때") {
-            val res = testContainer.commentController.getLatestCommentList(board.id, 1L, pageable)
+            val res = testContainer.commentController.getLatestCommentList(board.id)
                 .result.list
 
             Then("저장된 댓글의 필드와 응답값과 일치해야 한다.") {
